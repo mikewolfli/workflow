@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<usrinfo>
+	<save>true</save>
+	<usrname>10256609</usrname>
+	<password></password>
+</usrinfo>
+<connect>
+	<host>localhost</host>
+	<port>5432</port>
+	<dbname>pg_workflow</dbname>
+	<dbuser>postgres</dbuser>
+	<dbpwd />
+</connect>
+<import>
+	<path />
+	<split>\t</split>
+</import>
+<environment>
+	<ThreadGap>15</ThreadGap>
+</environment>
+<export>
+	<configuredBOM>C:\export_nstd\</configuredBOM>
+</export>
+<din>
+	<url>http://10.127.160.41:9022/CELabelWebService.asmx/SetSJMutiCELabelData</url>
+</din>
+<sapconn>
+	<host>10.126.1.55</host>
+	<use_load_balancing>true</use_load_balancing>
+	<system_name />
+	<sysnr>0</sysnr>
+	<use_sapgui>0</use_sapgui>
+	<destination>110</destination>
+	<client>110</client>
+	<user>10256603</user>
+	<password />
+	<language>E</language>
+	<trace>true</trace>
+	<abap_debug>false</abap_debug>
+</sapconn>

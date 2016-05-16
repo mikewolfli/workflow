@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="info_id_generator_panel">
+		<id_arg>0</id_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="sb_ll" member="no">
+					<label>内部联络单取号</label>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer1" member="no">
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_LL" variable="tc_ll" member="yes">
+									<size>301,23</size>
+								</object>
+								<colspan>3</colspan>
+								<col>1</col>
+								<row>0</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_LL_GEN" variable="Button_LL_gen" member="yes">
+									<label>生成编号</label>
+									<handler function="OnButton_LL_genClick" entry="EVT_BUTTON" />
+								</object>
+								<col>4</col>
+								<row>0</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT2" variable="st_ll" member="yes">
+									<label>主题</label>
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="sb_spec_gad" member="no">
+					<label>SPEC 和 GAD 更改通知单取号</label>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer2" member="no">
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_SG_PROJ" variable="tc_sg_proj" member="yes">
+									<size>278,21</size>
+									<enabled>0</enabled>
+								</object>
+								<colspan>3</colspan>
+								<col>1</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_SG_GEN" variable="Button_sg_gen" member="yes">
+									<label>生成编号</label>
+									<handler function="OnButton_sg_genClick" entry="EVT_BUTTON" />
+								</object>
+								<col>4</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_SG_INFO" variable="Button_sg_info" member="yes">
+									<label>相关项目</label>
+									<handler function="OnButton_sg_infoClick" entry="EVT_BUTTON" />
+								</object>
+								<col>5</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT1" variable="st_sg" member="yes">
+									<label>更改项目</label>
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="stb_wb" member="no">
+					<label>WBS BOM 更改通知单取号</label>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer3" member="no">
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT3" variable="st_wbsbom" member="yes">
+									<label>更改原因</label>
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_WB_REASON" variable="tc_wb_reason" member="yes">
+									<size>277,21</size>
+								</object>
+								<colspan>3</colspan>
+								<col>1</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_WB" variable="Button_wb" member="yes">
+									<label>生成编号</label>
+									<handler function="OnButton_wbClick" entry="EVT_BUTTON" />
+								</object>
+								<col>4</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="stb_wb_obj" member="no">
+									<label>发放对象</label>
+									<object class="sizeritem">
+										<object class="wxGridSizer" variable="GridSizer1" member="no">
+											<cols>6</cols>
+											<rows>2</rows>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_CHECKBOX_PU" variable="cb_pu" member="yes">
+													<label>PU</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_CHECKBOX_QM" variable="cb_qm" member="yes">
+													<label>QM</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_CHECKBOX_IE" variable="cb_ie" member="yes">
+													<label>IE</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_CHECKBOX_PP" variable="cb_pp" member="yes">
+													<label>PP</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_CHECKBOX_lo" variable="cb_lo" member="yes">
+													<label>LO</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_CHECKBOX_PSM" variable="cb_psm" member="yes">
+													<label>PSM</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_CHECKBOX_PM" variable="cb_pm" member="yes">
+													<label>PM</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_CHECKBOX_CO" variable="cb_co" member="yes">
+													<label>CO</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxCheckBox" name="ID_CHECKBOX_OTHERS" variable="cb_others" member="yes">
+													<label>Others</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALL|wxEXPAND</flag>
+										<option>1</option>
+									</object>
+								</object>
+								<colspan>6</colspan>
+								<rowspan>2</rowspan>
+								<col>0</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>2</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+					<label>备注</label>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL_REMARKS" variable="tc_remarks" member="yes">
+							<style>wxTE_MULTILINE</style>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>

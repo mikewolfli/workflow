@@ -1,0 +1,28 @@
+var classwx_pg_result_iterator =
+[
+    [ "wxPgResultIterator", "classwx_pg_result_iterator.html#a9144f0000ad4f3a0354bb93bb1d2ac99", null ],
+    [ "wxPgResultIterator", "classwx_pg_result_iterator.html#a7b4a02e67cfaed1dd2a47a6e9086c191", null ],
+    [ "~wxPgResultIterator", "classwx_pg_result_iterator.html#a29a142ff5cf7ed32c26d01424bd2aa70", null ],
+    [ "GetBool", "classwx_pg_result_iterator.html#a793c9649b581cd9b4a885fccd6ce8a27", null ],
+    [ "GetBool", "classwx_pg_result_iterator.html#a0738339a8c7de497d41ae7cc2bf7c3a4", null ],
+    [ "GetDate", "classwx_pg_result_iterator.html#aae5464ef61b29386be5c42070e8a05d7", null ],
+    [ "GetDate", "classwx_pg_result_iterator.html#a7941768d24fce08106e35e4833562ff2", null ],
+    [ "GetDateTime", "classwx_pg_result_iterator.html#a05496d0aa23292debf9977060c8edd74", null ],
+    [ "GetDateTime", "classwx_pg_result_iterator.html#a9b17ece22b1a5d4cf859d769a35c80bd", null ],
+    [ "GetDouble", "classwx_pg_result_iterator.html#a20c1bf8fa80d9749f93cae13b17bf4fa", null ],
+    [ "GetDouble", "classwx_pg_result_iterator.html#a4f699b78207615dec25439bcc230fae5", null ],
+    [ "GetLong", "classwx_pg_result_iterator.html#a443a6f0d8e3257c3d3bfb980207f90cc", null ],
+    [ "GetLong", "classwx_pg_result_iterator.html#a6756e513c87b66177e5b4bf2f2d4211e", null ],
+    [ "GetLongLong", "classwx_pg_result_iterator.html#a7b3873986ee240f4236c985f075dfa7a", null ],
+    [ "GetLongLong", "classwx_pg_result_iterator.html#abd807e20d8f060f26987dfc5dcd25680", null ],
+    [ "GetOid", "classwx_pg_result_iterator.html#ac9dd3f9749ce32cd2f95ff8a565033fa", null ],
+    [ "GetOid", "classwx_pg_result_iterator.html#a361364e42810667cdf8c34b533bf0e62", null ],
+    [ "GetVal", "classwx_pg_result_iterator.html#a8d9d60007fa1c42f5775f5cf5d42c453", null ],
+    [ "GetVal", "classwx_pg_result_iterator.html#ad8e6b305911359b161277e4a0c2104ec", null ],
+    [ "IsValid", "classwx_pg_result_iterator.html#a03ff11c7d1f3fd809e48666d7a9de6a4", null ],
+    [ "MovePrev", "classwx_pg_result_iterator.html#ad3a534aa37c1e40694e3c4a3cb568ada", null ],
+    [ "RowsLeft", "classwx_pg_result_iterator.html#a46cd9537b729ad57a1ba5b58b4b1ab4c", null ],
+    [ "Set", "classwx_pg_result_iterator.html#a79fa39247cf70ba5df4ba4cd7201ae66", null ],
+    [ "first", "classwx_pg_result_iterator.html#a20ba5cd261bde20b6639218281d6757e", null ],
+    [ "set", "classwx_pg_result_iterator.html#a5578916f3500694be464d09eba4df348", null ]
+];

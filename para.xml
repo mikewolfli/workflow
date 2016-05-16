@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mechanic>
+    <item>曳引机</item>
+    <item>曳引机机架</item>
+    <item>导向轮组件</item>
+    <item>井道顶部梁</item>
+	<item>限速器组件</item>
+	<item>隔机梁</item>
+	<item>导轨支架(轿厢侧)</item>
+	<item>导轨支架(对重侧)</item>
+	<item>顶部导轨</item>
+	<item>缓冲器</item>
+	<item>缓冲器底座(轿厢侧)</item>
+	<item>缓冲器底座(对重侧)</item>
+	<item>轿壁</item>
+	<item>轿顶</item>
+	<item>吊顶</item>
+	<item>轿顶防护栏</item>
+	<item>轿底组件</item>
+	<item>上梁组件</item>
+	<item>轿顶轮组件</item>
+	<item>下梁组件</item>
+	<item>滚动导靴(轿厢侧)</item>
+	<item>轿厢架立柱组件</item>
+	<item>轿架斜拉杆</item>
+	<item>安全钳</item>
+	<item>空调</item>
+	<item>空调安装支架</item>
+	<item>对重轮组件</item>
+	<item>对重框架组件</item>
+	<item>对重防护栏组件</item>
+	<item>对重块</item>
+	<item>轿门安装附件</item>
+	<item>轿门悬挂组件</item>
+	<item>轿门地坎</item>
+	<item>轿门门板</item>
+	<item>光幕</item>
+	<item>光幕支撑板</item>
+	<item>厅门门板</item>
+	<item>门套</item>
+	<item>厅门悬挂组件</item>
+	<item>门地坎</item>
+	<item>观光梯</item>
+	<item>机械整梯非标</item>
+	<item>其他</item>
+</mechanic>
+<electric>
+   <item>控制柜</item>
+   <item>COP</item>
+   <item>LIOP</item>
+   <item>电缆</item>
+   <item>电气整梯BOM</item>
+   <item>其他非标点</item>
+</electric>
+<private_filter>
+	<default>0</default>
+</private_filter>
+
+<private_task_catalog>
+	<item>售前技术征询</item>
+	<item>售后技术支持</item>
+	<item>ECR(ECO)处理</item>
+	<item>紧急项目交货期预定</item>
+	<item>设计（新部件规范及技术文档）</item>
+	<item>试制单及内联单下发</item>
+	<item>公出</item>
+	<item>会议</item>
+	<item>培训</item>
+	<item>供应商非标图纸确认</item>
+	<item>库存使用及消耗</item>
+	<item>PC维护及支持</item>
+	<item>其他事宜(非整梯排产相关)</item>
+</private_task_catalog>
+
+<StartFolder>
+   <item>0100 控制屏总成</item>
+   <item>0201 曳引机总成</item>
+   <item>0202 曳引机机架</item>
+   <item>0300 井道部件总成</item>
+   <item>0400 导轨总成</item>
+   <item>0500 厅门头门板组件</item>
+   <item>0600 安全部件</item>
+   <item>0700 SPEC&GAD</item>
+   <item>0801 电缆组件</item>
+   <item>0802 芯片信息表</item>
+   <item>0803 COP&LOP</item>
+   <item>1000 轿底轿顶总成</item>
+   <item>1100 轿壁总成</item>
+   <item>1200 轿门组合</item>
+   <item>1300 对重框架</item>
+   <item>1400 对重铁</item>
+   <item>1500 悬挂绳索总成</item>
+   <item>1600 补偿链总成</item>
+</StartFolder>
+
+<StartPath>
+   <item>M:\</item>
+</StartPath>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="project_review_author_panel">
+		<id_arg>0</id_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxGridBagSizer" variable="GridBagSizer1" member="no">
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="sbox_author" member="no">
+							<label>待授权任务清单</label>
+						</object>
+						<colspan>6</colspan>
+						<rowspan>6</rowspan>
+						<col>0</col>
+						<row>0</row>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>6</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_AUTHOR" variable="Button_Author" member="yes">
+									<label>授权/评审/审核</label>
+									<handler function="OnButton_AuthorClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_REUEIRE_FINISH" variable="Button_Require" member="yes">
+									<label>设置评审完成日</label>
+									<handler function="OnButton_RequireClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_DRAW_QTY" variable="Button_Draw_qty" member="yes">
+									<label>变更图纸套数</label>
+									<handler function="OnButton_Draw_qtyClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_RETURN" variable="Button_RETURN" member="yes">
+									<label>任务退回</label>
+									<handler function="OnButton_RETURNClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_RETURN_TO_START" variable="Button_return_to_start" member="yes">
+									<label>退回到待启动状态</label>
+									<hidden>1</hidden>
+									<handler function="OnButton_return_to_startClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_FEEDBACK" variable="Button_Feedback" member="yes">
+									<label>问题反馈</label>
+									<handler function="OnButton_FeedbackClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_REFRESH" variable="Button_REFRESH" member="yes">
+									<label>刷新任务列表</label>
+									<handler function="OnButton_REFRESHClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_GROUP" variable="button_group" member="yes">
+									<label>组员评审任务(全显)</label>
+									<handler function="Onbutton_groupClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<col>6</col>
+						<row>0</row>
+						<flag>wxALL|wxALIGN_TOP</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+							<label>组员列表</label>
+							<object class="sizeritem">
+								<object class="wxListView" name="ID_LISTVIEW_PERSON" variable="lv_person" member="yes">
+									<size>185,224</size>
+									<style>wxLC_REPORT</style>
+									<handler function="Onlv_personItemActivated" entry="EVT_LIST_ITEM_ACTIVATED" />
+									<handler function="Onlv_personItemRClick" entry="EVT_LIST_ITEM_RIGHT_CLICK" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<colspan>2</colspan>
+						<rowspan>6</rowspan>
+						<col>7</col>
+						<row>0</row>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>2</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="sb_group" member="no">
+					<label>组员任务清单</label>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_author" member="yes">
+			<object class="wxMenuItem" name="idMenu_Expand" variable="mi_expand" member="yes">
+				<label>全部展开(&amp;E)</label>
+				<help>项目展开</help>
+				<handler function="Onmi_expandSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Collapse" variable="mi_collapse" member="yes">
+				<label>全部收起(&amp;C)</label>
+				<help>项目收起</help>
+				<handler function="Onmi_collapseSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_All" variable="mi_show_all" member="yes">
+				<label>显示全部任务(&amp;A)</label>
+				<help>显示全部任务</help>
+				<checked>1</checked>
+				<handler function="Onmi_show_allSelected" entry="EVT_MENU" />
+				<checkable>1</checkable>
+			</object>
+			<object class="wxMenuItem" name="idMenu_Author" variable="mi_show_author" member="yes">
+				<label>仅显示待授权(&amp;W)</label>
+				<help>仅显示待授权</help>
+				<handler function="Onmi_show_authorSelected" entry="EVT_MENU" />
+				<checkable>1</checkable>
+			</object>
+			<object class="wxMenuItem" name="idMenu_Review" variable="mi_review" member="yes">
+				<label>仅显示待评审(&amp;R)</label>
+				<help>仅显示待评审项目</help>
+				<handler function="Onmi_reviewSelected" entry="EVT_MENU" />
+				<checkable>1</checkable>
+			</object>
+			<object class="wxMenuItem" name="idMenu_Check" variable="mi_check" member="yes">
+				<label>仅显示待审核(&amp;H)</label>
+				<help>仅显示待审核项目</help>
+				<handler function="Onmi_checkSelected" entry="EVT_MENU" />
+				<checkable>1</checkable>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_review" variable="mi_process" member="yes">
+				<label>项目评审流程信息(&amp;I)</label>
+				<help>项目评审流程信息</help>
+				<handler function="Onmi_processSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_restart_history" variable="mi_history" member="yes">
+				<label>重启评审历史(&amp;T)</label>
+				<help>重启评审历史</help>
+				<handler function="Onmi_historySelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_com_log" variable="mi_com_log" member="yes">
+				<label>问题传递log(&amp;L)</label>
+				<help>问题传递log</help>
+				<handler function="Onmi_com_logSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_pos" variable="mi_pos" member="yes">
+				<label>快速定位(&amp;P)</label>
+				<accel>Ctrl+F</accel>
+				<help>快速定位-合同号或WBSNO</help>
+				<handler function="Onmi_posSelected" entry="EVT_MENU" />
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_check" member="yes">
+			<object class="wxMenuItem" name="idMenu_NoCheck" variable="mi_no_check" member="yes">
+				<label>免审设置(&amp;N)</label>
+				<help>免审设置</help>
+				<handler function="Onmi_no_checkSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Cancel" variable="mi_cancel_no_check" member="yes">
+				<label>取消免审(&amp;C)</label>
+				<help>取消免审</help>
+				<handler function="Onmi_cancel_no_checkSelected" entry="EVT_MENU" />
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_filter" member="yes">
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_filter" variable="mi_filter" member="yes">
+				<label>按组员筛选(&amp;F)</label>
+				<help>按组员筛选显示项目</help>
+				<handler function="Onmi_filterSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_show_all" variable="mi_showall" member="yes">
+				<label>所有组员任务(&amp;A)</label>
+				<help>所有组员任务</help>
+				<handler function="Onmi_showallSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_group_review" variable="mi_group_process" member="yes">
+				<label>项目评审流程信息(&amp;I)</label>
+				<help>项目评审流程信息</help>
+				<handler function="Onmi_group_processSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_group_restart_his" variable="mi_group_review_history" member="yes">
+				<label>重启评审历史(&amp;H)</label>
+				<help>重启评审历史</help>
+				<handler function="Onmi_group_review_historySelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_group_com_log" variable="mi_group_com_log" member="yes">
+				<label>问题传递log(&amp;L)</label>
+				<help>问题传递log</help>
+				<handler function="Onmi_group_com_logSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_group_pos" variable="mi_group_pos" member="yes">
+				<label>快速定位(&amp;P)</label>
+				<accel>Ctrl+D</accel>
+				<help>快速定位</help>
+				<handler function="Onmi_group_posSelected" entry="EVT_MENU" />
+			</object>
+		</object>
+	</object>
+</wxsmith>

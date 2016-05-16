@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="wf" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/wf" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D__WXMSW__" />
+					<Add option="-D_UNICODE" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-DNOPCH" />
+					<Add directory="$(CODEBLOCKS)/sdk/wx/lib/gcc_lib/mswud" />
+					<Add directory="$(CODEBLOCKS)/sdk/pugixml/src" />
+					<Add directory="interface" />
+					<Add directory="utils" />
+					<Add directory="thread" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="$(CODEBLOCKS)/sdk/wx/lib/gcc_lib/mswud" />
+				</ResourceCompiler>
+				<Linker>
+					<Add library="libwxtoolboxd.a" />
+					<Add library="libwxmsw31ud.a" />
+					<Add library="libwxmsw31ud_gl.a" />
+					<Add library="libwxjpegd.a" />
+					<Add library="libwxpngd.a" />
+					<Add library="libwxregexud.a" />
+					<Add library="libwxexpatd.a" />
+					<Add library="libwxscintillad.a" />
+					<Add library="libwxtiffd.a" />
+					<Add library="libwxzlibd.a" />
+					<Add library="xlslib/lib/libxlsd.a" />
+					<Add library="wxJson/lib/libwxjsond.a" />
+					<Add directory="$(CODEBLOCKS)/sdk/wx/lib/gcc_lib" />
+					<Add directory="$(CODEBLOCKS)/sdk/pugixml/lib/gcc" />
+					<Add directory="wxJSON/lib/gcc_lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/wf" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DWIN32" />
+					<Add option="-D__WXMSW__" />
+					<Add option="-D_UNICODE" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-DNOPCH" />
+					<Add directory="$(CODEBLOCKS)/sdk/wx/lib/gcc_lib/mswu" />
+					<Add directory="$(CODEBLOCKS)/sdk/pugixml/src" />
+					<Add directory="interface" />
+					<Add directory="utils" />
+					<Add directory="thread" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="$(CODEBLOCKS)/sdk/wx/lib/gcc_lib/mswu" />
+					<Add directory="$(CODEBLOCKS)/sdk/pugixml/src" />
+				</ResourceCompiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="libwxtoolbox.a" />
+					<Add library="libwxmsw31u.a" />
+					<Add library="libwxmsw31u_gl.a" />
+					<Add library="libwxpng.a" />
+					<Add library="libwxjpeg.a" />
+					<Add library="libwxregexu.a" />
+					<Add library="libwxexpat.a" />
+					<Add library="libwxscintilla.a" />
+					<Add library="libwxtiff.a" />
+					<Add library="libwxzlib.a" />
+					<Add library="xlslib/lib/libxls.a" />
+					<Add library="wxJson/lib/libwxjson.a" />
+					<Add directory="$(CODEBLOCKS)/sdk/wx/lib/gcc_lib" />
+					<Add directory="$(CODEBLOCKS)/sdk/pugixml/lib/gcc" />
+					<Add directory="wxJSON/lib/gcc_lib" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-pipe" />
+			<Add option="-mthreads" />
+			<Add option="-D__GNUWIN32__" />
+			<Add option="-D__WXMSW__" />
+			<Add option="-DwxUSE_UNICODE" />
+			<Add option="-DSAPwithUNICODE" />
+			<Add option="-DHAVE_CONFIG_H" />
+			<Add option="-DCURL_STATICLIB" />
+			<Add directory="../wf" />
+			<Add directory="postgresql" />
+			<Add directory="interface" />
+			<Add directory="xlslib/src" />
+			<Add directory="pugixml/src" />
+			<Add directory="nwrfcsdk/include" />
+			<Add directory="qrencode" />
+			<Add directory="wxcurl/include" />
+			<Add directory="wxJson/include" />
+		</Compiler>
+		<ResourceCompiler>
+			<Add directory="../wf" />
+			<Add directory="postgresql" />
+		</ResourceCompiler>
+		<Linker>
+			<Add option="-mthreads" />
+			<Add library="postgresql/gcc/libpq.a" />
+			<Add library="nwrfcsdk/lib/sapnwrfc.a" />
+			<Add library="libcurl.a" />
+			<Add library="ws2_32" />
+			<Add library="wldap32" />
+			<Add library="libssl.a" />
+			<Add library="libcrypto.a" />
+			<Add library="libssh2.a" />
+			<Add library="libz.a" />
+			<Add directory="postgresql/gcc" />
+			<Add directory="wxJson/lib" />
+		</Linker>
+		<Unit filename="add_nstd_app_item.cpp" />
+		<Unit filename="add_nstd_app_item.h" />
+		<Unit filename="cf_task_list.cpp" />
+		<Unit filename="cf_task_list.h" />
+		<Unit filename="communication_dlg.cpp" />
+		<Unit filename="communication_dlg.h" />
+		<Unit filename="configure_mat_list_editor.cpp" />
+		<Unit filename="configure_mat_list_editor.h" />
+		<Unit filename="connect_para_dlg.cpp" />
+		<Unit filename="connect_para_dlg.h" />
+		<Unit filename="contract_label_print.cpp" />
+		<Unit filename="contract_label_print.h" />
+		<Unit filename="contractbook_br_dlg.cpp" />
+		<Unit filename="contractbook_br_dlg.h" />
+		<Unit filename="contractlabeldraw.cpp" />
+		<Unit filename="contractlabeldraw.h" />
+		<Unit filename="ctrl/treelistctrl.cpp" />
+		<Unit filename="ctrl/treelistctrl.h" />
+		<Unit filename="datepickerdlg.cpp" />
+		<Unit filename="datepickerdlg.h" />
+		<Unit filename="enter_log.cpp" />
+		<Unit filename="enter_log.h" />
+		<Unit filename="evaluate_dlg.cpp" />
+		<Unit filename="evaluate_dlg.h" />
+		<Unit filename="generated_id_display_panel.cpp" />
+		<Unit filename="generated_id_display_panel.h" />
+		<Unit filename="info_id_generator_panel.cpp" />
+		<Unit filename="info_id_generator_panel.h" />
+		<Unit filename="ins_nonstd_proc_log.cpp" />
+		<Unit filename="ins_nonstd_proc_log.h" />
+		<Unit filename="ins_proc_log.cpp" />
+		<Unit filename="ins_proc_log.h" />
+		<Unit filename="instance_unit_info.cpp" />
+		<Unit filename="instance_unit_info.h" />
+		<Unit filename="interface/ctlSQLGrid.cpp" />
+		<Unit filename="interface/ctlSQLGrid.h" />
+		<Unit filename="interface/nstdapptable.cpp" />
+		<Unit filename="interface/nstdapptable.h" />
+		<Unit filename="interface/sqledittable.cpp" />
+		<Unit filename="interface/sqledittable.h" />
+		<Unit filename="interface/sqlresulttable.cpp" />
+		<Unit filename="interface/sqlresulttable.h" />
+		<Unit filename="interface/wxPostgreSQL.cpp" />
+		<Unit filename="interface/wxPostgreSQL.h" />
+		<Unit filename="interface/wxpg_utils.cpp" />
+		<Unit filename="interface/wxpg_utils.h" />
+		<Unit filename="login_dlg.cpp" />
+		<Unit filename="login_dlg.h" />
+		<Unit filename="mydatepicker.cpp" />
+		<Unit filename="mydatepicker.h" />
+		<Unit filename="ncr_proc_dlg.cpp" />
+		<Unit filename="ncr_proc_dlg.h" />
+		<Unit filename="ncr_proc_panel.cpp" />
+		<Unit filename="ncr_proc_panel.h" />
+		<Unit filename="ndo_generator_panel.cpp" />
+		<Unit filename="ndo_generator_panel.h" />
+		<Unit filename="nstd_app_item_units.cpp" />
+		<Unit filename="nstd_app_item_units.h" />
+		<Unit filename="nstd_app_search.cpp" />
+		<Unit filename="nstd_app_search.h" />
+		<Unit filename="nstd_app_unit_list.cpp" />
+		<Unit filename="nstd_app_unit_list.h" />
+		<Unit filename="nstd_apply_panel.cpp" />
+		<Unit filename="nstd_apply_panel.h" />
+		<Unit filename="nstd_author_panel.cpp" />
+		<Unit filename="nstd_author_panel.h" />
+		<Unit filename="nstd_ins_doc.cpp" />
+		<Unit filename="nstd_ins_doc.h" />
+		<Unit filename="nstd_mat_apply.cpp" />
+		<Unit filename="nstd_mat_apply.h" />
+		<Unit filename="nstd_mat_muti_level_task_list.cpp" />
+		<Unit filename="nstd_mat_muti_level_task_list.h" />
+		<Unit filename="nstd_mat_task_list.cpp" />
+		<Unit filename="nstd_mat_task_list.h" />
+		<Unit filename="nstd_reason_list.cpp" />
+		<Unit filename="nstd_reason_list.h" />
+		<Unit filename="nstd_task_author.cpp" />
+		<Unit filename="nstd_task_author.h" />
+		<Unit filename="nstd_task_tree_list.cpp" />
+		<Unit filename="nstd_task_tree_list.h" />
+		<Unit filename="po_confirm_panel.cpp" />
+		<Unit filename="po_confirm_panel.h" />
+		<Unit filename="private_setting.cpp" />
+		<Unit filename="private_setting.h" />
+		<Unit filename="private_tasks_panel.cpp" />
+		<Unit filename="private_tasks_panel.h" />
+		<Unit filename="prj_hex_result_dlg.cpp" />
+		<Unit filename="prj_hex_result_dlg.h" />
+		<Unit filename="proj_configure_history.cpp" />
+		<Unit filename="proj_configure_history.h" />
+		<Unit filename="project_author_panel.cpp" />
+		<Unit filename="project_author_panel.h" />
+		<Unit filename="project_info_panel.cpp" />
+		<Unit filename="project_info_panel.h" />
+		<Unit filename="project_review_author_panel.cpp" />
+		<Unit filename="project_review_author_panel.h" />
+		<Unit filename="project_review_panel.cpp" />
+		<Unit filename="project_review_panel.h" />
+		<Unit filename="pugixml/src/pugiconfig.hpp" />
+		<Unit filename="pugixml/src/pugixml.cpp" />
+		<Unit filename="pugixml/src/pugixml.hpp" />
+		<Unit filename="qrencode/bitstream.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="qrencode/bitstream.h" />
+		<Unit filename="qrencode/config.h" />
+		<Unit filename="qrencode/mask.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="qrencode/mask.h" />
+		<Unit filename="qrencode/mmask.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="qrencode/mmask.h" />
+		<Unit filename="qrencode/mqrspec.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="qrencode/mqrspec.h" />
+		<Unit filename="qrencode/qrencode.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="qrencode/qrencode.h" />
+		<Unit filename="qrencode/qrencode_inner.h" />
+		<Unit filename="qrencode/qrinput.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="qrencode/qrinput.h" />
+		<Unit filename="qrencode/qrspec.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="qrencode/qrspec.h" />
+		<Unit filename="qrencode/rsecc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="qrencode/rsecc.h" />
+		<Unit filename="qrencode/split.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="qrencode/split.h" />
+		<Unit filename="res/tab16.jpg" />
+		<Unit filename="res/toolbar16.jpg" />
+		<Unit filename="res/toolbox48.jpg" />
+		<Unit filename="reset_pwd.cpp" />
+		<Unit filename="reset_pwd.h" />
+		<Unit filename="resource.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="return_log.cpp" />
+		<Unit filename="return_log.h" />
+		<Unit filename="review_communication_log.cpp" />
+		<Unit filename="review_communication_log.h" />
+		<Unit filename="review_remarks_dlg.cpp" />
+		<Unit filename="review_remarks_dlg.h" />
+		<Unit filename="rfc_communication.cpp" />
+		<Unit filename="rfc_communication.h" />
+		<Unit filename="search_case.cpp" />
+		<Unit filename="search_case.h" />
+		<Unit filename="security/base64.cpp" />
+		<Unit filename="security/base64.h" />
+		<Unit filename="security/md5.cpp" />
+		<Unit filename="security/md5.h" />
+		<Unit filename="security/wxMD5.cpp" />
+		<Unit filename="security/wxMD5.h" />
+		<Unit filename="thread/curl_http.cpp" />
+		<Unit filename="thread/curl_http.h" />
+		<Unit filename="thread/curl_thread.cpp" />
+		<Unit filename="thread/curl_thread.h" />
+		<Unit filename="thread/mythread.cpp" />
+		<Unit filename="thread/mythread.h" />
+		<Unit filename="unit_info_attach_dlg.cpp" />
+		<Unit filename="unit_info_attach_dlg.h" />
+		<Unit filename="units_list_dlg.cpp" />
+		<Unit filename="units_list_dlg.h" />
+		<Unit filename="utils/wf_operator.cpp" />
+		<Unit filename="utils/wf_operator.h" />
+		<Unit filename="version.h" />
+		<Unit filename="wfApp.cpp" />
+		<Unit filename="wfApp.h" />
+		<Unit filename="wfMain.cpp" />
+		<Unit filename="wfMain.h" />
+		<Unit filename="wf_listview_dlg.cpp" />
+		<Unit filename="wf_listview_dlg.h" />
+		<Unit filename="wf_num_id_dlg.cpp" />
+		<Unit filename="wf_num_id_dlg.h" />
+		<Unit filename="wf_search.cpp" />
+		<Unit filename="wf_search.h" />
+		<Unit filename="wf_stdafx.cpp" />
+		<Unit filename="wf_stdafx.h" />
+		<Unit filename="wf_workflow_panel.cpp" />
+		<Unit filename="wf_workflow_panel.h" />
+		<Unit filename="workflow_wf.cpp" />
+		<Unit filename="workflow_wf.h" />
+		<Unit filename="wxsmith/add_nstd_app_item.wxs" />
+		<Unit filename="wxsmith/cf_task_list.wxs" />
+		<Unit filename="wxsmith/communication_dlg.wxs" />
+		<Unit filename="wxsmith/configure_mat_list_editor.wxs" />
+		<Unit filename="wxsmith/contract_label_print.wxs" />
+		<Unit filename="wxsmith/contractbook_br_dlg.wxs" />
+		<Unit filename="wxsmith/enter_log.wxs" />
+		<Unit filename="wxsmith/evaluate_dlg.wxs" />
+		<Unit filename="wxsmith/generated_id_display_panel.wxs" />
+		<Unit filename="wxsmith/info_id_generator_panel.wxs" />
+		<Unit filename="wxsmith/ins_nonstd_proc_log.wxs" />
+		<Unit filename="wxsmith/ins_proc_log.wxs" />
+		<Unit filename="wxsmith/instance_unit_info.wxs" />
+		<Unit filename="wxsmith/login_dlg.wxs" />
+		<Unit filename="wxsmith/mydatepicker.wxs" />
+		<Unit filename="wxsmith/ncr_proc_dlg.wxs" />
+		<Unit filename="wxsmith/ncr_proc_panel.wxs" />
+		<Unit filename="wxsmith/ndo_generator_panel.wxs" />
+		<Unit filename="wxsmith/nstd_app_item_units.wxs" />
+		<Unit filename="wxsmith/nstd_app_search.wxs" />
+		<Unit filename="wxsmith/nstd_app_unit_list.wxs" />
+		<Unit filename="wxsmith/nstd_apply_panel.wxs" />
+		<Unit filename="wxsmith/nstd_author_panel.wxs" />
+		<Unit filename="wxsmith/nstd_ins_doc.wxs" />
+		<Unit filename="wxsmith/nstd_mat_apply.wxs" />
+		<Unit filename="wxsmith/nstd_mat_muti_level_task_list.wxs" />
+		<Unit filename="wxsmith/nstd_mat_task_list.wxs" />
+		<Unit filename="wxsmith/nstd_task_author.wxs" />
+		<Unit filename="wxsmith/nstd_task_tree_list.wxs" />
+		<Unit filename="wxsmith/po_confirm_panel.wxs" />
+		<Unit filename="wxsmith/private_setting.wxs" />
+		<Unit filename="wxsmith/private_tasks_panel.wxs" />
+		<Unit filename="wxsmith/prj_hex_result_dlg.wxs" />
+		<Unit filename="wxsmith/proj_configure_history.wxs" />
+		<Unit filename="wxsmith/project_author_panel.wxs" />
+		<Unit filename="wxsmith/project_info_panel.wxs" />
+		<Unit filename="wxsmith/project_review_author_panel.wxs" />
+		<Unit filename="wxsmith/project_review_panel.wxs" />
+		<Unit filename="wxsmith/reset_pwd.wxs" />
+		<Unit filename="wxsmith/return_log.wxs" />
+		<Unit filename="wxsmith/review_communication_log.wxs" />
+		<Unit filename="wxsmith/review_remarks_dlg.wxs" />
+		<Unit filename="wxsmith/search_case.wxs" />
+		<Unit filename="wxsmith/unit_info_attach_dlg.wxs" />
+		<Unit filename="wxsmith/units_list_dlg.wxs" />
+		<Unit filename="wxsmith/wf_listview_dlg.wxs" />
+		<Unit filename="wxsmith/wf_search1.wxs" />
+		<Unit filename="wxsmith/wf_workflow_panel1.wxs" />
+		<Unit filename="wxsmith/workflow_wf.wxs" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="wfApp.cpp" main="" init_handlers="necessary" language="CPP" />
+				<resources>
+					<wxDialog wxs="wxsmith/login_dlg.wxs" src="login_dlg.cpp" hdr="login_dlg.h" fwddecl="0" i18n="1" name="login_dlg" language="CPP" />
+					<wxPanel wxs="wxsmith/instance_unit_info.wxs" src="instance_unit_info.cpp" hdr="instance_unit_info.h" fwddecl="0" i18n="1" name="instance_unit_info" language="CPP" />
+					<wxPanel wxs="wxsmith/workflow_wf.wxs" src="workflow_wf.cpp" hdr="workflow_wf.h" fwddecl="0" i18n="1" name="workflow_wf" language="CPP" />
+					<wxPanel wxs="wxsmith/project_author_panel.wxs" src="project_author_panel.cpp" hdr="project_author_panel.h" fwddecl="0" i18n="1" name="project_author_panel" language="CPP" />
+					<wxDialog wxs="wxsmith/search_case.wxs" src="search_case.cpp" hdr="search_case.h" fwddecl="0" i18n="1" name="search_case" language="CPP" />
+					<wxDialog wxs="wxsmith/enter_log.wxs" src="enter_log.cpp" hdr="enter_log.h" fwddecl="0" i18n="1" name="enter_log" language="CPP" />
+					<wxDialog wxs="wxsmith/mydatepicker.wxs" src="mydatepicker.cpp" hdr="mydatepicker.h" fwddecl="0" i18n="1" name="mydatepicker" language="CPP" />
+					<wxDialog wxs="wxsmith/ins_proc_log.wxs" src="ins_proc_log.cpp" hdr="ins_proc_log.h" fwddecl="0" i18n="1" name="ins_proc_log" language="CPP" />
+					<wxDialog wxs="wxsmith/reset_pwd.wxs" src="reset_pwd.cpp" hdr="reset_pwd.h" fwddecl="0" i18n="1" name="reset_pwd" language="CPP" />
+					<wxDialog wxs="wxsmith/wf_search1.wxs" src="wf_search.cpp" hdr="wf_search.h" fwddecl="0" i18n="1" name="wf_search" language="CPP" />
+					<wxDialog wxs="wxsmith/return_log.wxs" src="return_log.cpp" hdr="return_log.h" fwddecl="0" i18n="1" name="return_log" language="CPP" />
+					<wxPanel wxs="wxsmith/nstd_apply_panel.wxs" src="nstd_apply_panel.cpp" hdr="nstd_apply_panel.h" fwddecl="0" i18n="1" name="nstd_apply_panel" language="CPP" />
+					<wxDialog wxs="wxsmith/cf_task_list.wxs" src="cf_task_list.cpp" hdr="cf_task_list.h" fwddecl="0" i18n="1" name="cf_task_list" language="CPP" />
+					<wxPanel wxs="wxsmith/nstd_author_panel.wxs" src="nstd_author_panel.cpp" hdr="nstd_author_panel.h" fwddecl="0" i18n="1" name="nstd_author_panel" language="CPP" />
+					<wxPanel wxs="wxsmith/nstd_mat_apply.wxs" src="nstd_mat_apply.cpp" hdr="nstd_mat_apply.h" fwddecl="0" i18n="1" name="nstd_mat_apply" language="CPP" />
+					<wxPanel wxs="wxsmith/wf_workflow_panel1.wxs" src="wf_workflow_panel.cpp" hdr="wf_workflow_panel.h" fwddecl="0" i18n="1" name="wf_workflow_panel" language="CPP" />
+					<wxDialog wxs="wxsmith/nstd_app_unit_list.wxs" src="nstd_app_unit_list.cpp" hdr="nstd_app_unit_list.h" fwddecl="0" i18n="1" name="nstd_app_unit_list" language="CPP" />
+					<wxDialog wxs="wxsmith/add_nstd_app_item.wxs" src="add_nstd_app_item.cpp" hdr="add_nstd_app_item.h" fwddecl="0" i18n="1" name="add_nstd_app_item" language="CPP" />
+					<wxDialog wxs="wxsmith/nstd_app_search.wxs" src="nstd_app_search.cpp" hdr="nstd_app_search.h" fwddecl="0" i18n="1" name="nstd_app_search" language="CPP" />
+					<wxDialog wxs="wxsmith/nstd_app_item_units.wxs" src="nstd_app_item_units.cpp" hdr="nstd_app_item_units.h" fwddecl="0" i18n="1" name="nstd_app_item_units" language="CPP" />
+					<wxDialog wxs="wxsmith/nstd_task_author.wxs" src="nstd_task_author.cpp" hdr="nstd_task_author.h" fwddecl="0" i18n="1" name="nstd_task_author" language="CPP" />
+					<wxDialog wxs="wxsmith/nstd_mat_task_list.wxs" src="nstd_mat_task_list.cpp" hdr="nstd_mat_task_list.h" fwddecl="0" i18n="1" name="nstd_mat_task_list" language="CPP" />
+					<wxDialog wxs="wxsmith/ins_nonstd_proc_log.wxs" src="ins_nonstd_proc_log.cpp" hdr="ins_nonstd_proc_log.h" fwddecl="0" i18n="1" name="ins_nonstd_proc_log" language="CPP" />
+					<wxDialog wxs="wxsmith/nstd_mat_muti_level_task_list.wxs" src="nstd_mat_muti_level_task_list.cpp" hdr="nstd_mat_muti_level_task_list.h" fwddecl="0" i18n="1" name="nstd_mat_muti_level_task_list" language="CPP" />
+					<wxDialog wxs="wxsmith/configure_mat_list_editor.wxs" src="configure_mat_list_editor.cpp" hdr="configure_mat_list_editor.h" fwddecl="0" i18n="1" name="configure_mat_list_editor" language="CPP" />
+					<wxDialog wxs="wxsmith/evaluate_dlg.wxs" src="evaluate_dlg.cpp" hdr="evaluate_dlg.h" fwddecl="0" i18n="1" name="evaluate_dlg" language="CPP" />
+					<wxPanel wxs="wxsmith/private_tasks_panel.wxs" src="private_tasks_panel.cpp" hdr="private_tasks_panel.h" fwddecl="0" i18n="1" name="private_tasks_panel" language="CPP" />
+					<wxDialog wxs="wxsmith/private_setting.wxs" src="private_setting.cpp" hdr="private_setting.h" fwddecl="0" i18n="1" name="private_setting" language="CPP" />
+					<wxDialog wxs="wxsmith/proj_configure_history.wxs" src="proj_configure_history.cpp" hdr="proj_configure_history.h" fwddecl="0" i18n="1" name="proj_configure_history" language="CPP" />
+					<wxPanel wxs="wxsmith/project_info_panel.wxs" src="project_info_panel.cpp" hdr="project_info_panel.h" fwddecl="0" i18n="1" name="project_info_panel" language="CPP" />
+					<wxPanel wxs="wxsmith/project_review_author_panel.wxs" src="project_review_author_panel.cpp" hdr="project_review_author_panel.h" fwddecl="0" i18n="1" name="project_review_author_panel" language="CPP" />
+					<wxPanel wxs="wxsmith/project_review_panel.wxs" src="project_review_panel.cpp" hdr="project_review_panel.h" fwddecl="0" i18n="1" name="project_review_panel" language="CPP" />
+					<wxPanel wxs="wxsmith/po_confirm_panel.wxs" src="po_confirm_panel.cpp" hdr="po_confirm_panel.h" fwddecl="0" i18n="1" name="po_confirm_panel" language="CPP" />
+					<wxDialog wxs="wxsmith/review_remarks_dlg.wxs" src="review_remarks_dlg.cpp" hdr="review_remarks_dlg.h" fwddecl="0" i18n="1" name="review_remarks_dlg" language="CPP" />
+					<wxDialog wxs="wxsmith/communication_dlg.wxs" src="communication_dlg.cpp" hdr="communication_dlg.h" fwddecl="0" i18n="1" name="communication_dlg" language="CPP" />
+					<wxDialog wxs="wxsmith/nstd_ins_doc.wxs" src="nstd_ins_doc.cpp" hdr="nstd_ins_doc.h" fwddecl="0" i18n="1" name="nstd_ins_doc" language="CPP" />
+					<wxDialog wxs="wxsmith/nstd_task_tree_list.wxs" src="nstd_task_tree_list.cpp" hdr="nstd_task_tree_list.h" fwddecl="0" i18n="1" name="nstd_task_tree_list" language="CPP" />
+					<wxDialog wxs="wxsmith/unit_info_attach_dlg.wxs" src="unit_info_attach_dlg.cpp" hdr="unit_info_attach_dlg.h" fwddecl="0" i18n="1" name="unit_info_attach_dlg" language="CPP" />
+					<wxPanel wxs="wxsmith/info_id_generator_panel.wxs" src="info_id_generator_panel.cpp" hdr="info_id_generator_panel.h" fwddecl="0" i18n="1" name="info_id_generator_panel" language="CPP" />
+					<wxPanel wxs="wxsmith/generated_id_display_panel.wxs" src="generated_id_display_panel.cpp" hdr="generated_id_display_panel.h" fwddecl="0" i18n="1" name="generated_id_display_panel" language="CPP" />
+					<wxDialog wxs="wxsmith/units_list_dlg.wxs" src="units_list_dlg.cpp" hdr="units_list_dlg.h" fwddecl="0" i18n="1" name="units_list_dlg" language="CPP" />
+					<wxDialog wxs="wxsmith/review_communication_log.wxs" src="review_communication_log.cpp" hdr="review_communication_log.h" fwddecl="0" i18n="1" name="review_communication_log" language="CPP" />
+					<wxDialog wxs="wxsmith/contract_label_print.wxs" src="contract_label_print.cpp" hdr="contract_label_print.h" fwddecl="0" i18n="1" name="contract_label_print" language="CPP" />
+					<wxDialog wxs="wxsmith/wf_listview_dlg.wxs" src="wf_listview_dlg.cpp" hdr="wf_listview_dlg.h" fwddecl="0" i18n="1" name="wf_listview_dlg" language="CPP" />
+					<wxDialog wxs="wxsmith/prj_hex_result_dlg.wxs" src="prj_hex_result_dlg.cpp" hdr="prj_hex_result_dlg.h" fwddecl="0" i18n="1" name="prj_hex_result_dlg" language="CPP" />
+					<wxPanel wxs="wxsmith/ndo_generator_panel.wxs" src="ndo_generator_panel.cpp" hdr="ndo_generator_panel.h" fwddecl="0" i18n="1" name="ndo_generator_panel" language="CPP" />
+					<wxDialog wxs="wxsmith/ncr_proc_dlg.wxs" src="ncr_proc_dlg.cpp" hdr="ncr_proc_dlg.h" fwddecl="0" i18n="1" name="ncr_proc_dlg" language="CPP" />
+					<wxPanel wxs="wxsmith/ncr_proc_panel.wxs" src="ncr_proc_panel.cpp" hdr="ncr_proc_panel.h" fwddecl="0" i18n="1" name="ncr_proc_panel" language="CPP" />
+					<wxDialog wxs="wxsmith/contractbook_br_dlg.wxs" src="contractbook_br_dlg.cpp" hdr="contractbook_br_dlg.h" fwddecl="0" i18n="1" name="contractbook_br_dlg" language="CPP" />
+				</resources>
+			</wxsmith>
+			<AutoVersioning>
+				<Scheme minor_max="10" build_max="0" rev_max="0" rev_rand_max="10" build_times_to_increment_minor="100" />
+				<Settings autoincrement="0" date_declarations="1" use_define="0" update_manifest="1" do_auto_increment="0" ask_to_increment="0" language="C++" svn="0" svn_directory="" header_path="version.h" />
+				<Changes_Log show_changes_editor="1" app_title="released version %M.%m.%b of %p" changeslog_path="ChangesLog.txt" />
+				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix="" />
+			</AutoVersioning>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

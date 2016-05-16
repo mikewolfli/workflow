@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxDialog" name="login_dlg">
+		<title>系统登录</title>
+		<size>300,192</size>
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<handler function="OnInit" entry="EVT_INIT_DIALOG" />
+		<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+			<label>用户名:</label>
+			<pos>16,40</pos>
+			<size>72,13</size>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
+			<label>密码:</label>
+			<pos>16,80</pos>
+			<size>80,13</size>
+		</object>
+		<object class="wxTextCtrl" name="ID_TEXTCTRL_USER" variable="tc_user" member="yes">
+			<pos>96,40</pos>
+			<size>152,21</size>
+		</object>
+		<object class="wxTextCtrl" name="ID_TEXTCTRL_PWD" variable="tc_pwd" member="yes">
+			<pos>96,72</pos>
+			<size>152,21</size>
+			<style>wxTE_PASSWORD</style>
+		</object>
+		<object class="wxCheckBox" name="ID_CHECKBOX_SAVE" variable="cb_save" member="yes">
+			<label>是否保存用户名和密码</label>
+			<pos>32,104</pos>
+			<size>240,13</size>
+		</object>
+		<object class="wxButton" name="ID_BUTTON1" variable="Button1" member="yes">
+			<label>登录</label>
+			<pos>48,128</pos>
+			<handler function="OnButton1Click" entry="EVT_BUTTON" />
+		</object>
+		<object class="wxButton" name="ID_BUTTON2" variable="Button2" member="yes">
+			<label>取消</label>
+			<pos>168,128</pos>
+			<handler function="OnButton2Click" entry="EVT_BUTTON" />
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT3" variable="st_message" member="yes">
+			<label></label>
+			<pos>0,176</pos>
+			<size>296,13</size>
+		</object>
+	</object>
+</wxsmith>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="wf_workflow_panel">
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>流程操作</label>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_FEEDBACK" variable="Button1" member="yes">
+							<label>退回</label>
+							<handler function="OnButton1Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_PASS" variable="Button2" member="yes">
+							<label>完成</label>
+							<handler function="OnButton2Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_HIDE" variable="Button3" member="yes">
+							<label>显示/隐藏组员任务表</label>
+							<handler function="OnButton3Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_DISPLAY_TASKS" variable="Button_DISPLAY" member="yes">
+							<label>显示/隐藏任务表</label>
+							<handler function="OnButton_DISPLAYClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_REFRESH" variable="Button4" member="yes">
+							<label>刷新任务</label>
+							<handler function="OnButton4Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+					<label>任务清单</label>
+					<object class="sizeritem">
+						<object class="wxGrid" name="ID_GRID_TASK" subclass="sqlResultGrid" variable="gd_task_list" member="yes">
+							<handler function="Ongd_task_listCellRightClick" entry="EVT_CMD_GRID_CELL_RIGHT_CLICK" />
+							<handler function="Ongd_task_listCellRightClick" entry="EVT_CMD_GRID_LABEL_RIGHT_CLICK" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>5</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="sbs_group" member="no">
+					<label>团队任务清单</label>
+					<object class="sizeritem">
+						<object class="wxGrid" name="ID_GRID_GROUP" subclass="sqlResultGrid" variable="gd_group_task_list" member="yes">
+							<handler function="Ongd_group_task_listCellRightClick" entry="EVT_CMD_GRID_CELL_RIGHT_CLICK" />
+							<handler function="Ongd_group_task_listCellRightClick" entry="EVT_CMD_GRID_LABEL_RIGHT_CLICK" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>5</option>
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_attach" member="yes">
+			<object class="wxMenuItem" name="idMenu_REMARKS" variable="MenuItem_REMARKS" member="yes">
+				<label>备注信息(&amp;R)</label>
+				<help>备注信息</help>
+				<handler function="OnMenuItem_REMARKSSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_Units" variable="MenuItem3" member="yes">
+				<label>相关项目(&amp;U)</label>
+				<help>显示相关项目</help>
+				<handler function="OnMenuItem3Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="IdMenu_MAT_INFO" variable="MenuItem1" member="yes">
+				<label>显示配置物料清单(&amp;M)</label>
+				<accel>M</accel>
+				<help>显示配置物料清单</help>
+				<handler function="OnMenuItem1Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_RETURN" variable="MenuItem_RETURN" member="yes">
+				<label>显示退回源(&amp;F)</label>
+				<accel>F</accel>
+				<help>显示退回源</help>
+				<handler function="OnMenuItem_RETURNSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_WORKFLOW" variable="MenuItem_WORKFLOW" member="yes">
+				<label>显示工作流(&amp;W)</label>
+				<accel>W</accel>
+				<help>显示工作流</help>
+				<handler function="OnMenuItem_WORKFLOWSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_Nonstd_draw_require" variable="MenuItem4" member="yes">
+				<label>更新非标图纸需求日(&amp;D)</label>
+				<help>更新非标图纸需求日</help>
+				<handler function="OnMenuItem4Selected" entry="EVT_MENU" />
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_group" member="yes">
+			<object class="wxMenuItem" name="idMenu_Group_Filter" variable="MenuItem2" member="yes">
+				<label>按人员筛选(&amp;F)</label>
+				<accel>F</accel>
+				<help>按人员筛选</help>
+				<handler function="OnMenuItem2Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Date_filter" variable="MenuItem5" member="yes">
+				<label>按日期筛选(&amp;D)</label>
+				<help>按日期筛选</help>
+				<handler function="OnMenuItem5Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_task_tree" variable="MenuItem6" member="yes">
+				<label>显示任务树(&amp;T)</label>
+				<handler function="OnMenuItem6Selected" entry="EVT_MENU" />
+			</object>
+		</object>
+	</object>
+</wxsmith>

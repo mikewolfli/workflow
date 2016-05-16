@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="ndo_generator_panel">
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>填写信息</label>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer1" member="no">
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+									<label>组分类</label>
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxComboBox" name="ID_COMBOBOX_COMPONENTS_CLASSIFICATION" variable="cbb_comp_cli" member="yes">
+									<size>487,21</size>
+									<style>wxCB_READONLY|wxCB_DROPDOWN</style>
+									<handler function="Oncbb_comp_cliSelected" entry="EVT_COMBOBOX" />
+								</object>
+								<colspan>4</colspan>
+								<col>1</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
+									<label>部件</label>
+								</object>
+								<col>0</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxComboBox" name="ID_COMBOBOX_COMPONENTS" variable="cbb_components" member="yes">
+									<size>484,21</size>
+									<style>wxCB_READONLY|wxCB_DROPDOWN</style>
+								</object>
+								<colspan>4</colspan>
+								<col>1</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
+									<label>非标指令</label>
+								</object>
+								<col>0</col>
+								<row>2</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_ID" variable="tc_id" member="yes">
+									<size>202,21</size>
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>1</col>
+								<row>2</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
+									<label>文件号</label>
+								</object>
+								<col>2</col>
+								<row>2</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_FILE_ID" variable="tc_file_id" member="yes">
+									<size>230,21</size>
+								</object>
+								<colspan>2</colspan>
+								<col>3</col>
+								<row>2</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
+									<label>文件名称</label>
+								</object>
+								<col>0</col>
+								<row>3</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_FILE_NAME" variable="tc_file_name" member="yes">
+									<size>486,47</size>
+									<style>wxTE_MULTILINE</style>
+								</object>
+								<colspan>4</colspan>
+								<rowspan>2</rowspan>
+								<col>1</col>
+								<row>3</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText6" member="yes">
+									<label>备注</label>
+								</object>
+								<col>0</col>
+								<row>5</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_REMARKS" variable="tc_remarks" member="yes">
+									<size>484,34</size>
+									<style>wxTE_MULTILINE</style>
+								</object>
+								<colspan>4</colspan>
+								<rowspan>2</rowspan>
+								<col>1</col>
+								<row>5</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>4</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_GENERATE" variable="Button_generator" member="yes">
+							<label>指令生成</label>
+							<handler function="OnButton_generatorClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_CLEAR" variable="Button_Clear" member="yes">
+							<label>清空</label>
+							<handler function="OnButton_ClearClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_LEFT</flag>
+				<border>5</border>
+				<option>1</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>

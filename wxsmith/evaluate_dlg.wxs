@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxDialog" name="evaluate_dlg">
+		<title>任务考核</title>
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<handler function="OnInit" entry="EVT_INIT_DIALOG" />
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxGridBagSizer" variable="GridBagSizer1" member="no">
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+							<label>任务</label>
+						</object>
+						<col>0</col>
+						<row>0</row>
+						<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL1" variable="tc_task" member="yes">
+							<size>194,21</size>
+							<style>wxTE_READONLY</style>
+						</object>
+						<colspan>2</colspan>
+						<col>1</col>
+						<row>0</row>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL2" variable="tc_task_info" member="yes">
+							<size>225,38</size>
+							<style>wxTE_MULTILINE|wxTE_READONLY</style>
+						</object>
+						<colspan>2</colspan>
+						<rowspan>2</rowspan>
+						<col>3</col>
+						<row>0</row>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
+							<label>工作量</label>
+						</object>
+						<col>0</col>
+						<row>2</row>
+						<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL3" variable="tc_eval_value" member="yes">
+							<value>8</value>
+							<size>127,21</size>
+							<handler function="Ontc_eval_valueText" entry="EVT_TEXT" />
+						</object>
+						<col>1</col>
+						<row>2</row>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
+							<label>工作流</label>
+						</object>
+						<col>3</col>
+						<row>2</row>
+						<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL4" variable="tc_workflow" member="yes">
+							<size>156,21</size>
+							<style>wxTE_READONLY</style>
+						</object>
+						<col>4</col>
+						<row>2</row>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
+							<label>工作量说明</label>
+						</object>
+						<col>0</col>
+						<row>3</row>
+						<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL5" variable="tc_eval_remarks" member="yes">
+							<size>197,55</size>
+							<style>wxTE_MULTILINE</style>
+						</object>
+						<colspan>2</colspan>
+						<rowspan>2</rowspan>
+						<col>1</col>
+						<row>3</row>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText6" member="yes">
+							<label>工作步</label>
+						</object>
+						<col>3</col>
+						<row>3</row>
+						<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL6" variable="tc_action" member="yes">
+							<size>153,21</size>
+							<style>wxTE_READONLY</style>
+						</object>
+						<col>4</col>
+						<row>3</row>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT7" variable="StaticText7" member="yes">
+							<label>错误数量</label>
+						</object>
+						<col>0</col>
+						<row>5</row>
+						<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL7" variable="tc_error_qty" member="yes">
+							<value>0</value>
+							<size>129,21</size>
+							<handler function="Ontc_error_qtyText" entry="EVT_TEXT" />
+						</object>
+						<col>1</col>
+						<row>5</row>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText8" member="yes">
+							<label>操作人</label>
+						</object>
+						<col>3</col>
+						<row>4</row>
+						<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL8" variable="tc_operator" member="yes">
+							<size>154,21</size>
+							<style>wxTE_READONLY</style>
+						</object>
+						<col>4</col>
+						<row>4</row>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
+							<label>错误说明</label>
+						</object>
+						<col>0</col>
+						<row>6</row>
+						<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL9" variable="tc_error_points" member="yes">
+							<size>195,49</size>
+							<style>wxTE_MULTILINE</style>
+						</object>
+						<colspan>2</colspan>
+						<rowspan>2</rowspan>
+						<col>1</col>
+						<row>6</row>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT10" variable="st_check_eval" member="yes">
+							<label>考评人</label>
+						</object>
+						<col>3</col>
+						<row>5</row>
+						<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL10" variable="tc_evaluator" member="yes">
+							<size>155,21</size>
+							<style>wxTE_READONLY</style>
+						</object>
+						<col>4</col>
+						<row>5</row>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
+							<label>小时</label>
+						</object>
+						<col>2</col>
+						<row>2</row>
+						<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<option>7</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_OK" variable="Button_OK" member="yes">
+							<label>确认</label>
+							<handler function="OnButton_OKClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_CANCEL" variable="Button_Cancel" member="yes">
+							<label>取消</label>
+							<handler function="OnButton_CancelClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<option>1</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxDialog" name="contract_label_print">
+		<title>合同标签操作</title>
+		<id_arg>0</id_arg>
+		<style>wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX</style>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+							<label>操作按钮</label>
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxGridSizer" variable="GridSizer1" member="no">
+									<cols>2</cols>
+									<rows>4</rows>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON_ADD" variable="Button_ADD" member="yes">
+											<label>新增标签合同</label>
+											<handler function="OnButton_ADDClick" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON_REMOVE" variable="Button_Remove" member="yes">
+											<label>移除标签合同</label>
+											<handler function="OnButton_RemoveClick" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON_PRINT" variable="Button_Print" member="yes">
+											<label>打印标签</label>
+											<handler function="OnButton_PrintClick" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON_PRINT_PREVIEW" variable="Button_Print_Preview" member="yes">
+											<label>打印预览</label>
+											<handler function="OnButton_Print_PreviewClick" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON_GENERATE" variable="Button_Generate" member="yes">
+											<label>生成合同文档</label>
+											<handler function="OnButton_GenerateClick" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON_INPUT_CONTRACT_ID" variable="Button_contract_id" member="yes">
+											<label>补全合同号</label>
+											<handler function="OnButton_contract_idClick" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_BUTTON_EXIT" variable="Button_Exit" member="yes">
+											<label>退出</label>
+											<handler function="OnButton_ExitClick" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer3" member="no">
+							<label>标签合同</label>
+							<object class="sizeritem">
+								<object class="wxListView" name="ID_LISTVIEW_CONTRACT_LEVEL" variable="lv_contract" member="yes">
+									<size>153,80</size>
+									<style>wxLC_REPORT|wxLC_SINGLE_SEL</style>
+									<handler function="Onlv_contractItemSelect" entry="EVT_LIST_ITEM_SELECTED" />
+									<handler function="Onlv_contractItemRClick" entry="EVT_LIST_ITEM_RIGHT_CLICK" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>3</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer4" member="no">
+							<label>合同内包含梯</label>
+							<object class="sizeritem">
+								<object class="wxListView" name="ID_LISTVIEW_UNIT_LEVEL" variable="lv_wbs" member="yes">
+									<style>wxLC_REPORT</style>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>2</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>标签预览</label>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>3</option>
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_contract" member="yes">
+			<object class="wxMenuItem" name="idMenu_Catalog" variable="mi_catalog_switch" member="yes">
+				<label>Major Project(&amp;S)</label>
+				<help>项目类型切换</help>
+				<handler function="Onmi_catalog_switchSelected" entry="EVT_MENU" />
+				<checkable>1</checkable>
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_Add_unit" variable="mi_add_unit" member="yes">
+				<label>加入新梯(&amp;A)</label>
+				<help>加入新梯</help>
+				<handler function="Onmi_add_unitSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Remove" variable="mi_remove_unit" member="yes">
+				<label>移除已有梯(&amp;R)</label>
+				<help>移除已有梯</help>
+				<handler function="Onmi_remove_unitSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_Delete" variable="mi_del_doc" member="yes">
+				<label>删除合同文档(&amp;D)</label>
+				<help>删除合同文档</help>
+				<handler function="Onmi_del_docSelected" entry="EVT_MENU" />
+			</object>
+		</object>
+	</object>
+</wxsmith>

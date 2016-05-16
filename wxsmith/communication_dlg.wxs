@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxDialog" name="communication_dlg">
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>评审问题相关项</label>
+					<orient>wxVERTICAL</orient>
+					<object class="sizeritem">
+						<object class="wxCheckBox" name="ID_CHECKBOX_GAD" variable="cb_gad" member="yes">
+							<label>GAD</label>
+						</object>
+						<flag>wxALL|wxALIGN_LEFT</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxCheckBox" name="ID_CHECKBOX_SPEC_MEMO" variable="cb_specmemo" member="yes">
+							<label>Spec Memo</label>
+						</object>
+						<flag>wxALL|wxALIGN_LEFT</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL_CONTENT" variable="tc_content" member="yes">
+							<size>271,34</size>
+							<style>wxTE_MULTILINE</style>
+						</object>
+						<flag>wxALL|wxALIGN_LEFT</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL_RETURN" variable="tc_return" member="yes">
+							<style>wxTE_MULTILINE</style>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>3</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON1" variable="Button1" member="yes">
+							<label>确认</label>
+							<handler function="OnButton1Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON2" variable="Button2" member="yes">
+							<label>取消</label>
+							<handler function="OnButton2Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL</flag>
+				<border>5</border>
+				<option>1</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>

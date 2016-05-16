@@ -1,0 +1,7 @@
+D:/develop/code/workspace/wfcode/wf/qrencode/qrencode.h:64: warning: explicit link request to 'QRinput' could not be resolved
+D:/develop/code/workspace/wfcode/wf/qrencode/qrencode.h:85: warning: explicit link request to 'QRcode_List' could not be resolved
+D:/develop/code/workspace/wfcode/wf/qrencode/qrencode.h:104: warning: explicit link request to 'QRinput_Struct' could not be resolved
+D:/develop/code/workspace/wfcode/wf/qrencode/qrencode.h:105: warning: explicit link request to 'QRinput' could not be resolved
+D:/develop/code/workspace/wfcode/wf/qrencode/qrencode.h:106: warning: explicit link request to 'QRinput' could not be resolved
+D:/develop/code/workspace/wfcode/wf/qrencode/qrencode.h:107: warning: explicit link request to 'QRinput' could not be resolved
+D:/develop/code/workspace/wfcode/wf/qrencode/qrencode.h:107: warning: explicit link request to 'QRinput_Struct' could not be resolved

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<groups>
+	<group lang='cn'>
+		<classification pos='00' name='技术资料(GAD,技术规格表)'>
+		</classification>
+		<classification pos='01' name='机房部件(顶层部件)'>
+			<component nid='1'>曳引机</component>
+			<component nid='2'>曳引机机架</component>
+			<component nid='3'>导向轮组件</component>
+			<component nid='4'>主机/机房附件</component>
+			<component nid='5'>橡胶块</component>
+			<component nid='6'>吊环螺钉</component>
+			<component nid='7'>隔音装置</component>
+			<component nid='8'>井道顶部梁</component>
+			<component nid='9'>限速器组件</component>
+			<component nid='10'>限速器张紧装置</component>
+			<component nid='11'>张紧装置附件</component>
+			<component nid='12'>应急灯连接板</component>
+			<component nid='13'>应急灯</component>
+			<component nid='14'>松闸装置</component>
+			<component nid='15'>隔机梁</component>
+			<component nid='16'>自动救援装置</component>
+			<component nid='17'>自动救援装置电源</component>
+			<component nid='18'>电源/电缆接线盒</component>
+		</classification>
+		<classification pos='02' name='井道部件'>
+			<component nid='19'>随行电缆支架组件</component>
+			<component nid='20'>钢丝绳(随行电缆保护)</component>
+			<component nid='21'>随行电缆保护装置</component>
+			<component nid='22'>导轨支架</component>
+			<component nid='23'>导轨支架</component>
+			<component nid='24'>导轨座</component>
+			<component nid='25'>集油盒</component>
+			<component nid='26'>顶部导轨</component>
+			<component nid='27'>导轨</component>
+			<component nid='28'>导轨附件</component>
+			<component nid='29'>导轨</component>
+			<component nid='30'>导轨附件</component>
+			<component nid='31'>缓冲器</component>
+			<component nid='32'>缓冲器安装附件</component>
+			<component nid='33'>缓冲器底座(轿厢侧)</component>
+			<component nid='34'>缓冲器支架(轿厢侧)</component>
+			<component nid='35'>缓冲器底座(对重侧)</component>
+			<component nid='36'>缓冲器支架(对重侧)</component>
+			<component nid='37'>绳头端接装置</component>
+			<component nid='38'>钢丝绳</component>
+			<component nid='39'>钢丝绳</component>
+			<component nid='40'>钢丝绳</component>
+			<component nid='41'>钢丝绳夹</component>
+			<component nid='42'>消防感应组件</component>
+			<component nid='43'>井道分线盒</component>
+			<component nid='44'>补偿绳张紧装置组件</component>
+			<component nid='45'>补偿绳张紧重导轨底座组件</component>
+			<component nid='46'>补偿绳张紧装置横梁</component>
+			<component nid='47'>油压阻尼器</component>
+			<component nid='48'>木夹</component>
+			<component nid='49'>补偿缆</component>
+			<component nid='50'>补偿缆支架</component>
+			<component nid='51'>补偿链</component>
+			<component nid='52'>补偿链固定组件</component>
+			<component nid='53'>导向装置组件</component>
+			<component nid='54'>井道照明灯</component>
+			<component nid='55'>消防返回到位开关组件</component>
+			<component nid='56'>底坑爬梯</component>
+			<component nid='57'>中继器安装盒</component>
+			<component nid='58'>锁梯装置</component>
+		</classification>
+		<classification pos='03' name='轿厢'>
+			<component nid='59'>轿壁</component>
+			<component nid='60'>轿门门楣组件</component>
+			<component nid='61'>遮光板</component>
+			<component nid='62'>轿壁连接件</component>
+			<component nid='63'>轿厢扶手组件</component>
+			<component nid='64'>镜子组件</component>
+			<component nid='65'>轿顶</component>
+			<component nid='66'>风扇</component>
+			<component nid='67'>吊顶</component>
+			<component nid='68'>轿顶防护栏</component>
+			<component nid='69'>轿底组件</component>
+			<component nid='70'>平衡块</component>
+		</classification>
+		<classification pos='04' name='轿厢架'>
+			<component nid='71'>上梁组件</component>
+			<component nid='72'>轿顶轮组件</component>
+			<component nid='73'>下梁组件</component>
+			<component nid='74'>减震装置</component>
+			<component nid='75'>滑动导靴</component>
+			<component nid='76'>轿底托架</component>
+			<component nid='77'>称重支架</component>
+			<component nid='78'>减震压簧</component>
+			<component nid='79'>其他垫片</component>
+			<component nid='80'>滚动导靴(轿厢侧）</component>
+			<component nid='81'>油杯组件</component>
+			<component nid='82'>轿厢架立柱组件</component>
+			<component nid='83'>轿架斜拉杆</component>
+			<component nid='84'>安全钳</component>
+			<component nid='85'>空调</component>
+			<component nid='86'>空调安装支架</component>
+			<component nid='87'>空调安装附件</component>
+			<component nid='88'>平衡块挡板组件</component>
+			<component nid='89'>称重装置</component>
+			<component nid='90'>称重控制盒</component>
+		</classification>
+		<classification pos='05' name="对重组件">
+			<component nid='91'>对重轮组件</component>
+			<component nid='92'>对重框架组件</component>
+			<component nid='93'>对重防护栏导轨压板附件</component>
+			<component nid='94'>定距块组件</component>
+			<component nid='95'>调节对重块</component>
+			<component nid='96'>对重防护栏组件</component>
+			<component nid='97'>滑动导靴</component>
+			<component nid='98'>对重块</component>
+		</classification>
+		<classification pos='06' name='轿门系统'>
+			<component nid='99'>K5 轿门系统</component>
+			<component nid='100'>轿门安装附件</component>
+			<component nid='101'>轿门悬挂组件</component>
+			<component nid='102'>门地坎</component>
+			<component nid='103'>轿门门板</component>
+			<component nid='104'>门电机组件</component>
+			<component nid='105'>轿门安装附件</component>
+			<component nid='106'>光幕</component>
+			<component nid='107'>光幕支撑板</component>
+		</classification>
+		<classification pos='07' name='厅门'>
+			<component nid='108'>厅门门板</component>
+			<component nid='109'>小门套</component>
+			<component nid='110'>厅门悬挂组件</component>
+			<component nid='111'>门地坎</component>
+			<component nid='112'>厅门地坎托架</component>
+			<component nid='113'>厅门护脚板</component>
+			<component nid='114'>厅门安装附件</component>		     
+		</classification>
+		<classification pos='08' name='人机界面'>
+			<component nid='115'>召唤显示箱</component>
+			<component nid='116'>底坑检修箱</component>
+			<component nid='117'>轿顶检修箱</component>
+			<component nid='118'>对讲机(轿顶检修箱)</component>
+			<component nid='119'>语音报站</component>
+			<component nid='120'>井道电源盒</component>
+			<component nid='121'>井道分线盒</component>
+			<component nid='122'>消防开关盒</component>
+			<component nid='123'>蜂鸣器</component>
+			<component nid='124'>辅助急停开关盒</component>
+			<component nid='125'>电梯紧急通讯报警系统电源</component>
+			<component nid='126'>对讲机(监控室)</component>
+			<component nid='127.1'>操纵箱面板</component>
+			<component nid='127.2'>操纵箱盖板</component>
+			<component nid='127.3'>对讲机</component>
+			<component nid='127.4'>按钮</component>
+			<component nid='127.5'>芯片</component>
+			<component nid='127.6'>控制板</component>
+			<component nid='127.7'>轿厢显示板</component>
+			<component nid='127.8'>到站钟</component>
+			<component nid='127.9'>警示牌</component>
+			<component nid='127.10'>操纵箱电缆</component>
+			<component nid='128'>Bolt 板接线盒</component>
+		</classification>
+		<classification pos='09' name='控制系统'>
+			<component nid='129.1'>控制柜</component>
+			<component nid='129.2'>变频器柜</component>
+			<component nid='129.3'>电路板</component>
+			<component nid='129.4'>预开门功能组件</component>
+			<component nid='129.5'>地震功能附件</component>
+			<component nid='129.6'>高峰运行功能附件</component>
+			<component nid='129.7'>自动救援功能附件</component>
+			<component nid='129.8'>BAS接口功能附件</component>
+			<component nid='129.9'>松闸功能组件</component>
+			<component nid='130'>控制柜安装附件</component>		
+		</classification>
+		<classification pos='10' name='定位系统'>
+			<component nid='131'>感应组件</component>
+			<component nid='132'>极限开关组件</component>
+			<component nid='133'>撞弓组件</component>
+			<component nid='134'>限位触发组件</component>
+			<component nid='135'>叶片支架组件</component>
+			<component nid='136'>叶片支架加强组件</component>
+			<component nid='137'>选层器叶片</component>
+			<component nid='138'>门区叶片</component>
+			<component nid='139'>端站减速组件</component>
+			<component nid='140'>消防返回到位开关组件</component>
+		</classification>
+		<classification pos='11' name='电缆'>
+			<component nid='141'>主电源电缆</component>
+			<component nid='142'>照明电源电缆</component>
+			<component nid='143'>动力电缆</component>
+			<component nid='144'>制动器检测开关电缆</component>
+			<component nid='145'>制动器线圈电缆</component>
+			<component nid='146'>热敏电阻电缆</component>
+			<component nid='147'>轿厢限速器开关电缆</component>
+			<component nid='148'>群控通讯电缆</component>
+			<component nid='149'>群控消防返回电缆</component>
+			<component nid='150'>群控高峰服务电缆</component>
+			<component nid='151'>松闸限速器控制电缆</component>
+			<component nid='152'>松闸装置电源电缆</component>
+			<component nid='153'>松闸线圈控制电缆</component>
+			<component nid='154'>控制柜-变频器柜电源电缆</component>
+			<component nid='155'>控制柜-变频器柜强电控制电缆</component>
+			<component nid='156'>控制柜-变频器柜弱电控制电缆</component>
+			<component nid='157'>基站锁电缆</component>
+			<component nid='158'>底坑对讲电缆</component>
+			<component nid='159'>底坑电缆</component>
+			<component nid='160'>警铃电缆</component>
+			<component nid='161'>消防紧急返回电缆</component>
+			<component nid='162'>消防返回到位电缆</component>
+			<component nid='163'>消防员操作电缆</component>
+			<component nid='164'>消防平层开关电缆</component>
+			<component nid='165'>厅门锁电缆</component>
+			<component nid='166'>外召通讯电缆</component>
+			<component nid='167'>外召电源电缆</component>
+			<component nid='168'>井道电源盒电源电缆</component>
+			<component nid='169'>上极限开关电缆</component>
+			<component nid='170'>下极限开关电缆</component>
+			<component nid='171'>张紧轮开关电缆</component>
+			<component nid='172'>对重缓冲器开关电缆</component>
+			<component nid='173'>轿厢缓冲器开关电缆</component>
+			<component nid='174'>随行电缆</component>
+			<component nid='175'>井道照明电缆</component>
+			<component nid='176'>上限位开关电缆</component>
+			<component nid='177'>下限位开关电缆</component>
+			<component nid='178'>轿厢照明电源电缆</component>
+			<component nid='179'>风扇电源电缆</component>
+			<component nid='180'>下行安全钳开关电缆</component>
+			<component nid='181'>安全窗开关电缆</component>
+			<component nid='182'>称重装置电源电缆</component>
+			<component nid='183'>门电机控制电缆</component>
+			<component nid='184'>门电机电源电缆</component>
+			<component nid='185'>应急通讯电源电缆</component>
+			<component nid='186'>应急通讯电缆</component>
+			<component nid='187'>轿门锁电缆</component>
+			<component nid='188'>锁梯开关电缆</component>
+			<component nid='189'>盘车手轮开关电缆</component>
+			<component nid='190'>曳引机风扇电源电缆</component>
+			<component nid='191'>底坑检修门开关电缆</component>
+			<component nid='192'>补偿装置开关电缆</component>
+			<component nid='193'>井道安全门电缆</component>
+		</classification>
+		<classification pos='12' name='安装附件'>
+			<component nid='194'>导轨油</component>
+			<component nid='195'>缓冲器安装辅板</component>
+			<component nid='196'>扎线带</component>
+			<component nid='197'>井道电缆夹</component>
+			<component nid='198'>金属软管</component>
+			<component nid='199'>机房线槽</component>
+			<component nid='200'>电梯标志</component>
+			<component nid='201'>高速梯井道线槽组件</component>
+			<component nid='202'>钢丝</component>
+			<component nid='203'>波纹管</component>
+			<component nid='204'>包装箱</component>
+		</classification>
+	</group>		
+	<group lang='en'>
+		<classification pos='01' name='Machine Room Component(Head Room Component)'>
+		</classification>
+	</group>
+</groups>

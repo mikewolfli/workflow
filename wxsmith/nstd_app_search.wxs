@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxDialog" name="nstd_app_search">
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>条件查询</label>
+					<object class="sizeritem">
+						<object class="wxChoice" name="ID_CHOICE_SELECT" variable="choice_select" member="yes">
+							<content>
+								<item>显示所有未提交的非标申请</item>
+								<item>显示所有已经走流程的非标申请</item>
+								<item>显示所有已经完成的非标申请</item>
+								<item>非标申请编号</item>
+								<item>项目WBS号</item>
+								<item>项目名称</item>
+								<item>合同号</item>
+							</content>
+							<selection>0</selection>
+							<handler function="Onchoice_selectSelect" entry="EVT_CHOICE" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL_VALUE" variable="tc_value" member="yes">
+							<size>260,21</size>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>2</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON1" variable="Button1" member="yes">
+							<label>确定</label>
+							<handler function="OnButton1Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON2" variable="Button2" member="yes">
+							<label>取消</label>
+							<handler function="OnButton2Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_LEFT</flag>
+				<option>1</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>

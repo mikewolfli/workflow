@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="po_confirm_panel">
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<handler function="OnRightDown" entry="EVT_RIGHT_DOWN" />
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="sbox_PO_Deal" member="no">
+					<label>线下PO处理</label>
+					<orient>wxVERTICAL</orient>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON3" variable="Button_Confirm1" member="yes">
+									<label>确认</label>
+									<handler function="OnButton_Confirm1Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON2" variable="Button_Return1" member="yes">
+									<label>退回</label>
+									<handler function="OnButton_Return1Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_PRICE_LIST" variable="Button_Change" member="yes">
+									<label>计价表收到日期</label>
+									<handler function="OnButton_ChangeClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_TASK_CHANGE" variable="button_task_change" member="yes">
+									<label>任务转交</label>
+									<handler function="Onbutton_task_changeClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_FILTER" variable="Button_Filter" member="yes">
+									<label>按人员筛选</label>
+									<handler function="OnButton_FilterClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_LEFT</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="sbox_PO_List" member="no">
+							<label>任务清单</label>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>5</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+					<label>线上PO处理</label>
+					<orient>wxVERTICAL</orient>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer3" member="no">
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON4" variable="Button_Confirm2" member="yes">
+									<label>确认</label>
+									<handler function="OnButton_Confirm2Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON5" variable="Button_Return2" member="yes">
+									<label>退回</label>
+									<handler function="OnButton_Return2Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_SPEC2" variable="Button_Spec2" member="yes">
+									<label>特批排产</label>
+									<handler function="OnButton_Spec2Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_POS" variable="Button_pos" member="yes">
+									<label>快速定位(F3)</label>
+									<handler function="OnButton_posClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON1" variable="Button_Refresh" member="yes">
+									<label>刷新所有任务</label>
+									<handler function="OnButton_RefreshClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_LEFT</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer4" member="no">
+							<label>任务清单</label>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>5</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_filter" member="yes">
+			<object class="wxMenuItem" name="idMenu_only_private" variable="mi_private" member="yes">
+				<label>只显示本人任务(&amp;M)</label>
+				<help>只显示本人任务</help>
+				<checked>1</checked>
+				<handler function="OnMenuItem1Selected" entry="EVT_MENU" />
+				<checkable>1</checkable>
+			</object>
+			<object class="wxMenuItem" name="idMenu_all" variable="mi_all" member="yes">
+				<label>显示所有人的任务(&amp;A)</label>
+				<help>显示所有人的任务</help>
+				<handler function="OnMenuItem2Selected" entry="EVT_MENU" />
+				<checkable>1</checkable>
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_offline_PO" member="yes">
+			<object class="wxMenuItem" name="idMenu_task_change" variable="MenuItem2" member="yes">
+				<label>任务转交(&amp;C)</label>
+				<help>任务转交</help>
+				<handler function="OnMenuItem1Selected1" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Pricelist" variable="MenuItem1" member="yes">
+				<label>计价表收到日期(&amp;D)</label>
+				<help>设定计价表收到日期</help>
+				<handler function="OnMenuItem2Selected1" entry="EVT_MENU" />
+			</object>
+		</object>
+	</object>
+</wxsmith>

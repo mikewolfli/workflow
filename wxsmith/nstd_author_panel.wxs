@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="nstd_author_panel">
+		<id_arg>0</id_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>非标任务清单</label>
+					<object class="sizeritem">
+						<object class="wxGrid" name="ID_GRID_TASK" subclass="nstdappGrid" variable="gd_task_list" member="yes">
+							<size>121,888</size>
+							<style>wxVSCROLL|wxHSCROLL|wxALWAYS_SHOW_SB|wxFULL_REPAINT_ON_RESIZE</style>
+							<handler function="Ongd_task_listCellRightClick" entry="EVT_CMD_GRID_CELL_RIGHT_CLICK" />
+							<handler function="Ongd_task_listCellRightClick" entry="EVT_CMD_GRID_LABEL_RIGHT_CLICK" />
+							<handler function="Ongd_task_listCellChange" entry="EVT_CMD_GRID_SELECT_CELL" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>3</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer3" member="no">
+					<orient>wxVERTICAL</orient>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON2" variable="Button2" member="yes">
+									<label>任务授权</label>
+									<size>108,40</size>
+									<handler function="OnButton2Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_REFRESH" variable="Button3" member="yes">
+									<label>刷新</label>
+									<handler function="OnButton3Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_APPROVE" variable="Button_APPROVE" member="yes">
+									<label>审核通过</label>
+									<hidden>1</hidden>
+									<handler function="OnButton_APPROVEClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+							<label>非标工程师</label>
+							<object class="sizeritem">
+								<object class="wxListCtrl" name="ID_LISTCTRL_RES" variable="lc_res" member="yes">
+									<style>wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_HRULES|wxLC_VRULES</style>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>6</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+		</object>
+		<object class="wxMenu" variable="Task_info" member="yes">
+			<object class="wxMenuItem" name="idMenu_INFO" variable="MenuItem1" member="yes">
+				<label>任务信息(&amp;I)</label>
+				<help>任务信息</help>
+				<handler function="OnMenuItem1Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_WORKFLOW" variable="MenuItem2" member="yes">
+				<label>显示工作流(&amp;W)</label>
+				<help>显示工作流</help>
+				<handler function="OnMenuItem2Selected" entry="EVT_MENU" />
+			</object>
+		</object>
+	</object>
+</wxsmith>

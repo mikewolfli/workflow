@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="generated_id_display_panel">
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>操作区</label>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer1" member="no">
+							<object class="sizeritem">
+								<object class="wxChoice" name="ID_CHOICE_GEN_CATALOG" variable="Choice_catalog" member="yes">
+									<content>
+										<item>内部联络单</item>
+										<item>Spec&amp;GAD更改通知单</item>
+										<item>WBS BOM更改通知单</item>
+										<item>非标设计指令</item>
+									</content>
+									<handler function="OnChoice_catalogSelect" entry="EVT_CHOICE" />
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_REFRESH" variable="Button_refresh" member="yes">
+									<label>刷新单据</label>
+									<handler function="OnButton_refreshClick" entry="EVT_BUTTON" />
+								</object>
+								<col>2</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_SEARCH_TEXT" variable="tc_search" member="yes">
+									<size>138,21</size>
+								</object>
+								<col>0</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_SEARCH" variable="Button_Search" member="yes">
+									<label>查询</label>
+									<handler function="OnButton_SearchClick" entry="EVT_BUTTON" />
+								</object>
+								<col>1</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxChoice" name="ID_CHOICE_FILTER" variable="Choice_filter" member="yes">
+									<content>
+										<item>新生成</item>
+										<item>已发放</item>
+										<item>已取消</item>
+									</content>
+									<selection>0</selection>
+									<handler function="OnChoice_filterSelect" entry="EVT_CHOICE" />
+								</object>
+								<col>2</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_RESTORE" variable="Button_Restore" member="yes">
+									<label>恢复单据</label>
+									<handler function="OnButton_RestoreClick" entry="EVT_BUTTON" />
+								</object>
+								<col>3</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_SEND" variable="Button_send" member="yes">
+									<label>发放</label>
+									<handler function="OnButton_sendClick" entry="EVT_BUTTON" />
+								</object>
+								<col>1</col>
+								<row>0</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_CANCEL" variable="Button_cancel" member="yes">
+									<label>取消单据</label>
+									<handler function="OnButton_cancelClick" entry="EVT_BUTTON" />
+								</object>
+								<col>3</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<object class="sizeritem">
+						<object class="wxListView" name="ID_LISTVIEW_LIST" variable="lv_list" member="yes">
+							<style>wxLC_REPORT</style>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>5</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>

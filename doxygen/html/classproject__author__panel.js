@@ -1,0 +1,28 @@
+var classproject__author__panel =
+[
+    [ "project_author_panel", "classproject__author__panel.html#a976478f87f44f4ded699a47759d66179", null ],
+    [ "~project_author_panel", "classproject__author__panel.html#a64f9fa25718ecb27ff813fddd861b094", null ],
+    [ "BuildDataViewCtrl", "classproject__author__panel.html#a3069db0a7f5b40db1d363a8626882b04", null ],
+    [ "init_list_header", "classproject__author__panel.html#aa7748068ae3665d9da9a1bcdd8fbf352", null ],
+    [ "InitImageList", "classproject__author__panel.html#a759e6ce0e8f133e723ad0f2f40213f14", null ],
+    [ "refresh_list", "classproject__author__panel.html#a67633d7a07a4e5f39f732abf67a68a76", null ],
+    [ "refresh_res_list", "classproject__author__panel.html#ae995d276ea16aa9d3a790b191805e9fc", null ],
+    [ "Set_Clause", "classproject__author__panel.html#a44b33dc60871a11bc4af8e0a07dd6949", null ],
+    [ "b_case", "classproject__author__panel.html#a0e52b37031e141c97634a425b5503e17", null ],
+    [ "Button1", "classproject__author__panel.html#ae5881c6a5d31a5d3a3a638680bf67c54", null ],
+    [ "Button2", "classproject__author__panel.html#a8f949a5746a29c5617abc5be1eec2bd2", null ],
+    [ "Button3", "classproject__author__panel.html#a13cbf46016fbf238fbaf831bbe47de0a", null ],
+    [ "Button_Nstd_level", "classproject__author__panel.html#a5bb416910e0004fb80ba6bb075e54c09", null ],
+    [ "lc_res", "classproject__author__panel.html#aa906b94c63c844a2cb99bd47b0ba55cc", null ],
+    [ "menu_authority", "classproject__author__panel.html#a097d473851abe5343d69aa4bfa6b09f3", null ],
+    [ "MenuItem1", "classproject__author__panel.html#a8f7023b42aaa960640962bbc95a9e011", null ],
+    [ "MenuItem2", "classproject__author__panel.html#a7b1b910d845e63aaf2f7893653b885f1", null ],
+    [ "MenuItem3", "classproject__author__panel.html#a0c96a8077ae74ac710f909c7fa5c62e3", null ],
+    [ "MenuItem4", "classproject__author__panel.html#a64aab34c56651602ea95c9d2e454871f", null ],
+    [ "MenuItem5", "classproject__author__panel.html#a4e4043346db054e1917518d819f64395", null ],
+    [ "MenuItem6", "classproject__author__panel.html#afa7e9ceb187b8c298b1e36979595013c", null ],
+    [ "MenuItem7", "classproject__author__panel.html#aca0dd1bca74077f49d02ac7e1713e088", null ],
+    [ "MenuItem8", "classproject__author__panel.html#abae80b7c79cf32ccdbad5cd72e381753", null ],
+    [ "str_freeze", "classproject__author__panel.html#a26e387a10dfbbf77e5a0d2464c229bbb", null ],
+    [ "tlc_proj_list", "classproject__author__panel.html#a04c09b572770587370f80854c048ee0c", null ]
+];

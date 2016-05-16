@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="instance_unit_info">
+		<id_arg>0</id_arg>
+		<style>wxTAB_TRAVERSAL|wxNO_FULL_REPAINT_ON_RESIZE</style>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>项目信息</label>
+					<object class="sizeritem">
+						<object class="wxListCtrl" name="ID_LISTCTRL_PROJECT" variable="lc_project" member="yes">
+							<size>533,165</size>
+							<style>wxLC_REPORT|wxLC_HRULES|wxLC_VRULES</style>
+							<handler function="Onlc_projectItemActivated" entry="EVT_LIST_ITEM_ACTIVATED" />
+							<handler function="Onlc_projectItemRClick" entry="EVT_LIST_ITEM_RIGHT_CLICK" />
+							<handler function="Onlc_projectItemRClick" entry="EVT_LIST_COL_RIGHT_CLICK" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>3</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer3" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_START_REVIEW" variable="Button2" member="yes">
+									<label>启动评审</label>
+									<size>100,23</size>
+									<tooltip>启动评审</tooltip>
+									<handler function="OnButton2Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_START_CONFIGURE" variable="Button3" member="yes">
+									<label>启动配置</label>
+									<tooltip>启动配置的前提条件：项目评审完成，同时确定配置完成日期。</tooltip>
+									<handler function="OnButton3Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_RESTART" variable="Button4" member="yes">
+									<label>重排产</label>
+									<tooltip>重排产的条件是项目配置必须已经完成。</tooltip>
+									<handler function="OnButton4Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_CANCEL_RESTART" variable="button_cancel_restart" member="yes">
+									<label>取消重排产</label>
+									<handler function="Onbutton_cancel_restartClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_CANCEL_PROJECT" variable="Button_Cancel_project" member="yes">
+									<label>取消排产</label>
+									<tooltip>启动的项目,流程数据存储在log中，项目打‘CANCEL&apos;标识。</tooltip>
+									<handler function="OnButton_Cancel_projectClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_RESTORE_PROJECT" variable="Button_Restore_project" member="yes">
+									<label>恢复排产</label>
+									<tooltip>&apos;CANCEL&apos;的项目恢复排产，从项目授权启动</tooltip>
+									<handler function="OnButton_Restore_projectClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_DEL_PROJECT" variable="Button_DEL_project" member="yes">
+									<label>项目删除</label>
+									<tooltip>彻底删除项目和项目流程数据</tooltip>
+									<handler function="OnButton_DEL_projectClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_IMPORT" variable="Button1" member="yes">
+									<label>导入项目</label>
+									<size>83,23</size>
+									<tooltip>从外部文件或SAP导入项目信息</tooltip>
+									<handler function="OnButton1Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_SAP_BY_WBS" variable="button_sap_by_wbs" member="yes">
+									<label>按WBS NO从SAP导入</label>
+									<handler function="Onbutton_sap_by_wbsClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_BY_INTERNAL_DATE" variable="button_sap_by_internal" member="yes">
+									<label>根据启动日期从SAP导入</label>
+									<handler function="Onbutton_sap_by_internalClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_NSTD_SAP_UPDATE" variable="Button_NSTD_SAP_UPDATE" member="yes">
+									<label>SAP中非标等级确认已更新</label>
+									<handler function="OnButton_NSTD_SAP_UPDATEClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_BASIC_INFO" variable="Button_Cal_Basic_Info" member="yes">
+									<label>同步计算项目基本信息</label>
+									<handler function="OnButton_Cal_Basic_InfoClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_SYC_TO_DIN" variable="Button_syc_to_din" member="yes">
+									<label>同步信息到DIN</label>
+									<handler function="OnButton_syc_to_dinClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON1" variable="Button5" member="yes">
+									<label>项目release</label>
+									<size>178,24</size>
+									<hidden>1</hidden>
+									<tooltip>项目归档是将已经发运完成的项目从流程状态排除，加快系统处理速度</tooltip>
+									<handler function="OnButton5Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_TOP</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+					<label>Unit信息</label>
+					<object class="sizeritem">
+						<object class="wxGrid" name="ID_GRID_UNIT_INFO" subclass="sqlResultGrid" variable="gd_unit_info" member="yes">
+							<collabels>
+								<item>项目号;合同号;Unit WBS NO.;</item>
+							</collabels>
+							<style>wxVSCROLL|wxHSCROLL</style>
+							<handler function="Ongd_unit_infoCellRightClick" entry="EVT_CMD_GRID_CELL_RIGHT_CLICK" />
+							<handler function="Ongd_unit_infoCellRightClick" entry="EVT_CMD_GRID_LABEL_RIGHT_CLICK" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>5</option>
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_unit_info_renew" member="yes">
+			<object class="wxMenuItem" name="idMenu_SelAll" variable="MenuItem1" member="yes">
+				<label>全选(&amp;A)</label>
+				<accel>A</accel>
+				<help>选择所有列</help>
+				<handler function="OnMenuItem1Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_UnSel" variable="MenuItem2" member="yes">
+				<label>取消选择(&amp;C)</label>
+				<accel>C</accel>
+				<help>取消选择</help>
+				<handler function="OnMenuItem2Selected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_export_xls" variable="mi_Excel_export" member="yes">
+				<label>导出EXCEL(&amp;X)</label>
+				<accel>X</accel>
+				<help>导出EXCEL</help>
+				<handler function="Onmi_Excel_exportSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_print_label" variable="mi_print_label" member="yes">
+				<label>打印标签(&amp;L)</label>
+				<accel>L</accel>
+				<help>打印标签</help>
+				<handler function="Onmi_print_labelSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="break" />
+			<object class="break" />
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_ReviewFlow" variable="MenuItem_Review" member="yes">
+				<label>项目评审流程信息(&amp;V)</label>
+				<help>项目评审流程信息</help>
+				<handler function="OnMenuItem_ReviewSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_ProcFlow" variable="MenuItem18" member="yes">
+				<label>项目配置流程信息(&amp;W)</label>
+				<help>项目流程信息</help>
+				<handler function="OnMenuItem18Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Nstd_workflow" variable="MenuItem21" member="yes">
+				<label>非标申请工作流(&amp;T)</label>
+				<help>非标申请工作流</help>
+				<handler function="OnMenuItem21Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_nstd_mat_maintain" variable="MenuItem22" member="yes">
+				<label>非标物料维护工作流(&amp;M)</label>
+				<help>非标物料维护工作流</help>
+				<handler function="OnMenuItem22Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_nstd_design" variable="MenuItem23" member="yes">
+				<label>非标设计工作流(&amp;S)</label>
+				<help>非标设计工作流</help>
+				<handler function="OnMenuItem23Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_nonstd_item" variable="MenuItem24" member="yes">
+				<label>显示非标选项(&amp;H)</label>
+				<help>显示非标选项</help>
+				<handler function="OnMenuItem24Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Weight" variable="MenuItem_Weight" member="yes">
+				<label>显示轿厢空重和装潢重量(&amp;D)</label>
+				<help>显示轿厢空重和装潢重量</help>
+				<handler function="OnMenuItem_WeightSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_in_contract" variable="mi_unit_in_contract" member="yes">
+				<label>unit资料文档信息(&amp;I)</label>
+				<help>unit资料文档信息</help>
+				<handler function="Onmi_unit_in_contractSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_hex" variable="mi_hex" member="yes">
+				<label>获取项目随行电缆|钢丝绳|补偿链单重HEX数值(&amp;E)</label>
+				<help>获取项目随行电缆|钢丝绳|补偿链单重HEX数值</help>
+				<handler function="Onmi_hexSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_ReqDelv" variable="MenuItem3" member="yes">
+				<label>变更发货期(&amp;D)</label>
+				<help>变更发货期</help>
+				<enabled>0</enabled>
+				<handler function="OnMenuItem3Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_ReqFin" variable="MenuItem4" member="yes">
+				<label>变更配置完成日期(&amp;F)</label>
+				<help>变更配置完成日期</help>
+				<enabled>0</enabled>
+				<handler function="OnMenuItem4Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_PrjCata" variable="MenuItem5" member="yes">
+				<label>变更项目类型(&amp;P)</label>
+				<help>变革项目类型</help>
+				<enabled>0</enabled>
+				<handler function="OnMenuItem5Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Urgent" variable="mi_urgent" member="yes">
+				<label>紧急项目(&amp;R)</label>
+				<help>是否紧急项目切换</help>
+				<enabled>0</enabled>
+				<handler function="OnMenuItem6Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_NonStd" variable="MenuItem7" member="yes">
+				<label>非标等级切换(&amp;N)</label>
+				<help>非标等级选择</help>
+				<enabled>0</enabled>
+				<handler function="OnMenuItem7Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Update" variable="MenuItem8" member="yes">
+				<label>暂停项目(&amp;Z)</label>
+				<help>暂停项目</help>
+				<enabled>0</enabled>
+				<handler function="OnMenuItem8Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_unFreezed" variable="MenuItem19" member="yes">
+				<label>恢复项目(&amp;U)</label>
+				<help>恢复项目</help>
+				<enabled>0</enabled>
+				<handler function="OnMenuItem19Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_CANRESTART" variable="MenuItem20" member="no">
+				<label>取消重排产(&amp;Q)</label>
+				<help>取消重排产</help>
+				<enabled>0</enabled>
+				<handler function="OnMenuItem20Selected" entry="EVT_MENU" />
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_project_filter" member="yes">
+			<object class="wxMenuItem" name="idMenu_generate_contract" variable="mi_generate_contract" member="yes">
+				<label>生成合同文档(&amp;G)</label>
+				<help>生成合同文档</help>
+				<handler function="Onmi_generate_contractSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Search_contract" variable="mi_search_contract" member="yes">
+				<label>查询合同文档(&amp;S)</label>
+				<help>查询和处理合同文档</help>
+				<handler function="Onmi_search_contractSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Contract_id" variable="mi_add_contract_id" member="yes">
+				<label>补全项目合同号(&amp;F)</label>
+				<help>补全项目合同号</help>
+				<handler function="Onmi_add_contract_idSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_contract_br_search" variable="mi_contract_br_search" member="yes">
+				<label>项目合同借阅查询</label>
+				<help>项目合同借阅查询</help>
+				<handler function="Onmi_contract_br_searchSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_ContractBook_Search" variable="mi_cb_search" member="yes">
+				<label>列表中选择合同借阅查询</label>
+				<help>列表中选择项目合同借阅查询</help>
+				<handler function="Onmi_contractbook_searchSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Change_Lender" variable="mi_cb_lender" member="yes">
+				<label>项目合同借阅人转借</label>
+				<help>项目合同借阅人转借</help>
+				<handler function="Onmi_change_lenderSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_All" variable="MenuItem9" member="yes">
+				<label>全部项目(&amp;A)</label>
+				<help>显示全部项目</help>
+				<enabled>0</enabled>
+				<handler function="OnMenuItem9Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_NSTD_LEVEL" variable="MenuItem26" member="yes">
+				<label>SAP中非标等级待更新的项目(&amp;T)</label>
+				<help>非标等级变更的项目</help>
+				<handler function="OnMenuItem26Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_UnSt" variable="MenuItem10" member="yes">
+				<label>未启动项目(&amp;U)</label>
+				<help>未启动项目</help>
+				<handler function="OnMenuItem10Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Motion" variable="MenuItem12" member="yes">
+				<label>活动状态的项目(&amp;M)</label>
+				<help>正在走流程的项目</help>
+				<handler function="OnMenuItem12Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Finish" variable="MenuItem11" member="yes">
+				<label>评审完成的项目(&amp;R)</label>
+				<help>已经完成的项目</help>
+				<handler function="OnMenuItem11Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Closed" variable="MenuItem15" member="yes">
+				<label>配置完成的项目(&amp;C)</label>
+				<help>配置完成的项目</help>
+				<handler function="OnMenuItem15Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_InDoc" variable="MenuItem16" member="yes">
+				<label>Released的项目(&amp;D)</label>
+				<help>归档的项目</help>
+				<handler function="OnMenuItem16Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Freeze" variable="MenuItem17" member="yes">
+				<label>暂停的项目(&amp;F)</label>
+				<help>暂停的项目</help>
+				<handler function="OnMenuItem17Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Cancel" variable="MenuItem25" member="yes">
+				<label>取消排产的项目(&amp;N)</label>
+				<help>取消排产的项目</help>
+				<handler function="OnMenuItem25Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_contract_id" variable="mi_contract" member="yes">
+				<label>按合同号筛选(&amp;O)</label>
+				<help>按合同号筛选</help>
+				<handler function="Onmi_contractSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Prj" variable="MenuItem13" member="yes">
+				<label>按Project筛选(&amp;P)</label>
+				<help>按项目筛选</help>
+				<handler function="OnMenuItem13Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Wbs" variable="MenuItem14" member="yes">
+				<label>按WBS NO筛选(&amp;W)</label>
+				<help>按WBS NO筛选</help>
+				<handler function="OnMenuItem14Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_delivery_date" variable="mi_delivery_date" member="yes">
+				<label>按发运日期筛选(&amp;T)</label>
+				<help>按发运日期筛选</help>
+				<handler function="Onmi_delivery_dateSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Filt_basic_info" variable="MenuItem_Basic_Info" member="yes">
+				<label>需同步基本信息的项目(&amp;B)</label>
+				<help>列出所有需同步基本信息的项目</help>
+				<handler function="OnMenuItem_Basic_InfoSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_syc_din_units" variable="mi_syc_din" member="yes">
+				<label>需同步DIN系统的项目(&amp;Y)</label>
+				<help>需同步DIN系统的项目</help>
+				<handler function="Onmi_syc_dinSelected" entry="EVT_MENU" />
+			</object>
+		</object>
+	</object>
+</wxsmith>

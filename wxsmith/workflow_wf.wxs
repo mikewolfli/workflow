@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="workflow_wf">
+		<id_arg>0</id_arg>
+		<style>wxTAB_TRAVERSAL|wxNO_FULL_REPAINT_ON_RESIZE</style>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>流程操作</label>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_FEEDBACK" variable="Button1" member="yes">
+							<label>反馈(退回）</label>
+							<handler function="OnButton1Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_PASS" variable="Button2" member="yes">
+							<label>完成</label>
+							<handler function="OnButton2Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_SHOWANDHIDE" variable="Button3" member="yes">
+							<label>显示/隐藏组员任务表</label>
+							<handler function="OnButton3Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_REFRESH" variable="Button4" member="yes">
+							<label>刷新任务</label>
+							<handler function="OnButton4Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+					<label>任务清单</label>
+				</object>
+				<flag>wxALL|wxEXPAND|wxFIXED_MINSIZE</flag>
+				<option>5</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer3" member="no">
+					<label>团队任务清单</label>
+				</object>
+				<flag>wxALL|wxEXPAND|wxFIXED_MINSIZE</flag>
+				<option>5</option>
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_workflow_popup" member="yes">
+			<object class="wxMenuItem" name="idMenu_Explain" variable="MenuItem1" member="yes">
+				<label>备注(&amp;R)</label>
+				<help>工作流说明</help>
+				<handler function="OnMenuItem1Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_nstd_level" variable="MenuItem8" member="yes">
+				<label>更新非标等级(&amp;U)</label>
+				<help>更新非标等级</help>
+				<handler function="OnMenuItem8Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_lender_change" variable="mi_cb_change" member="yes">
+				<label>项目合同转借</label>
+				<help>项目合同转借</help>
+				<handler function="Onmi_cb_changeSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_contractbook_search" variable="mi_contractbook_br_search" member="yes">
+				<label>项目合同借阅查询</label>
+				<help>项目合同借阅查询</help>
+				<handler function="Onmi_contractbook_br_searchSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_Feedback" variable="MenuItem2" member="yes">
+				<label>显示退回源(&amp;F)</label>
+				<accel>F</accel>
+				<help>显示谁退回的</help>
+				<handler function="OnMenuItem2Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Status" variable="MenuItem3" member="yes">
+				<label>工作流查询(&amp;W)</label>
+				<accel>W</accel>
+				<help>工作流查询</help>
+				<handler function="OnMenuItem3Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_SSearch" variable="MenuItem4" member="yes">
+				<label>工作流条件查询(&amp;C)</label>
+				<accel>C</accel>
+				<help>工作流条件查询</help>
+				<handler function="OnMenuItem4Selected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_Nstd" variable="MenuItem5" member="yes">
+				<label>显示非标选项(&amp;L)</label>
+				<accel>L</accel>
+				<help>显示非标选项(</help>
+				<handler function="OnMenuItem5Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_MTList" variable="MenuItem6" member="yes">
+				<label>显示非标物料清单(&amp;M)</label>
+				<accel>M</accel>
+				<help>显示非标物料清单</help>
+				<handler function="OnMenuItem6Selected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_Car_or_DC_weight" variable="MenuItem_WEIGHT" member="yes">
+				<label>显示/修改轿厢空重和装潢重量(&amp;D)</label>
+				<help>显示轿厢空重和装潢重量</help>
+				<handler function="OnMenuItem_WEIGHTSelected" entry="EVT_MENU" />
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_worflow_group_popup" member="yes">
+			<object class="wxMenuItem" name="idMenu_Res_Filter" variable="MenuItem7" member="yes">
+				<label>按人员筛选(&amp;F)</label>
+				<accel>F</accel>
+				<help>按人员筛选</help>
+				<handler function="OnMenuItem7Selected" entry="EVT_MENU" />
+			</object>
+		</object>
+	</object>
+</wxsmith>

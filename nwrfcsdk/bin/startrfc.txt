@@ -1,0 +1,5 @@
+FILE QUARANTINED
+----------------
+
+Our mail system removed nwrfcsdk.zip->startrfc.exe since it
+was found to match the FILE FILTER= *.exe file filter.

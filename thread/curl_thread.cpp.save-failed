@@ -1,0 +1,57 @@
+#include "curl_thread.h"
+
+//for curl thread
+
+curl_thread::curl_thread(wfFrame* frame,wxArrayToDin & a_ToDIn):
+    wxThread(), threadcurl(new curl_http), ThreadFrame(frame)
+{
+    a_info = a_ToDIn;
+
+}
+
+curl_thread::~curl_thread()
+{
+    wxCriticalSectionLocker locker(wxGetApp().AppCritSection);
+
+    wxArrayThread& threads = wxGetApp().AppThreads;
+    threads.Remove(this);
+
+    if ( threads.IsEmpty() )
+    {
+        // signal that no threads is waiting
+
+
+        if ( wxGetApp().AppShutdown )
+        {
+            wxGetApp().AppShutdown = false;
+
+            wxGetApp().AppSemaphoreDone.Post();
+        }
+    }
+
+    a_info.Clear();
+}
+
+wxThread::ExitCode curl_thread::Entry()
+{
+    {
+        wxCriticalSectionLocker locker(wxGetApp().AppCritSection);
+
+        // If stop button pressed then return immediately
+        if ( wxGetApp().AppShutdown )
+            return NULL;
+    }
+
+
+    threadcurl->set_value(a_info);
+    wxLogMessage(_("开始向DIN系统写入..."));
+    threadcurl->update_data_into_din();
+
+    wxString str= threadcurl->GetAnswer();
+
+    wxString str1;
+    str1.FromUTF8((const char*)str.mb_str());
+
+    wxMessageBox(str1,_("test"));
+
+}

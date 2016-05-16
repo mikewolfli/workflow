@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxDialog" name="nstd_mat_muti_level_task_list">
+		<size>800,400</size>
+		<id_arg>0</id_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>任务清单</label>
+					<orient>wxVERTICAL</orient>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>5</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+					<label>红色:关联项目全部暂停;黄色:关联项目部分暂停;绿色:加急;天蓝色:非本人任务</label>
+					<size>466,33</size>
+				</object>
+				<flag>wxALL|wxALIGN_LEFT</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<object class="sizeritem">
+						<object class="wxCheckBox" name="ID_CHECKBOX_FILTER" variable="cb_filter" member="yes">
+							<label>含已指定工程师任务</label>
+							<checked>1</checked>
+							<handler function="Oncb_filterClick" entry="EVT_CHECKBOX" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON1" variable="Button1" member="yes">
+							<label>确认</label>
+							<handler function="OnButton1Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON2" variable="Button2" member="yes">
+							<label>取消</label>
+							<handler function="OnButton2Click" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<option>1</option>
+			</object>
+		</object>
+		<object class="wxMenu" variable="menu_info" member="yes">
+			<object class="wxMenuItem" name="IdMenu_Info" variable="MenuItem1" member="yes">
+				<label>项目信息(&amp;S)</label>
+				<help>项目信息</help>
+				<handler function="OnMenuItem1Selected" entry="EVT_MENU" />
+			</object>
+		</object>
+	</object>
+</wxsmith>

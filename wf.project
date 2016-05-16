@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Project Name="wf">
+  <Plugins>
+    <Plugin Name="CMakePlugin">
+      <![CDATA[[{
+  "name": "Debug",
+  "enabled": false,
+  "buildDirectory": "build",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "",
+  "buildType": "",
+  "arguments": [],
+  "parentProject": ""
+ }]]]>
+    </Plugin>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
+  </Plugins>
+  <Description/>
+  <Dependencies/>
+  <VirtualDirectory Name="src">
+    <File Name="add_nstd_app_item.cpp"/>
+    <File Name="cf_task_list.cpp"/>
+    <File Name="communication_dlg.cpp"/>
+    <File Name="configure_mat_list_editor.cpp"/>
+    <File Name="connect_para_dlg.cpp"/>
+    <File Name="contract_label_print.cpp"/>
+    <File Name="contractbook_br_dlg.cpp"/>
+    <File Name="contractlabeldraw.cpp"/>
+    <File Name="ctrl/treelistctrl.cpp"/>
+    <File Name="datepickerdlg.cpp"/>
+    <File Name="enter_log.cpp"/>
+    <File Name="evaluate_dlg.cpp"/>
+    <File Name="generated_id_display_panel.cpp"/>
+    <File Name="info_id_generator_panel.cpp"/>
+    <File Name="ins_nonstd_proc_log.cpp"/>
+    <File Name="ins_proc_log.cpp"/>
+    <File Name="instance_unit_info.cpp"/>
+    <File Name="interface/ctlSQLGrid.cpp"/>
+    <File Name="interface/nstdapptable.cpp"/>
+    <File Name="interface/sqledittable.cpp"/>
+    <File Name="interface/sqlresulttable.cpp"/>
+    <File Name="interface/wxPostgreSQL.cpp"/>
+    <File Name="interface/wxpg_utils.cpp"/>
+    <File Name="login_dlg.cpp"/>
+    <File Name="mydatepicker.cpp"/>
+    <File Name="ncr_proc_dlg.cpp"/>
+    <File Name="ncr_proc_panel.cpp"/>
+    <File Name="ndo_generator_panel.cpp"/>
+    <File Name="nstd_app_item_units.cpp"/>
+    <File Name="nstd_app_search.cpp"/>
+    <File Name="nstd_app_unit_list.cpp"/>
+    <File Name="nstd_apply_panel.cpp"/>
+    <File Name="nstd_author_panel.cpp"/>
+    <File Name="nstd_ins_doc.cpp"/>
+    <File Name="nstd_mat_apply.cpp"/>
+    <File Name="nstd_mat_muti_level_task_list.cpp"/>
+    <File Name="nstd_mat_task_list.cpp"/>
+    <File Name="nstd_reason_list.cpp"/>
+    <File Name="nstd_task_author.cpp"/>
+    <File Name="nstd_task_tree_list.cpp"/>
+    <File Name="po_confirm_panel.cpp"/>
+    <File Name="private_setting.cpp"/>
+    <File Name="private_tasks_panel.cpp"/>
+    <File Name="prj_hex_result_dlg.cpp"/>
+    <File Name="proj_configure_history.cpp"/>
+    <File Name="project_author_panel.cpp"/>
+    <File Name="project_info_panel.cpp"/>
+    <File Name="project_review_author_panel.cpp"/>
+    <File Name="project_review_panel.cpp"/>
+    <File Name="pugixml/src/pugixml.cpp"/>
+    <File Name="qrencode/bitstream.c"/>
+    <File Name="qrencode/mask.c"/>
+    <File Name="qrencode/mmask.c"/>
+    <File Name="qrencode/mqrspec.c"/>
+    <File Name="qrencode/qrencode.c"/>
+    <File Name="qrencode/qrinput.c"/>
+    <File Name="qrencode/qrspec.c"/>
+    <File Name="qrencode/rsecc.c"/>
+    <File Name="qrencode/split.c"/>
+    <File Name="reset_pwd.cpp"/>
+    <File Name="return_log.cpp"/>
+    <File Name="review_communication_log.cpp"/>
+    <File Name="review_remarks_dlg.cpp"/>
+    <File Name="rfc_communication.cpp"/>
+    <File Name="search_case.cpp"/>
+    <File Name="security/base64.cpp"/>
+    <File Name="security/md5.cpp"/>
+    <File Name="security/wxMD5.cpp"/>
+    <File Name="thread/curl_http.cpp"/>
+    <File Name="thread/curl_thread.cpp"/>
+    <File Name="thread/mythread.cpp"/>
+    <File Name="unit_info_attach_dlg.cpp"/>
+    <File Name="units_list_dlg.cpp"/>
+    <File Name="utils/wf_operator.cpp"/>
+    <File Name="wfApp.cpp"/>
+    <File Name="wfMain.cpp"/>
+    <File Name="wf_listview_dlg.cpp"/>
+    <File Name="wf_num_id_dlg.cpp"/>
+    <File Name="wf_search.cpp"/>
+    <File Name="wf_stdafx.cpp"/>
+    <File Name="wf_workflow_panel.cpp"/>
+    <File Name="workflow_wf.cpp"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="include">
+    <File Name="add_nstd_app_item.h"/>
+    <File Name="cf_task_list.h"/>
+    <File Name="communication_dlg.h"/>
+    <File Name="configure_mat_list_editor.h"/>
+    <File Name="connect_para_dlg.h"/>
+    <File Name="contract_label_print.h"/>
+    <File Name="contractbook_br_dlg.h"/>
+    <File Name="contractlabeldraw.h"/>
+    <File Name="ctrl/treelistctrl.h"/>
+    <File Name="datepickerdlg.h"/>
+    <File Name="enter_log.h"/>
+    <File Name="evaluate_dlg.h"/>
+    <File Name="generated_id_display_panel.h"/>
+    <File Name="info_id_generator_panel.h"/>
+    <File Name="ins_nonstd_proc_log.h"/>
+    <File Name="ins_proc_log.h"/>
+    <File Name="instance_unit_info.h"/>
+    <File Name="interface/ctlSQLGrid.h"/>
+    <File Name="interface/nstdapptable.h"/>
+    <File Name="interface/sqledittable.h"/>
+    <File Name="interface/sqlresulttable.h"/>
+    <File Name="interface/wxPostgreSQL.h"/>
+    <File Name="interface/wxpg_utils.h"/>
+    <File Name="login_dlg.h"/>
+    <File Name="mydatepicker.h"/>
+    <File Name="ncr_proc_dlg.h"/>
+    <File Name="ncr_proc_panel.h"/>
+    <File Name="ndo_generator_panel.h"/>
+    <File Name="nstd_app_item_units.h"/>
+    <File Name="nstd_app_search.h"/>
+    <File Name="nstd_app_unit_list.h"/>
+    <File Name="nstd_apply_panel.h"/>
+    <File Name="nstd_author_panel.h"/>
+    <File Name="nstd_ins_doc.h"/>
+    <File Name="nstd_mat_apply.h"/>
+    <File Name="nstd_mat_muti_level_task_list.h"/>
+    <File Name="nstd_mat_task_list.h"/>
+    <File Name="nstd_reason_list.h"/>
+    <File Name="nstd_task_author.h"/>
+    <File Name="nstd_task_tree_list.h"/>
+    <File Name="po_confirm_panel.h"/>
+    <File Name="private_setting.h"/>
+    <File Name="private_tasks_panel.h"/>
+    <File Name="prj_hex_result_dlg.h"/>
+    <File Name="proj_configure_history.h"/>
+    <File Name="project_author_panel.h"/>
+    <File Name="project_info_panel.h"/>
+    <File Name="project_review_author_panel.h"/>
+    <File Name="project_review_panel.h"/>
+    <File Name="pugixml/src/pugiconfig.hpp"/>
+    <File Name="pugixml/src/pugixml.hpp"/>
+    <File Name="qrencode/bitstream.h"/>
+    <File Name="qrencode/config.h"/>
+    <File Name="qrencode/mask.h"/>
+    <File Name="qrencode/mmask.h"/>
+    <File Name="qrencode/mqrspec.h"/>
+    <File Name="qrencode/qrencode.h"/>
+    <File Name="qrencode/qrencode_inner.h"/>
+    <File Name="qrencode/qrinput.h"/>
+    <File Name="qrencode/qrspec.h"/>
+    <File Name="qrencode/rsecc.h"/>
+    <File Name="qrencode/split.h"/>
+    <File Name="reset_pwd.h"/>
+    <File Name="return_log.h"/>
+    <File Name="review_communication_log.h"/>
+    <File Name="review_remarks_dlg.h"/>
+    <File Name="rfc_communication.h"/>
+    <File Name="search_case.h"/>
+    <File Name="security/base64.h"/>
+    <File Name="security/md5.h"/>
+    <File Name="security/wxMD5.h"/>
+    <File Name="thread/curl_http.h"/>
+    <File Name="thread/curl_thread.h"/>
+    <File Name="thread/mythread.h"/>
+    <File Name="unit_info_attach_dlg.h"/>
+    <File Name="units_list_dlg.h"/>
+    <File Name="utils/wf_operator.h"/>
+    <File Name="version.h"/>
+    <File Name="wfApp.h"/>
+    <File Name="wfMain.h"/>
+    <File Name="wf_listview_dlg.h"/>
+    <File Name="wf_num_id_dlg.h"/>
+    <File Name="wf_search.h"/>
+    <File Name="wf_stdafx.h"/>
+    <File Name="wf_workflow_panel.h"/>
+    <File Name="workflow_wf.h"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="resource">
+    <File Name="res/tab16.jpg"/>
+    <File Name="res/toolbar16.jpg"/>
+    <File Name="res/toolbox48.jpg"/>
+    <File Name="resource.rc"/>
+    <File Name="wxsmith/add_nstd_app_item.wxs"/>
+    <File Name="wxsmith/cf_task_list.wxs"/>
+    <File Name="wxsmith/communication_dlg.wxs"/>
+    <File Name="wxsmith/configure_mat_list_editor.wxs"/>
+    <File Name="wxsmith/contract_label_print.wxs"/>
+    <File Name="wxsmith/contractbook_br_dlg.wxs"/>
+    <File Name="wxsmith/enter_log.wxs"/>
+    <File Name="wxsmith/evaluate_dlg.wxs"/>
+    <File Name="wxsmith/generated_id_display_panel.wxs"/>
+    <File Name="wxsmith/info_id_generator_panel.wxs"/>
+    <File Name="wxsmith/ins_nonstd_proc_log.wxs"/>
+    <File Name="wxsmith/ins_proc_log.wxs"/>
+    <File Name="wxsmith/instance_unit_info.wxs"/>
+    <File Name="wxsmith/login_dlg.wxs"/>
+    <File Name="wxsmith/mydatepicker.wxs"/>
+    <File Name="wxsmith/ncr_proc_dlg.wxs"/>
+    <File Name="wxsmith/ncr_proc_panel.wxs"/>
+    <File Name="wxsmith/ndo_generator_panel.wxs"/>
+    <File Name="wxsmith/nstd_app_item_units.wxs"/>
+    <File Name="wxsmith/nstd_app_search.wxs"/>
+    <File Name="wxsmith/nstd_app_unit_list.wxs"/>
+    <File Name="wxsmith/nstd_apply_panel.wxs"/>
+    <File Name="wxsmith/nstd_author_panel.wxs"/>
+    <File Name="wxsmith/nstd_ins_doc.wxs"/>
+    <File Name="wxsmith/nstd_mat_apply.wxs"/>
+    <File Name="wxsmith/nstd_mat_muti_level_task_list.wxs"/>
+    <File Name="wxsmith/nstd_mat_task_list.wxs"/>
+    <File Name="wxsmith/nstd_task_author.wxs"/>
+    <File Name="wxsmith/nstd_task_tree_list.wxs"/>
+    <File Name="wxsmith/po_confirm_panel.wxs"/>
+    <File Name="wxsmith/private_setting.wxs"/>
+    <File Name="wxsmith/private_tasks_panel.wxs"/>
+    <File Name="wxsmith/prj_hex_result_dlg.wxs"/>
+    <File Name="wxsmith/proj_configure_history.wxs"/>
+    <File Name="wxsmith/project_author_panel.wxs"/>
+    <File Name="wxsmith/project_info_panel.wxs"/>
+    <File Name="wxsmith/project_review_author_panel.wxs"/>
+    <File Name="wxsmith/project_review_panel.wxs"/>
+    <File Name="wxsmith/reset_pwd.wxs"/>
+    <File Name="wxsmith/return_log.wxs"/>
+    <File Name="wxsmith/review_communication_log.wxs"/>
+    <File Name="wxsmith/review_remarks_dlg.wxs"/>
+    <File Name="wxsmith/search_case.wxs"/>
+    <File Name="wxsmith/unit_info_attach_dlg.wxs"/>
+    <File Name="wxsmith/units_list_dlg.wxs"/>
+    <File Name="wxsmith/wf_listview_dlg.wxs"/>
+    <File Name="wxsmith/wf_search1.wxs"/>
+    <File Name="wxsmith/wf_workflow_panel1.wxs"/>
+    <File Name="wxsmith/workflow_wf.wxs"/>
+  </VirtualDirectory>
+  <Settings Type="Executable">
+    <GlobalSettings>
+      <Compiler Options="" C_Options="" Assembler="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="">
+        <LibraryPath Value="."/>
+      </Linker>
+      <ResourceCompiler Options=""/>
+    </GlobalSettings>
+    <Configuration Name="Debug" CompilerType="MinGW ( MinGW )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g -DWIN32 -D_DEBUG -D__WXMSW__ -D_UNICODE -D_WINDOWS -DNOPCH -Wall -pipe -mthreads -D__GNUWIN32__ -D__WXMSW__ -DwxUSE_UNICODE -DSAPwithUNICODE -DHAVE_CONFIG_H -DCURL_STATICLIB " C_Options="-g -DWIN32 -D_DEBUG -D__WXMSW__ -D_UNICODE -D_WINDOWS -DNOPCH -Wall -pipe -mthreads -D__GNUWIN32__ -D__WXMSW__ -DwxUSE_UNICODE -DSAPwithUNICODE -DHAVE_CONFIG_H -DCURL_STATICLIB " Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+        <IncludePath Value="$(CODEBLOCKS)/sdk/wx/lib/gcc_lib/mswud"/>
+        <IncludePath Value="$(CODEBLOCKS)/sdk/pugixml/src"/>
+        <IncludePath Value="interface"/>
+        <IncludePath Value="utils"/>
+        <IncludePath Value="thread"/>
+        <IncludePath Value="../wf"/>
+        <IncludePath Value="postgresql"/>
+        <IncludePath Value="interface"/>
+        <IncludePath Value="xlslib/src"/>
+        <IncludePath Value="pugixml/src"/>
+        <IncludePath Value="nwrfcsdk/include"/>
+        <IncludePath Value="qrencode"/>
+        <IncludePath Value="wxcurl/include"/>
+        <IncludePath Value="wxJson/include"/>
+      </Compiler>
+      <Linker Options="-mthreads " Required="yes">
+        <LibraryPath Value="$(CODEBLOCKS)/sdk/wx/lib/gcc_lib"/>
+        <LibraryPath Value="$(CODEBLOCKS)/sdk/pugixml/lib/gcc"/>
+        <LibraryPath Value="wxJSON/lib/gcc_lib"/>
+        <LibraryPath Value="postgresql/gcc"/>
+        <LibraryPath Value="wxJson/lib"/>
+        <Library Value="libwxtoolboxd.a"/>
+        <Library Value="libwxmsw31ud.a"/>
+        <Library Value="libwxmsw31ud_gl.a"/>
+        <Library Value="libwxjpegd.a"/>
+        <Library Value="libwxpngd.a"/>
+        <Library Value="libwxregexud.a"/>
+        <Library Value="libwxexpatd.a"/>
+        <Library Value="libwxscintillad.a"/>
+        <Library Value="libwxtiffd.a"/>
+        <Library Value="libwxzlibd.a"/>
+        <Library Value="xlslib/lib/libxlsd.a"/>
+        <Library Value="wxJson/lib/libwxjsond.a"/>
+        <Library Value="postgresql/gcc/libpq.a"/>
+        <Library Value="nwrfcsdk/lib/sapnwrfc.a"/>
+        <Library Value="libcurl.a"/>
+        <Library Value="ws2_32"/>
+        <Library Value="wldap32"/>
+        <Library Value="libssl.a"/>
+        <Library Value="libcrypto.a"/>
+        <Library Value="libssh2.a"/>
+        <Library Value="libz.a"/>
+      </Linker>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="bin/Debug/wf" IntermediateDirectory="./Debug" Command="./wf" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="bin/Debug" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[CODEBLOCKS=16.01]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
+        <DebuggerSearchPaths/>
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName/>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no" EnableCpp14="no">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="MinGW ( MinGW )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-O2 -DWIN32 -D__WXMSW__ -D_UNICODE -DNDEBUG -D_WINDOWS -DNOPCH -Wall -pipe -mthreads -D__GNUWIN32__ -D__WXMSW__ -DwxUSE_UNICODE -DSAPwithUNICODE -DHAVE_CONFIG_H -DCURL_STATICLIB " C_Options="-O2 -DWIN32 -D__WXMSW__ -D_UNICODE -DNDEBUG -D_WINDOWS -DNOPCH -Wall -pipe -mthreads -D__GNUWIN32__ -D__WXMSW__ -DwxUSE_UNICODE -DSAPwithUNICODE -DHAVE_CONFIG_H -DCURL_STATICLIB " Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+        <IncludePath Value="$(CODEBLOCKS)/sdk/wx/lib/gcc_lib/mswu"/>
+        <IncludePath Value="$(CODEBLOCKS)/sdk/pugixml/src"/>
+        <IncludePath Value="interface"/>
+        <IncludePath Value="utils"/>
+        <IncludePath Value="thread"/>
+        <IncludePath Value="../wf"/>
+        <IncludePath Value="postgresql"/>
+        <IncludePath Value="interface"/>
+        <IncludePath Value="xlslib/src"/>
+        <IncludePath Value="pugixml/src"/>
+        <IncludePath Value="nwrfcsdk/include"/>
+        <IncludePath Value="qrencode"/>
+        <IncludePath Value="wxcurl/include"/>
+        <IncludePath Value="wxJson/include"/>
+      </Compiler>
+      <Linker Options="-s -mthreads " Required="yes">
+        <LibraryPath Value="$(CODEBLOCKS)/sdk/wx/lib/gcc_lib"/>
+        <LibraryPath Value="$(CODEBLOCKS)/sdk/pugixml/lib/gcc"/>
+        <LibraryPath Value="wxJSON/lib/gcc_lib"/>
+        <LibraryPath Value="postgresql/gcc"/>
+        <LibraryPath Value="wxJson/lib"/>
+        <Library Value="libwxtoolbox.a"/>
+        <Library Value="libwxmsw31u.a"/>
+        <Library Value="libwxmsw31u_gl.a"/>
+        <Library Value="libwxpng.a"/>
+        <Library Value="libwxjpeg.a"/>
+        <Library Value="libwxregexu.a"/>
+        <Library Value="libwxexpat.a"/>
+        <Library Value="libwxscintilla.a"/>
+        <Library Value="libwxtiff.a"/>
+        <Library Value="libwxzlib.a"/>
+        <Library Value="xlslib/lib/libxls.a"/>
+        <Library Value="wxJson/lib/libwxjson.a"/>
+        <Library Value="postgresql/gcc/libpq.a"/>
+        <Library Value="nwrfcsdk/lib/sapnwrfc.a"/>
+        <Library Value="libcurl.a"/>
+        <Library Value="ws2_32"/>
+        <Library Value="wldap32"/>
+        <Library Value="libssl.a"/>
+        <Library Value="libcrypto.a"/>
+        <Library Value="libssh2.a"/>
+        <Library Value="libz.a"/>
+      </Linker>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="bin/Release/wf" IntermediateDirectory="./Debug" Command="./wf" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="bin/Release" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <Environment EnvVarSetName="&lt;Use Workspace Settings&gt;" DbgSetName="&lt;Use Global Settings&gt;">
+        <![CDATA[CODEBLOCKS=?
+
+]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
+        <DebuggerSearchPaths/>
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName/>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no" EnableCpp14="no">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+  </Settings>
+</CodeLite_Project>

@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="nstd_mat_apply">
+		<font>
+			<size>8</size>
+			<style>normal</style>
+			<weight>normal</weight>
+			<underlined>0</underlined>
+			<family>swiss</family>
+		</font>
+		<id_arg>0</id_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_RECEIVE" variable="Button_Receive" member="yes">
+							<label>接收非标任务</label>
+							<handler function="OnButton_ReceiveClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_CONF_APPLY" variable="Button_CONF_APPLY" member="yes">
+							<label>配置非标申请</label>
+							<handler function="OnButton_CONF_APPLYClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_TASK_LIST" variable="Button_task_list" member="yes">
+							<label>组内人员实时任务列表</label>
+							<handler function="OnButton_task_listClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_GENERATE" variable="Button_Generate" member="yes">
+							<label>生成非标申请(CS,MOD等)</label>
+							<handler function="OnButton_GenerateClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_ADD_BATCH" variable="Button_Add_Batch" member="yes">
+							<label>新增物料申请批次</label>
+							<handler function="OnButton_Add_BatchClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_SEARCH" variable="Button_Search" member="yes">
+							<label>申请查询</label>
+							<handler function="OnButton_SearchClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_CANCEL" variable="Button_Cancel" member="yes">
+							<label>删除批次/分任务</label>
+							<handler function="OnButton_CancelClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_CLEAN" variable="Button_Clean" member="yes">
+							<label>统一后台数据</label>
+							<hidden>1</hidden>
+							<handler function="OnButton_CleanClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxButton" name="ID_BUTTON_Print" variable="Button_Print" member="yes">
+							<label>打印物料申请</label>
+							<handler function="OnButton_PrintClick" entry="EVT_BUTTON" />
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>项次信息</label>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer1" member="no">
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+									<label>物料申请编号</label>
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText8" member="yes">
+									<label>分任务批号</label>
+								</object>
+								<col>1</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_INDEX_ID" variable="tc_index_id" member="yes">
+									<size>80,21</size>
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>0</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
+									<label>项目编号</label>
+								</object>
+								<col>3</col>
+								<row>0</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_PROJECT_ID" variable="tc_project_id" member="yes">
+									<size>75,24</size>
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>3</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_NSTD_MAT_APP" variable="tc_nstd_mat_app_id" member="yes">
+									<size>75,24</size>
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>2</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
+									<label>项目名称</label>
+								</object>
+								<col>4</col>
+								<row>0</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_PROJECT_NAME" variable="tc_project_name" member="yes">
+									<size>257,25</size>
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>4</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_REL" variable="Button_Rel" member="yes">
+									<label>关联项目...</label>
+									<size>122,24</size>
+									<handler function="OnButton_RelClick" entry="EVT_BUTTON" />
+								</object>
+								<col>6</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_WORKFLOW" variable="Button_Workflow" member="yes">
+									<label>显示非标申请工作流</label>
+									<handler function="OnButton_WorkflowClick" entry="EVT_BUTTON" />
+								</object>
+								<col>6</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_NSTD_INS_DOC" variable="Button_Nonstd_Ins_Doc" member="yes">
+									<label>非标安装文档设定</label>
+									<handler function="OnButton_Nonstd_Ins_DocClick" entry="EVT_BUTTON" />
+								</object>
+								<col>7</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_HEADER" variable="Button_Same_header" member="yes">
+									<label>相关项次信息...</label>
+									<handler function="OnButton_Same_headerClick" entry="EVT_BUTTON" />
+								</object>
+								<col>7</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
+									<label>物料需求日</label>
+								</object>
+								<col>0</col>
+								<row>2</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxDatePickerCtrl" name="ID_DATEPICKERCTRL1" variable="dp_mat_req" member="yes">
+									<size>94,24</size>
+									<style>wxDP_DEFAULT|wxDP_DROPDOWN|wxDP_SHOWCENTURY</style>
+									<handler function="Ondp_mat_reqChanged" entry="EVT_DATE_CHANGED" />
+								</object>
+								<col>0</col>
+								<row>3</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
+									<label>图纸需求日</label>
+								</object>
+								<col>1</col>
+								<row>2</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxDatePickerCtrl" name="ID_DATEPICKERCTRL_DRAW_REQ" variable="dp_draw_req" member="yes">
+									<style>wxDP_DEFAULT|wxDP_DROPDOWN|wxDP_SHOWCENTURY</style>
+									<handler function="Ondp_draw_reqChanged" entry="EVT_DATE_CHANGED" />
+								</object>
+								<col>1</col>
+								<row>3</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxComboBox" name="ID_COMBOBOX_NSTD_ITEM_CATALOG" variable="combo_nstd_item_catalog" member="yes">
+									<content>
+										<item>整梯BOM</item>
+										<item>人机界面</item>
+										<item>轿厢</item>
+										<item>井道部件</item>
+										<item>控制系统</item>
+										<item>机房部件</item>
+										<item>轿厢架</item>
+										<item>门系统</item>
+										<item>电缆</item>
+										<item>对重系统</item>
+										<item>其他</item>
+									</content>
+									<size>165,22</size>
+									<handler function="Oncombo_nstd_item_catalogTextUpdated" entry="EVT_TEXT" />
+								</object>
+								<colspan>2</colspan>
+								<col>2</col>
+								<row>3</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText6" member="yes">
+									<label>非标类别</label>
+								</object>
+								<colspan>2</colspan>
+								<col>2</col>
+								<row>2</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT7" variable="StaticText7" member="yes">
+									<label>非标原因</label>
+								</object>
+								<col>4</col>
+								<row>2</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_NSTD_REASON" variable="tc_nstd_reason" member="yes">
+									<size>618,32</size>
+									<style>wxTE_PROCESS_ENTER|wxTE_MULTILINE</style>
+									<handler function="Ontc_nstd_reasonTextEnter" entry="EVT_TEXT_ENTER" />
+								</object>
+								<colspan>4</colspan>
+								<rowspan>2</rowspan>
+								<col>4</col>
+								<row>3</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxBoxSizer" variable="BoxSizer5" member="no">
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_TEXTCTRL_BATCH_ID" variable="tc_batch_id" member="yes">
+											<minsize>-1,-1</minsize>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALL|wxEXPAND</flag>
+										<border>5</border>
+										<option>4</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxSpinButton" name="ID_SPINBUTTON_BATCH_ID" variable="spb_batch_id" member="yes">
+											<max>100</max>
+											<handler function="Onspb_batch_idChangeUp" entry="EVT_SPIN_UP" />
+											<handler function="Onspb_batch_idChangeDown" entry="EVT_SPIN_DOWN" />
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<option>1</option>
+									</object>
+								</object>
+								<col>1</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
+									<label>非标物料申请号</label>
+								</object>
+								<col>2</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT13" variable="st_res_person" member="yes">
+									<label>非标申请负责人</label>
+								</object>
+								<col>5</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_RES_PERSON" variable="tc_res_person" member="yes">
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>5</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer5" member="no">
+					<label>分任务信息</label>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer4" member="no">
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT10" variable="st_nstd_engineer" member="yes">
+									<label>非标工程师</label>
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_NSTD_ENGINEER" variable="tc_engineer" member="yes">
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>0</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_ENGINEER" variable="Button_Engineer" member="yes">
+									<label>指定非标工程师</label>
+									<size>110,23</size>
+									<handler function="OnButton_EngineerClick" entry="EVT_BUTTON" />
+								</object>
+								<col>2</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>3</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_RETURN" variable="Button_Return" member="yes">
+									<label>退回任务</label>
+									<size>97,23</size>
+									<handler function="OnButton_ReturnClick" entry="EVT_BUTTON" />
+								</object>
+								<col>3</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>3</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_LOW_STATUS" variable="tc_low_status" member="yes">
+									<size>54,21</size>
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>1</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT11" variable="st_low_nstd_reason" member="yes">
+									<label>分任务非标原因</label>
+								</object>
+								<col>4</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_LOW_NSTD_REASON" variable="tc_low_nstd_reason" member="yes">
+									<size>188,32</size>
+									<style>wxTE_PROCESS_ENTER|wxTE_MULTILINE</style>
+									<handler function="Ontc_low_nstd_reasonTextEnter" entry="EVT_TEXT_ENTER" />
+								</object>
+								<col>4</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT12" variable="st_low_nstd_feedback" member="yes">
+									<label>分任务回复信息</label>
+								</object>
+								<col>5</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_LOW_NSTD_FEEDBACK" variable="tc_low_nstd_feedback" member="yes">
+									<size>239,32</size>
+									<style>wxTE_PROCESS_ENTER|wxTE_MULTILINE</style>
+									<handler function="Ontc_low_nstd_feedbackTextEnter" entry="EVT_TEXT_ENTER" />
+								</object>
+								<col>5</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_LOW_CONFIRM" variable="Button_Low_Confirm" member="yes">
+									<label>分任务完成确认</label>
+									<handler function="OnButton_Low_ConfirmClick" entry="EVT_BUTTON" />
+								</object>
+								<col>6</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>3</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_LOW_REL" variable="Button_Low_Rel" member="yes">
+									<label>相关分任务信息</label>
+									<handler function="OnButton_Low_RelClick" entry="EVT_BUTTON" />
+								</object>
+								<col>7</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>3</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND|wxFIXED_MINSIZE</flag>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer4" member="no">
+					<label>回复配置信息</label>
+					<object class="sizeritem">
+						<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="no">
+							<cols>3</cols>
+							<growablecols>2</growablecols>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_REMARKS" variable="tc_remarks" member="yes">
+									<size>477,32</size>
+									<style>wxTE_PROCESS_ENTER|wxTE_MULTILINE</style>
+									<handler function="Ontc_remarksText" entry="EVT_TEXT_ENTER" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_PASS_NSTD" variable="Button_PASS_NSTD" member="yes">
+									<label>配置信息传递</label>
+									<handler function="OnButton_PASS_NSTDClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer3" member="no">
+					<label>附加信息</label>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer2" member="no">
+							<growablerows>5</growablerows>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_MAT" variable="cb_nstd_mat" member="yes">
+									<label>需要非标物料号</label>
+									<handler function="Oncb_nstd_matClick" entry="EVT_CHECKBOX" />
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_DRAWING" variable="cb_nstd_drawing" member="yes">
+									<label>需要非标图纸</label>
+									<handler function="Oncb_nstd_drawingClick" entry="EVT_CHECKBOX" />
+								</object>
+								<col>0</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_MAT_STATUS" variable="tc_mat_status" member="yes">
+									<size>48,21</size>
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>1</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_WF_MAT" variable="tc_mat_wf_status" member="yes">
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>2</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_DRAW_STATUS" variable="tc_draw_status" member="yes">
+									<size>48,21</size>
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>1</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_WF_DRAW" variable="tc_draw_wf_status" member="yes">
+									<style>wxTE_READONLY</style>
+								</object>
+								<col>2</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>2</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_SUBMIT_MAT" variable="Button_Submit" member="yes">
+									<label>提交非标物料申请</label>
+									<handler function="OnButton_SubmitClick" entry="EVT_BUTTON" />
+								</object>
+								<col>3</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>3</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_DRAWING" variable="Button_drawing" member="yes">
+									<label>提交非标设计申请</label>
+									<handler function="OnButton_drawingClick" entry="EVT_BUTTON" />
+								</object>
+								<col>3</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>3</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_WORKFLOW_MAT" variable="Button_workflow_mat" member="yes">
+									<label>显示非标物料工作流</label>
+									<handler function="OnButton_workflow_matClick" entry="EVT_BUTTON" />
+								</object>
+								<col>4</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>3</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_WORKFLOW_DRAW" variable="Button_workflow_draw" member="yes">
+									<label>显示非标设计工作流</label>
+									<handler function="OnButton_workflow_drawClick" entry="EVT_BUTTON" />
+								</object>
+								<col>4</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>3</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_TOP</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer3" member="no">
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_PREVIOUS" variable="Button_Previous" member="yes">
+									<label>&lt;-</label>
+									<handler function="OnButton_PreviousClick" entry="EVT_BUTTON" />
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_QTY" variable="tc_qty" member="yes">
+									<style>wxTE_READONLY</style>
+								</object>
+								<colspan>2</colspan>
+								<col>1</col>
+								<row>0</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_NEXT" variable="Button_Next" member="yes">
+									<label>-&gt;</label>
+									<handler function="OnButton_NextClick" entry="EVT_BUTTON" />
+								</object>
+								<col>3</col>
+								<row>0</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_BEGIN" variable="Button_Begin" member="yes">
+									<label>&lt;&lt;--</label>
+									<size>122,23</size>
+									<handler function="OnButton_BeginClick" entry="EVT_BUTTON" />
+								</object>
+								<colspan>2</colspan>
+								<rowspan>2</rowspan>
+								<col>0</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_END" variable="Button_End" member="yes">
+									<label>--&gt;&gt;</label>
+									<size>115,23</size>
+									<handler function="OnButton_EndClick" entry="EVT_BUTTON" />
+								</object>
+								<colspan>2</colspan>
+								<rowspan>2</rowspan>
+								<col>2</col>
+								<row>1</row>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_TOP</flag>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+					<label>配置物料清单</label>
+					<object class="sizeritem">
+						<object class="wxGrid" name="ID_GRID_MAT_LIST" subclass="nstdappGrid" variable="gd_mat_list" member="yes">
+							<size>1000,-1</size>
+							<handler function="Ongd_mat_listCellSelect" entry="EVT_CMD_GRID_SELECT_CELL" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>5</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer4" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_IMPORT_MAT" variable="Button_Import_Mat" member="yes">
+									<label>剪贴板导入清单</label>
+									<handler function="OnButton_Import_MatClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_ADD" variable="Button_Add" member="yes">
+									<label>+</label>
+									<minsize>-1,-1</minsize>
+									<handler function="OnButton_AddClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND|wxFIXED_MINSIZE</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_DEL" variable="Button_Del" member="yes">
+									<label>-</label>
+									<minsize>-1,-1</minsize>
+									<handler function="OnButton_DelClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND|wxFIXED_MINSIZE</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_ROW" variable="tc_row" member="yes">
+									<value>1</value>
+									<minsize>-1,-1</minsize>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_CHANGE_RELATION" variable="button_change_rel" member="yes">
+									<label>清单修改</label>
+									<handler function="Onbutton_change_relClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_REL_UNTIS" variable="Button_Rel_Units" member="yes">
+									<label>批量修改相关梯</label>
+									<handler function="OnButton_Rel_UnitsClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_UNIT_LIST" variable="Button_Unit" member="yes">
+									<label>按单梯显示物料清单</label>
+									<handler function="OnButton_UnitClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_TOP</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>7</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>

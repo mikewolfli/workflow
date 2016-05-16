@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="ncr_proc_panel">
+		<pos_arg>1</pos_arg>
+		<size_arg>1</size_arg>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
+					<label>NCR清单</label>
+					<object class="sizeritem">
+						<object class="wxListView" name="ID_LISTVIEW_NCR_LIST" variable="lv_ncrs" member="yes">
+							<size>800,800</size>
+							<style>wxLC_REPORT|wxLC_SINGLE_SEL</style>
+							<handler function="Onlv_ncrsItemActivated" entry="EVT_LIST_ITEM_ACTIVATED" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<minsize>1000,800</minsize>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>8</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+					<orient>wxVERTICAL</orient>
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+							<label>filter</label>
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxChoice" name="ID_CHOICE_FILTER1" variable="choice_filter1" member="yes">
+									<content>
+										<item>活动状态NCR</item>
+										<item>已领取NCR</item>
+										<item>未领取NCR</item>
+										<item>已回复NCR</item>
+										<item>已关闭NCR</item>
+									</content>
+									<handler function="Onchoice_filter1Select" entry="EVT_CHOICE" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxChoice" name="ID_CHOICE_FILTER2" variable="choice_filter2" member="yes">
+									<content>
+										<item>ALL</item>
+										<item>本人领取的NCR</item>
+										<item>本组负责的NCR</item>
+										<item>按组筛选</item>
+										<item>按负责人筛选</item>
+									</content>
+									<handler function="Onchoice_filter2Select" entry="EVT_CHOICE" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer3" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON1" variable="Button1" member="yes">
+									<label>刷新列表</label>
+									<handler function="OnButton1Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_CREATE" variable="Button_create" member="yes">
+									<label>创建NCR</label>
+									<handler function="OnButton_createClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_SUBMIT" variable="Button_submit" member="yes">
+									<label>发布NCR</label>
+									<size>108,32</size>
+									<handler function="OnButton_submitClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_CHANGE" variable="Button_change" member="yes">
+									<label>变更责任组</label>
+									<handler function="OnButton_changeClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_FETCH" variable="Button_fetch" member="yes">
+									<label>领取NCR</label>
+									<handler function="OnButton_fetchClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_FEEDBACK" variable="Button_feedback" member="yes">
+									<label>NCR回复</label>
+									<handler function="OnButton_feedbackClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_CLOSE" variable="Button_close" member="yes">
+									<label>关闭NCR</label>
+									<handler function="OnButton_closeClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_DEL" variable="Button_del" member="yes">
+									<label>删除NCR</label>
+									<handler function="OnButton_delClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_ROLLBACK" variable="Button_ROLL_back" member="yes">
+									<label>回退NCR</label>
+									<default>1</default>
+									<handler function="OnButton_ROLL_backClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<border>5</border>
+						<option>8</option>
+					</object>
+				</object>
+				<flag>wxALL</flag>
+				<option>1</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>
