@@ -23,7 +23,7 @@ RFC_RC lookupMetaData(RFC_CONNECTION_HANDLE connection, RFC_ERROR_INFO* errorInf
 	return errorInfoP->code;
 }
 
-void errorHandling(RFC_RC rc, SAP_UC description[], RFC_ERROR_INFO* errorInfo, RFC_CONNECTION_HANDLE connection){
+void errorHandling(RFC_RC rc, SAP_UC* description, RFC_ERROR_INFO* errorInfo, RFC_CONNECTION_HANDLE connection){
 	printfU(cU("%s: %d\n"), description, rc);
 	printfU(cU("%s: %s\n"), errorInfo->key, errorInfo->message);
 	// It's better to close the TCP/IP connection cleanly, than to just let the
@@ -85,13 +85,13 @@ void printFlightListTable(RFC_TABLE_HANDLE tableHandle){
 	SAP_UC format[] = iU("|%.5d| %.20s| %.20s| %.20s| %.8s | %.6s | %.8s | %.6s | %.12s| %.3s |\n");
 
 	RfcGetRowCount(tableHandle, &tabLen, &errorInfo);
-	printfU(cU("Found %d connections:\n"), tabLen);
+	printfU(cU("Found %u connections:\n"), tabLen);
 
 	printfU(cU("|No.  | Airline             | City from           | City to             | Date     | Time   | Arr.Date |Arr.Time| Price       | Curr|\n"));
 	printfU(cU("--------------------------------------------------------------------------------------------------------------------------------------\n"));
 
 	for (i=0; i<tabLen; i++){
-		SAP_UC airline[20] = iU(""), cityfrom[20] = iU(""), cityto[20] = iU(""), currIso[3] = iU(""), price[25] = iU(""), counter[5] = iU("");
+		SAP_UC airline[20] = iU(""), cityfrom[20] = iU(""), cityto[20] = iU(""), currIso[3] = iU(""), price[25] = iU("");
 		RFC_DATE date = iU(""), arrDate = iU("");
 		RFC_TIME time = iU(""), arrTime = iU("");
 		RfcMoveTo(tableHandle, i, &errorInfo);
@@ -195,8 +195,8 @@ int mainU(int argc, SAP_UC** argv){
 	if (tabLen == 0) goto startAllOver;
 	printFlightListTable(tableHandle);
 
-	chooseCon: printfU(cU("\nPlease choose a connection (0 - %d)\n> "), tabLen-1);
-	scanfU(cU("%d"), &i);
+	chooseCon: printfU(cU("\nPlease choose a connection (0 - %u)\n> "), tabLen-1);
+	scanfU(cU("%u"), &i);
 	fflush(stdin);
 	if (i >= tabLen) goto chooseCon;
 

@@ -1,4 +1,4 @@
-/* @(#) $Id: //bas/711_REL/src/include/sapucx.h#1 $ SAP*/
+/* @(#) $Id: //bas/721_REL/src/include/sapucx.h#2 $ SAP*/
 
 #ifndef SAPUCX_H
 #define SAPUCX_H
@@ -89,11 +89,11 @@ extern "C" {
 	#endif  /* _WIN16     */
 #elif defined(__linux)
 	#if !( defined(__i386__)   || defined(__ia64__)  || defined(__s390x__) || \
-	       defined(__x86_64__) || defined(__PPC64__) || defined(__hppa__) )
+	       defined(__x86_64__) || defined(__PPC64__) || defined(__BYTE_ORDER__) )
 		#error "sapucx.h STANDALONE on this Linux platform not yet implemented"
 	#endif
 	
-	#if defined(__s390x__) || defined(__PPC64__) || defined(__hppa__)
+	#if defined(__s390x__) || defined(__PPC64__) || (defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN) )
 	   #define SAPwithINT_BIGENDIAN  1
 	#else
 	   #define SAPwithINT_LITTLEENDIAN  1
@@ -226,11 +226,23 @@ extern "C" {
 	#ifndef SAPonUNIX
     	#define SAPonUNIX     1
     #endif
-    #define SAPonBSD   1
+	#ifndef SAPonDARW
+    	#define SAPonDARW     1
+    #endif
 
-    #define SAPwithINT_BIGENDIAN  1
     #define SAPwithFLOAT_IEEE     1
     #define SAPwithCHAR_ASCII     1
+
+	#if defined __x86_64__
+        #define SAPwithINT_LITTLEENDIAN  1
+        #define SAPwith64_BIT
+	#elif defined __i386__
+        #define SAPwithINT_LITTLEENDIAN  1
+		#define SAPonBSD      1
+	#else
+		#define SAPwithINT_BIGENDIAN  1
+		#define SAPonBSD      1
+	#endif
 
 #else
 	#error "sapucx.h STANDALONE not yet implemented"
@@ -284,6 +296,25 @@ extern "C" {
   #define WCHAR_is_4B
 #endif
 
+#if defined(SAPonLIN) && defined(GCC_UTF16_PATCH)
+  #if __GNUC_PREREQ (4,3)
+    #include <uchar.h>
+    #define SAP_UC_is_char16
+  #endif
+#endif
+
+/* Starting with z/OS release 1.11 the compiler supports UTF-16 */
+/* and UTF-32 strings and literals similar to Linux             */
+/* UTF-16 characters representing Unicode are of type char16_t  */
+
+#if defined(SAPonOS390) && defined(_LP64) && (__COMPILER_VER__ >= 0x410B0000)
+  /* for C++ the compile option KEYWORD(char16_t,char32_t) */
+  /* makes including of uchar.h surplus                    */
+  #ifndef __cplusplus
+    #include <uchar.h>
+  #endif
+  #define SAP_UC_is_char16
+#endif
 
 #ifndef SAPwithUNICODE
   #define SAP_UC_is_1B
@@ -294,6 +325,9 @@ extern "C" {
     #define SAP_UC_is_wchar
     typedef wchar_t SAP_CHAR;
     typedef wchar_t SAP_UC;
+  #elif defined(SAP_UC_is_char16)
+    typedef char16_t SAP_CHAR;
+    typedef char16_t SAP_UC;
   #else
     #define SAP_UC_is_UTF16_without_wchar
     typedef unsigned short SAP_CHAR;
@@ -313,7 +347,8 @@ extern "C" {
     defined(SAPonHP_UX) || \
     (defined(SAPonLIN) && defined(__i386__) && defined(__GNUC__) && (__GNUC__<3)) || \
     (defined(SAPonLIN) && defined(GCC_UTF16_PATCH)) || \
-    defined(SAPonSUN)
+    defined(SAPonSUN) || defined(SAPonAIX) || \
+    (defined(SAPonOS390) && (__COMPILER_VER__ >= 0x410B0000))
   /* we have literals for UTF-16 */
 #else
   #define SAPwithoutUTF16_LITERALS

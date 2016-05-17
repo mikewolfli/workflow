@@ -63,6 +63,7 @@ memsetU
 memsetU16
 nlsui_initialize
 nlsui_set_trace
+nlsui_set_trace_func
 openU
 openU16
 optargU
@@ -125,6 +126,7 @@ tolowerU
 toupperU
 u16_fwriteU
 u16_fwriteU16
+u16_set_fgetcU_error_parameters
 vfprintfU
 vfprintfU16
 vprintfU

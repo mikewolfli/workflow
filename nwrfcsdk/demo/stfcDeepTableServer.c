@@ -35,13 +35,14 @@ CALL FUNCTION 'STFC_DEEP_TABLE' DESTINATION 'MY_SERVER'
     export_tab       = extab
     resptext         = text
   EXCEPTIONS
-    system_failure   = 1  MESSAGE mes.
+    system_failure          = 1  MESSAGE mes.
+    communication_failure   = 2  MESSAGE mes.
 
 This also allows to catch the detail texts for SYSTEM_FAILURES.
 Note: STFC_DEEP_TABLE exists only from SAP_BASIS release 6.20 on.
 */
 
-void errorHandling(RFC_RC rc, SAP_UC description[], RFC_ERROR_INFO* errorInfo, RFC_CONNECTION_HANDLE connection){
+void errorHandling(RFC_RC rc, SAP_UC* description, RFC_ERROR_INFO* errorInfo, RFC_CONNECTION_HANDLE connection){
 	printfU(cU("%s: %d\n"), description, rc);
 	printfU(cU("%s: %s\n"), errorInfo->key, errorInfo->message);
 	// It's better to close the TCP/IP connection cleanly, than to just let the
@@ -78,10 +79,10 @@ RFC_RC SAP_API stfcDeepTableImplementation(RFC_CONNECTION_HANDLE rfcHandle, RFC_
 	RfcGetTable(funcHandle, cU("IMPORT_TAB"), &importTab, &errorInfo);
 
 	RfcGetRowCount(importTab, &tabLen, &errorInfo);
-	printfU(cU("IMPORT_TAB (%d lines)\n"), tabLen);
+	printfU(cU("IMPORT_TAB (%u lines)\n"), tabLen);
 	for (i=0; i<tabLen; i++){
 		RfcMoveTo(importTab, i, &errorInfo);
-		printfU(cU("\t\t-line %d\n"), i);
+		printfU(cU("\t\t-line %u\n"), i);
 
 		RfcGetInt(importTab, cU("I"), &intValue, &errorInfo);
 		printfU(cU("\t\t\t-I:\t%d\n"), intValue);
@@ -90,13 +91,13 @@ RFC_RC SAP_API stfcDeepTableImplementation(RFC_CONNECTION_HANDLE rfcHandle, RFC_
 		// Check for the stop flag:
 		if (i==0 && strncmpU(cU("STOP"), buffer, 4) == 0) listening = 0;
 		RfcGetStringLength(importTab, cU("STR"), &strLen, &errorInfo);
-		if (strLen > 256) printfU(cU("UTF8_STRING length bigger than 256: %d. Omitting the STR field...\n"), strLen);
+		if (strLen > 256) printfU(cU("UTF8_STRING length bigger than 256: %u. Omitting the STR field...\n"), strLen);
 		else{
 			RfcGetString(importTab, cU("STR"), buffer, 257, &strLen, &errorInfo);
 			printfU(cU("\t\t\t-STR:\t%s\n"), buffer);
 		}
 		RfcGetStringLength(importTab, cU("XSTR"), &strLen, &errorInfo);
-		if (strLen > 128) printfU(cU("XSTRING length bigger than 128: %d. Omitting the XSTR field...\n"), strLen);
+		if (strLen > 128) printfU(cU("XSTRING length bigger than 128: %u. Omitting the XSTR field...\n"), strLen);
 		else{
 			RfcGetString(importTab, cU("XSTR"), buffer, 257, &strLen, &errorInfo);
 			printfU(cU("\t\t\t-XSTR:\t%s\n"), buffer);
@@ -117,7 +118,7 @@ RFC_RC SAP_API stfcDeepTableImplementation(RFC_CONNECTION_HANDLE rfcHandle, RFC_
 	RfcGetTable(funcHandle, cU("EXPORT_TAB"), &exportTab, &errorInfo);
 	for (i=0; i<tabLen; i++){
 		tabLine = RfcAppendNewRow(exportTab, &errorInfo);
-		printfU(cU("Line %d\n"), i);
+		printfU(cU("Line %u\n"), i);
 		printfU(cU("\tPlease enter a value for C [CHAR10]:> "));
         /*CCQ_SECURE_LIB_OK*/
 		getsU(buffer);
@@ -197,6 +198,8 @@ int mainU(int argc, SAP_UC** argv){
 		rc = RfcListenAndDispatch(serverHandle, 120, &errorInfo);
 		printfU(cU("RfcListenAndDispatch() returned %s\n"), RfcGetRcAsString(rc));
 		switch (rc){
+			case RFC_OK:
+				break;
 			case RFC_RETRY:	// This only notifies us, that no request came in within the timeout period.
 						    // We just continue our loop.
 				printfU(cU("No request within 120s.\n"));

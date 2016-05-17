@@ -35,7 +35,7 @@ bool parseCommand(int argc, SAP_UC ** argv, OPTIONS* options)
     while(i < argc)
     {
         const SAP_UC ch1 = argv[i][0];
-        const SAP_UC ch2 = ch1 ? argv[i++][1] : 0;
+        const SAP_UC ch2 = argv[i++][1];
         if(ch1 == cU('-') && ch2) // we found an option
         {
             if(ch2 == cU('t'))
@@ -48,9 +48,9 @@ bool parseCommand(int argc, SAP_UC ** argv, OPTIONS* options)
                 options->showSysInfo = true;
                 continue;
             }
-            if(i==argc || argv[i][0] == cU('-'))
+            if(i > argc - 1 || argv[i][0] == cU('-'))
             {
-                break;
+                continue;
             }
             switch (ch2)
             {
@@ -92,6 +92,7 @@ bool parseCommand(int argc, SAP_UC ** argv, OPTIONS* options)
                 }
                 break;
             default:
+                i++;
                 break;
             }
         }
@@ -279,15 +280,6 @@ void showVersion()
 		cU("%s\n"), cU(__VERSION__)
 #elif defined SAPonNT
 		cU("%09d (VVRRPPPPP. Microsoft (R) C/C++ Compiler)\n"), _MSC_FULL_VER		/*decimal!*/
-#elif defined SAPonOSF1
-		cU("%09d (VVRRTPPPP. %s Compiler)\n"),	/*decimal!*/
-	#if defined __DECC
-			__DECC_VER, cU("C")
-	#elif defined __DECCXX
-			__DECCXX_VER, cU("C++")
-	#else
-			0, cU("Unknown Version")
-	#endif
 #elif defined SAPonSUN
 		cU("%03X (VRP. %s Compiler)\n"),
 	#if defined __SUNPRO_C
@@ -297,6 +289,8 @@ void showVersion()
 	#else
 			0, cU("Unknown Version")
 	#endif
+#elif defined SAPonOS390
+        cU("%08X (PVRRMMMM)\n"), __COMPILER_VER__
 #else
 		cU("%s\n"), cU("Version not available.")
 #endif

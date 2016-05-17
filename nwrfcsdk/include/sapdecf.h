@@ -1,4 +1,4 @@
-/* @(#) $Id: //bas/711_REL/src/include/sapdecf.h#1 $ SAP*/
+/* @(#) $Id: //bas/721_REL/src/include/sapdecf.h#1 $ SAP*/
 /*-----------------------------------------------------------------------------
  *
  * (c) Copyright SAP AG, Walldorf 
@@ -1243,6 +1243,69 @@ DECF_RETURN DecFloat16_Log10(DecFloat16* dfp16_res, DecFloat16 dfp16);
  */
 DECF_RETURN DecFloat34_Log10(DecFloat34* dfp34_res, DecFloat34 dfp16);
 
+
+/**
+ * \brief Returns the "next" DecFloat16 number to dfp16 in the direction of -Infinity
+ *
+ *  Returns the "next" DecFloat16 number to dfp16 in the direction of -Infinity according
+ *  to the IEEE 754r rules for "nextDown".
+ * 
+ * 
+ * @param dfp16_res  Pointer to the IEEE 754r 128-bit variable where the result is stored.
+ * @param dfp16      Argument value.
+ *
+ * @return           DECF_OK -- Fine.
+ * @return           DECF_INVALID_OP -- -- Argument is sNaN.
+ */
+DECF_RETURN DecFloat16NextMinus(DecFloat16* dfp16_res,DecFloat16 dfp16);
+
+
+/**
+ * \brief Returns the "next" DecFloat16 number to dfp16 in the direction of Infinity
+ *
+ *  Returns the "next" DecFloat16 number to dfp16 in the direction of -Infinity according
+ *  to the IEEE 754r rules for "nextDown".
+ * 
+ * 
+ * @param dfp16_res  Pointer to the IEEE 754r 128-bit variable where the result is stored.
+ * @param dfp16      Argument value.
+ *
+ * @return           DECF_OK -- Fine.
+ * @return           DECF_INVALID_OP -- -- Argument is sNaN.
+ */
+DECF_RETURN DecFloat16NextPlus(DecFloat16* dfp16_res,DecFloat16 dfp16);
+
+
+/**
+ * \brief Returns the "next" DecFloat34 number to dfp34 in the direction of -Infinity
+ *
+ *  Returns the "next" DecFloat34 number to dfp34 in the direction of -Infinity according
+ *  to the IEEE 754r rules for "nextDown".
+ * 
+ * 
+ * @param dfp34_res  Pointer to the IEEE 754r 128-bit variable where the result is stored.
+ * @param dfp34      Argument value.
+ *
+ * @return           DECF_OK -- Fine.
+ * @return           DECF_INVALID_OP -- -- Argument is sNaN.
+ */
+DECF_RETURN DecFloat34NextMinus(DecFloat34* dfp34_res,DecFloat34 dfp34);
+
+
+/**
+ * \brief Returns the "next" DecFloat34 number to dfp34 in the direction of Infinity
+ *
+ *  Returns the "next" DecFloat34 number to dfp34 in the direction of -Infinity according
+ *  to the IEEE 754r rules for "nextDown".
+ * 
+ * 
+ * @param dfp34_res  Pointer to the IEEE 754r 128-bit variable where the result is stored.
+ * @param dfp34      Argument value.
+ *
+ * @return           DECF_OK -- Fine.
+ * @return           DECF_INVALID_OP -- -- Argument is sNaN.
+ */
+DECF_RETURN DecFloat34NextPlus(DecFloat34* dfp34_res,DecFloat34 dfp34);
 
 
 END_externC

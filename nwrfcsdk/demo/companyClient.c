@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "sapnwrfc.h"
 
-void errorHandling(RFC_RC rc, SAP_UC description[], RFC_ERROR_INFO* errorInfo, RFC_CONNECTION_HANDLE connection){
+void errorHandling(RFC_RC rc, SAP_UC* description, RFC_ERROR_INFO* errorInfo, RFC_CONNECTION_HANDLE connection){
 	printfU(cU("%s: %d\n"), description, rc);
 	printfU(cU("%s: %s\n"), errorInfo->key, errorInfo->message);
 	// It's better to close the TCP/IP connection cleanly, than to just let the
@@ -50,6 +50,7 @@ int mainU(int argc, SAP_UC** argv){
 	RfcGetStructure(bapiCompany, cU("RETURN"), &returnStructure, &errorInfo);
 	RfcGetString(returnStructure, cU("MESSAGE"), message, 221, &resultLen, &errorInfo);
 	RfcDestroyFunction(bapiCompany, &errorInfo);
+	RfcCloseConnection(connection, NULL);
 
 	// On Windows you can use the following function from windows.h toconvert to UTF-8:
 	// utf8Len = WideCharToMultiByte(CP_UTF8, 0, message, strlenU(message), buffer, 1105, NULL, NULL);
@@ -65,6 +66,8 @@ int mainU(int argc, SAP_UC** argv){
     RfcSAPUCToUTF8(message,  strlenU(message), buffer, &utf8Len,  &resultLen, &errorInfo);
 
 	outFile = fopenU(cU("message.xml"), cU("w"));
+	if (!outFile) return 1;
+
 	/*SAPUNICODEOK_STRINGCONST*/ /*SAPUNICODEOK_LIBFCT*/
 	fputs("<?xml version=\"1.0\"?>\n<message>", outFile);
 	/*SAPUNICODEOK_LIBFCT*/

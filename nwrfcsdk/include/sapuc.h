@@ -1,10 +1,10 @@
-/* @(#) $Id: //bas/711_REL/src/include/sapuc.h#4 $ SAP*/
+/* @(#) $Id: //bas/721_REL/src/include/sapuc.h#8 $ SAP*/
 /* CCQ_CCU_FILE_OFF */ /* CCQ_COV_FILE_OFF */ /* CCQ_IPV6_SUPPORT_FILE_OK */ /* CCQ_USE_TIME_T_FILE_OK */
 #ifndef SAPUC_H
-#define SAPUC_H "$Id: //bas/711_REL/src/include/sapuc.h#4 $"
+#define SAPUC_H "$Id: //bas/721_REL/src/include/sapuc.h#8 $"
 
 /*******************************************************************************
- * (c) Copyright SAP AG, Walldorf, 1996 - 2002
+ * (c) Copyright SAP AG, Walldorf
  *
  *
  *              SSSS   AAA   PPPP          U   U   CCCC
@@ -27,6 +27,14 @@
  ******************************************************************************/
 
 /*-HISTORY----------------------------------------------------------------------
+ * 02.10.2012 tm       add SAP_CESU8.
+ * 17.02.2011 bs       add vsprintf_sU() and vsprintf_sR(); include <stdarg.h>
+ * 25.10.2010 bs       restore previous signature of nlsui_initialize() to avoid
+ *                     incompatibility in RFC SDK. Move storing of command line
+ *                     to new function nlsui_store_cmdline().
+ * 12.03.2009 bs       add SAPwith7BIT_UNICODE
+ * 06.02.2009 bs       add parentheses to macro definition MAX_PATH_LN
+ * 24.10.2008 lm       add HPUX_U16_OPTIMIZED functionality
  * 22.10.2008 bs       add nlsui_addIcuSearchPath(). 
  * 10.04.2008 bs       avoid ccQ warnings for strlenR() and other str*R() macros
  * 13.03.2008 bs       use own implementation of strtok_r on all platforms 
@@ -371,6 +379,13 @@
  *    WCHAR_is_2B  or  WCHAR_is_4B
  *  is needed for the definition of SAP_UTF16 and thus also in the non-Unicode
  *  case.
+ *  
+ *  The SAPwithICU_* switches indicate that the corresponding ICU functionality 
+ *  is available through the sapiculib. The exception is SAPwithICU_CTYPE which 
+ *  is set only for Unicode and works without the sapiculib.  
+ *
+ *  SAPwithICU_I18N can be used to enforce loading of ICU via mainU() even in 
+ *  non-Unicode programs. 
  *----------------------------------------------------------------------------*/
 
 #if defined(SAPonAIX)   || \
@@ -379,6 +394,7 @@
     defined(SAPonSUN)   || \
     defined(SAPonOSF1)  || \
     defined(SAPonOS390) || \
+    (defined(SAPonOS400) && defined(SAPwithUNICODE) ) || \
     defined(SAPonNT)
   /* platforms where ICU is available */
   #if defined(SAPwithUNICODE)
@@ -406,21 +422,7 @@
   #define SAPwithICU
 #endif
 
-#if defined(SAPwithoutICU)
-  #undef SAPwithICU_CTYPE
-  #undef SAPwithICU_COLL
-  #undef SAPwithICU_BIDI
-  #undef SAPwithICU_SHAPING
-  #undef SAPwithICU_BREAK
-  #undef SAPwithICU_NORM
-  #undef SAPwithICU_TRANS
-  #undef SAPwithICU_IDNA
-  #undef SAPwithICU_CAL
-  #undef SAPwithICU
-#endif
-
-#if defined( SAPwithU16LIBDyn ) || \
-    defined( SAPwithICU_CTYPE ) || \
+#if defined( SAPwithICU_CTYPE ) || \
     defined( SAPwithICU_I18N )
   #define SAPwithNLSUI_INITIALIZE
 #endif
@@ -522,12 +524,12 @@
  * Via saptype.h most neccessary headers are known, including
  * <limits.h>, <stddef.h>, <stdio.h>, <stdlib.h>, and <string.h>
  *----------------------------------------------------------------------------*/
+#include <stdarg.h>
+
 #if defined(SAPwithUNICODE) || defined(SAPU16C_LIB)
 
   #if defined(CPP_USE_NEW_C_HEADERS)
     #include <cstdarg>
-  #else
-    #include <stdarg.h>
   #endif
 
   #ifdef SAPonNT
@@ -671,6 +673,14 @@
     #else
       #include <wchar.h>
     #endif
+  #elif defined(SAPonDARWIN)
+	#if defined(CPP_USE_NEW_C_HEADERS)
+      #include <cwchar>
+      #include <cwctype>      /* isw..() */
+    #else
+      #include <wchar.h>
+      #include <wctype.h>     /* isw..() */
+    #endif
   #endif
 
 #endif /* SAPwithUNICODE */
@@ -760,6 +770,8 @@
 
 #if defined(WCHAR_is_2B)
   typedef wchar_t   SAP_UTF16;
+#elif defined(SAP_UC_is_char16)
+  typedef char16_t  SAP_UTF16;
 #else
   typedef SAP_USHORT   SAP_UTF16 ;
 #endif
@@ -1007,11 +1019,11 @@
  *----------------------------------------------------------------------------*/
 /* There are two possibilites:
  * (1) In a source file, define 
- *     #define SAP_IDENT "@(#) $Id: //bas/711_REL/src/include/sapuc.h#4 $"
+ *     #define SAP_IDENT "@(#) $Id: //bas/721_REL/src/include/sapuc.h#8 $"
  *     at top of the file (before(!) including sapuc.h).
  *     This identicfication is processed later in sapuc.h
  * (2) In a source file, use the macro
- *     SAP_IDENTN(name,"@(#) $Id: //bas/711_REL/src/include/sapuc.h#4 $")
+ *     SAP_IDENTN(name,"@(#) $Id: //bas/721_REL/src/include/sapuc.h#8 $")
  *     after(!) including saptype.h to define a identication string, that is
  *     not 'sccsid'. Please note: A semicolon must not be placed behind
  *     this macro call, because this would cause errors on pedantic ISO-C
@@ -1065,9 +1077,9 @@ SAP_IDENTN(sccsid, SAP_IDENT)
 #  define sccsidR   sccsid
 
 #  ifndef SAPwithUNICODE
-#    define sccsidU sccsid
+#    define sccsidU (const SAP_UC *)sccsid  /* cast, SAP_RAW would not be useful */
 #  else
-#    define sccsidU sccsidU16
+#    define sccsidU (const SAP_UC *)sccsidU16
 #  endif
 
 #endif /* SAP_IDENT */
@@ -1078,9 +1090,9 @@ SAP_IDENTN(sccsid, SAP_IDENT)
  *----------------------------------------------------------------------------*/
 #if SAP_RELEASE_NO >= 5010
   #ifdef SAPwithUNICODE
-   static SAP_RAW unicodeId[] = cR("@(#)     Unicode");
+   static SAP_RAW SAP_UNUSED unicodeId[] = cR("@(#)     Unicode");
   #else
-   static SAP_RAW unicodeId[] = cR("@(#) non-Unicode");
+   static SAP_RAW SAP_UNUSED unicodeId[] = cR("@(#) non-Unicode");
   #endif
 #endif
 
@@ -1172,7 +1184,7 @@ SAP_U16_PROTOTYPE_STDC(strncat)
 SAP_U16_PROTOTYPE_STDC(strncmp)
 #define strncmpU                    SAP_UNAME(strncmp)
 
-#define strncpyR( dest, src, n )    /*SAPUNICODEOK_LIBFCT*/ strncpR( dest, src, n )
+#define strncpyR( dest, src, n )    /*SAPUNICODEOK_LIBFCT*/ strncpy( dest, src, n )
 #define strncpyU16_RETURN           SAP_UTF16*
 #define strncpyU16_TPARAMS          (SAP_UTF16 * dest, const SAP_UTF16 * src, size_t n)
 #define strncpyU16_PARAMS           (dest, src, n)
@@ -1364,7 +1376,7 @@ externC DECL_EXP SAP_UTF16 * strcpytoupperU16 (SAP_UTF16 * dst, const SAP_UTF16 
 externC DECL_EXP char * strcpytoupperR  (char * dst, const char * src );
 #define strcpytoupperU(dst,src)         SAP_UNAME_UR(strcpytoupper)(dst,src)
 
-externC SAP_UTF16 * strcpytolowerU16    (SAP_UTF16 * dst, const SAP_UTF16 * src );
+externC DECL_EXP SAP_UTF16 * strcpytolowerU16 (SAP_UTF16 * dst, const SAP_UTF16 * src );
 externC DECL_EXP char * strcpytolowerR  (char * dst, const char * src );
 #define strcpytolowerU(dst,src)         SAP_UNAME_UR(strcpytolower)(dst,src)
 
@@ -1410,7 +1422,10 @@ externC DECL_EXP char * strcpytolowerR  (char * dst, const char * src );
 #define atofU(s)                   SAP_UNAME(atof)(s)
 #define atolU(s)                   SAP_UNAME(atol)(s)
 #if defined(SAPonNT)
-  #define atollU(s)                NUC_UC(_atoi64,atolU16)(s)
+  #define atollU(s)                NUC_UC(_atoi64,atollU16)(s)
+#elif defined(SAPonHP_UX) && !defined(atoll)
+  /* there is no atoll available in older releases of HP-UX*/
+  #define atollU(s)                NUC_UC(atol,atollU16)(s)
 #else
   #define atollU(s)                SAP_UNAME(atoll)(s)
 #endif
@@ -1504,6 +1519,19 @@ SAP_U16_PROTOTYPE(memset)
 # define memsetU(  s,  c,  len )   (SAP_UNAME_MEM_RET(memset)(  s, U_CHAR(c), len ) )
 #endif
 
+#if defined(SAPwithPASE400) && defined(SAPwithUNICODE) && defined(EXT_RELEASE)
+  #undef memsetU
+  #ifdef __cplusplus
+	extern "C"
+  #endif
+  SAP_UTF16* memsetUTF16_blocked(SAP_UTF16 *dest, SAP_UTF16 c, size_t count);
+  #define memsetU16PASE(dest,c,count)																	\
+          (!(c) ? (SAP_UTF16 *)/*SAPUNICODEOK_CONVERSION*/memsetR((dest),0,(count)*sizeofR(SAP_UTF16))  \
+                : ((count) <= 8) ? memsetU16((dest),(c),(count))										\
+                                 : memsetUTF16_blocked((dest),(c),(count)))
+  #define memsetU memsetU16PASE
+#endif
+
 #define bzeroR                    bzero
 #define bzeroU16( s, len )        memsetU16( s, (WINT_T)0, len )
 #define bzeroU( s, len )          SAP_UNAME_UR(bzero)( s, len )
@@ -1521,7 +1549,7 @@ SAP_U16_PROTOTYPE(memset)
           * use own implementations; either macros or the external functions
           * declared above or functions from libsapu16.
           */
-  #if defined(SAPwithINT_BIGENDIAN)
+  #if defined(SAPwithINT_BIGENDIAN) && !defined(SAPonLIN)
      #define       memcmpU16(   s1, s2, len )             \
                    memcmp(    s1, s2, (len)*sizeofR(SAP_UTF16) )
   #endif
@@ -1529,6 +1557,17 @@ SAP_U16_PROTOTYPE(memset)
        ((SAP_UTF16*)memcpy(   s1, s2, (len)*sizeofR(SAP_UTF16) ))
   #define          memmoveU16( s1, s2, len )              \
        ((SAP_UTF16*)memmove(  s1, s2, (len)*sizeofR(SAP_UTF16) ))
+
+  #if defined(HPUX_U16_OPTIMIZED)
+     #ifdef __cplusplus
+       extern "C" { void *__memsetU16(void *s, int c, size_t n); }
+     #else
+       void *__memsetU16(void *s, int c, size_t n);
+     #endif
+
+     #define memsetU16(  s,  wc, len )  __memsetU16(  s,  wc, len )
+  #endif
+
 #endif
 
 #if defined(SAPccQ) && defined(SAPwithUNICODE)
@@ -1765,10 +1804,18 @@ SAP_U16_PROTOTYPE_MODE_T(mkdir)
   #define mkdirU(wpath, mode)          SAP_UNAME(mkdir)(wpath, mode)
 #endif
 
+/*
+ * map mkstempsU in the moment only to SAP own implementation
+ * SAP_mkstemps. If there are later platform specific implementaions
+ * available then switch here between the variants.
+ */
+externC int SAP_mkstemps(SAP_UC* tmpl, int suffix_len);
+#define mkstempsU(tmpl,suffix_len)   SAP_mkstemps(tmpl,suffix_len)
+
 #ifdef SAPonNT
   #define mkstempU( tmpl )             mkstemp( tmpl )
 #elif defined(SAPonOS400)
-  #define mkstempU( tmpl ) /* not yet implemented */ >>> missing function <<<
+  #define mkstempU( tmpl ) mkstempsU(tmpl,0)
 #else
   #define mkstempU16_RETURN            int
   #define mkstempU16_TPARAMS           (SAP_UTF16 *tmpl)
@@ -1778,21 +1825,12 @@ SAP_U16_PROTOTYPE_MODE_T(mkdir)
 #endif
 
 /*
- * map mkstempsU in the moment only to SAP own implementation
- * SAP_mkstemps. If there are later platform specific implementaions
- * available then switch here between the variants.
- */
-externC int SAP_mkstemps(SAP_UC* tmpl, int suffix_len);
-#define mkstempsU(tmpl,suffix_len)   SAP_mkstemps(tmpl,suffix_len)
-
-/*
  * add mkstempsR for raw file creation
  */
-#if defined(SAPonOS400)
-  #define mkstempR( tmpl ) /* not yet implemented */ >>> missing function <<<
-#else  
 externC int SAP_mkstempsR(SAP_RAW* tmpl, int suffix_len);
 #define mkstempsR(tmpl,suffix_len)   SAP_mkstempsR(tmpl,suffix_len)
+#if defined(SAPonOS400)
+  #define mkstempR( tmpl ) mkstempsR(tmpl,0) 
 #endif
 
 #ifndef SAPonNT
@@ -1850,6 +1888,39 @@ externC int SAP_mkstempsR(SAP_RAW* tmpl, int suffix_len);
 #elif defined(SAPonOS400)
   #define strftimeU16                 wcsftime
 #endif
+
+/* Modifications to support 64-Bit time_t */
+#if defined(SAPonOS400) && defined(EXT_RELEASE)
+  #include <sys/types.h>
+  #if defined(__time64_t)
+	#include <time.h>
+	#include <utime.h>
+	#include <sys/stat.h>
+	#include <sys/sem.h>
+	#include <sys/shm.h>
+	#undef  time_t
+	#define time_t time64_t
+	#undef  ctime
+	/* REDEFSTDFUNC */
+	#define ctime(X) ctime64(X)
+	#undef  ctime_r
+	/* REDEFSTDFUNC */
+	#define ctime_r(X,Y) ctime64_r(X,Y)
+	#undef  gmtime
+	#define gmtime(X) gmtime64(X)
+	#undef  gmtime_r
+	#define gmtime_r(X,Y) gmtime64_r(X,Y)
+	#undef  localtime
+	#define localtime(X) localtime64(X)
+	#undef  localtime_r
+	#define localtime_r(X,Y) localtime64_r(X,Y)
+	#undef  mktime
+	#define mktime(X) mktime64(X)
+	#undef  time
+	#define time(X) time64(X)
+  #endif
+#endif /* SAPonOS400 */
+
 
 /*-----------------------------------------------------------------------------
  * sapuc.h - Functions that handle type char pointers:
@@ -1967,6 +2038,7 @@ SAP_U16_PROTOTYPE_UO(ttyname)
   #define tempnamU16                   _wtempnam
   #define tmpnamU16                    _wtmpnam
 #endif
+
 
 
 /*-----------------------------------------------------------------------
@@ -2171,10 +2243,26 @@ SAP_U16_PROTOTYPE_STDC_VALIST(vfprintf)
 SAP_U16_PROTOTYPE_STDC_VALIST(vsprintf)
 #define vsprintfU(p1, p2, p3)          SAP_UNAME(vsprintf)(p1, p2, p3)
 
+externC int vsprintf_sRFB(char * s, size_tR s1max, const char *format, va_list ap );
+#define vsprintf_sR                    vsprintf_sRFB
+#define vsprintf_sU16_RETURN           intU
+#define vsprintf_sU16_TPARAMS          (SAP_UTF16 *s, size_t n, const SAP_UTF16 *format, va_list ap)
+#define vsprintf_sU16_PARAMS           (s, n, format, ap)
+SAP_U16_PROTOTYPE_STDC_VALIST(vsprintf_s)
+#define vsprintf_sU(p1, p2, p3, p4)    SAP_UNAME_UR(vsprintf_s)(p1, p2, p3, p4)
+
 #define vsnprintfU16_RETURN            intU
 #define vsnprintfU16_TPARAMS           (SAP_UTF16 *s, size_t n, const SAP_UTF16 *format, va_list ap)
 #define vsnprintfU16_PARAMS            (s, n, format, ap)
 SAP_U16_PROTOTYPE_STDC_VALIST(vsnprintf)
+
+externC int vsnprintf_sRFB(char * s, size_tR s1max, const char *format, va_list ap );
+#define vsnprintf_sR                   vsnprintf_sRFB
+#define vsnprintf_sU16_RETURN          intU
+#define vsnprintf_sU16_TPARAMS         (SAP_UTF16 *s, size_t n, const SAP_UTF16 *format, va_list ap)
+#define vsnprintf_sU16_PARAMS          (s, n, format, ap)
+SAP_U16_PROTOTYPE_STDC_VALIST(vsnprintf_s)
+#define vsnprintf_sU(p1, p2, p3, p4)   SAP_UNAME_UR(vsnprintf_s)(p1, p2, p3, p4)
 
 #define sscanfU16_RETURN               int
 #define sscanfU16_TPARAMS              (const SAP_UTF16 *s, const SAP_UTF16 *format, ... )
@@ -2246,7 +2334,7 @@ END_NS_STD_C_HEADER
  *----------------------------------------------------------------------------*/
 
 /* Prototypes for Unicode and non-Unicode */
-externC int fget_strR( char *s, int n, FILE *stream, SAP_UC repl_char );
+externC DECL_EXP int fget_strR( char *s, int n, FILE *stream, SAP_UC repl_char );
 #define fget_strU16_RETURN               int
 #define fget_strU16_TPARAMS              (SAP_UTF16 *s, int n, FILE *stream, \
                                           SAP_UTF16 repl_char)
@@ -2254,7 +2342,7 @@ externC int fget_strR( char *s, int n, FILE *stream, SAP_UC repl_char );
 SAP_U16_PROTOTYPE(fget_str)
 #define fget_strU(s, n, stream, r)       SAP_UNAME_UR(fget_str)(s, n, stream, r)
 
-externC int fget_lineR( char *s, int n, FILE *stream, SAP_UC repl_char );
+externC DECL_EXP int fget_lineR( char *s, int n, FILE *stream, SAP_UC repl_char );
 #define fget_lineU16_RETURN              int
 #define fget_lineU16_TPARAMS             (SAP_UTF16 *s, int n, FILE *stream, \
                                           SAP_UTF16 repl_char)
@@ -2262,14 +2350,14 @@ externC int fget_lineR( char *s, int n, FILE *stream, SAP_UC repl_char );
 SAP_U16_PROTOTYPE(fget_line)
 #define fget_lineU(s, n, stream, r)      SAP_UNAME_UR(fget_line)(s, n, stream, r)
 
-externC int fget_longR( long int* ptr, FILE *stream );
+externC DECL_EXP int fget_longR( long int* ptr, FILE *stream );
 #define fget_longU16_RETURN              int
 #define fget_longU16_TPARAMS             (long int* ptr, FILE *stream)
 #define fget_longU16_PARAMS              (ptr, stream)
 SAP_U16_PROTOTYPE(fget_long)
 #define fget_longU(p, stream)            SAP_UNAME_UR(fget_long)(p, stream)
 
-externC int fget_intR( int* ptr, FILE *stream );
+externC DECL_EXP int fget_intR( int* ptr, FILE *stream );
 #define fget_intU16_RETURN               int
 #define fget_intU16_TPARAMS              (int* ptr, FILE *stream)
 #define fget_intU16_PARAMS               (ptr, stream)
@@ -2335,7 +2423,7 @@ externC int isQSYSFileNameU ( const SAP_UC* pszIFSPath );
 #endif
 
 
-#ifdef SAPonOS390
+#if defined(SAPonOS390) || defined(SAPonOS400)
   #if defined(SAPwithUNICODE)
     externC int spawnU16( const SAP_UTF16 *path,
                           const int     fd_count,
@@ -2343,9 +2431,13 @@ externC int isQSYSFileNameU ( const SAP_UC* pszIFSPath );
                           const struct  inheritance *inherit,
                           SAP_UTF16* const argv[],
                           SAP_UTF16* const wenv[]);
-   #define spawnU(p1,p2,p3,p4,p5,p6)      SAP_UNAME(spawn)(p1,p2,p3,p4,p5,p6)
+    #define spawnU(p1,p2,p3,p4,p5,p6)      SAP_UNAME(spawn)(p1,p2,p3,p4,p5,p6)
   #else
-   #define spawnU(p1,p2,p3,p4,p5,p6)      SAP_UNAME(spawn)(p1,p2,p3,p4,(const char **)(p5),(const char **)(p6))
+    #ifdef SAPonOS400
+      #define spawnU(p1,p2,p3,p4,p5,p6)      SAP_UNAME(spawn)(p1,p2,p3,p4,p5,p6)
+    #else
+      #define spawnU(p1,p2,p3,p4,p5,p6)      SAP_UNAME(spawn)(p1,p2,p3,p4,(const char **)(p5),(const char **)(p6))
+    #endif
   #endif
 #endif
 
@@ -2393,8 +2485,8 @@ SAP_U16_PROTOTYPE(putenv)
   #define DECLAREenvironU16            short sapu16cu_env_unused_var
                                        /* dummy variable for syntax reasons;
                                         * _wenviron is a macro in stdlib.h */
-  #define GETenvironU16                _wenviron
-  #define FREEenvironU16               (1)
+  #define GETenvironU16                /*CCQ_NO_EFFECT_OK*/_wenviron
+  #define FREEenvironU16               /*CCQ_NO_EFFECT_OK*/(1)
 #else
   #define environU16                   nlsui_environ
   #define DECLAREenvironU16            SAP_UTF16 **nlsui_environ_i, **nlsui_environ
@@ -2430,12 +2522,12 @@ SAP_U16_PROTOTYPE(putenv)
     # define GETenvironR                ((Qp0zInitEnv() == 0) ? environ : NULL)
   #endif
 #else
-  # define GETenvironR                  environ
+  # define GETenvironR                  /*CCQ_NO_EFFECT_OK*/environ
 #endif
 #if defined(SAPonOS400) && defined(SAPwithCHAR_ASCII)
   #define FREEenvironR                  o4_free_environ_a()
 #else
-  #define FREEenvironR                  (1)
+  #define FREEenvironR                  /*CCQ_NO_EFFECT_OK*/(1)
 #endif
 
 /* hook to allow initial private code before NLSUI_INIT_HOOK is called
@@ -2454,6 +2546,18 @@ SAP_U16_PROTOTYPE(putenv)
 externC int  nlsui_main       ( int argc, SAP_UC *argv[] );
 externC int  nlsui_main3      ( int argc, SAP_UC *argv[],
                                           SAP_UC *envp[] );
+externC DECL_EXP void CDCL_U nlsui_initialize( void );
+
+#if !defined(SAPUCX_H)
+externC DECL_EXP void CDCL_U nlsui_store_cmdline( int argc, SAP_UC *argv[] );
+ #define NLSUI_STORE_CMDLINE( argc, argv ) nlsui_store_cmdline( argc, argv );
+#else 
+ #define NLSUI_STORE_CMDLINE( argc, argv )
+#endif
+
+#if !defined(SAPUCX_H)
+externC DECL_EXP void CDCL_U nlsui_set7bitUnicode ( void );
+#endif
 
 #if !defined( SAPwithNLSUI_INITIALIZE )
 
@@ -2487,7 +2591,12 @@ externC int  nlsui_main3      ( int argc, SAP_UC *argv[],
     #define NLSUI_INIT_HOOK_MAYBE(ARGC,ARGV)
   #endif
 
-  externC DECL_EXP void CDCL_U nlsui_initialize ( void );
+  #ifdef SAPwith7BIT_UNICODE
+    #define NLSUI_SET_7BIT_MAYBE nlsui_set7bitUnicode();
+  #else
+    #define NLSUI_SET_7BIT_MAYBE
+  #endif
+
 
   #ifndef SAPwithUNICODE
 
@@ -2496,6 +2605,8 @@ externC int  nlsui_main3      ( int argc, SAP_UC *argv[],
       {                                                          \
         MAINU_INIT_HOOK_MAYBE(argc, argv)                        \
         NLSUI_INIT_HOOK_MAYBE(argc, argv)                        \
+        NLSUI_SET_7BIT_MAYBE                                     \
+        NLSUI_STORE_CMDLINE(argc, argv)                          \
         nlsui_initialize();                                      \
         return nlsui_main( argc, argv );                         \
       }                                                          \
@@ -2506,19 +2617,25 @@ externC int  nlsui_main3      ( int argc, SAP_UC *argv[],
       {                                                          \
         MAINU_INIT_HOOK_MAYBE(argc, argv)                        \
         NLSUI_INIT_HOOK_MAYBE(argc, argv)                        \
+        NLSUI_SET_7BIT_MAYBE                                     \
+        NLSUI_STORE_CMDLINE(argc, argv)                          \
         nlsui_initialize();                                      \
         return nlsui_main3( argc, argv, envp );                  \
       }                                                          \
       int nlsui_main3 /* (...) */
 
   #else /* now SAPwithUNICODE */
+
    #ifdef SAPonNT
+
 
     #define mainU                                                \
       wmain( int argc, wchar_t *argv[ ] )                        \
       {                                                          \
         MAINU_INIT_HOOK_MAYBE(argc, argv)                        \
         NLSUI_INIT_HOOK_MAYBE(argc, argv)                        \
+        NLSUI_SET_7BIT_MAYBE                                     \
+        NLSUI_STORE_CMDLINE(argc, argv)                          \
         nlsui_initialize();                                      \
         return nlsui_main( argc, argv );                         \
       }                                                          \
@@ -2529,6 +2646,8 @@ externC int  nlsui_main3      ( int argc, SAP_UC *argv[],
       {                                                          \
         MAINU_INIT_HOOK_MAYBE(argc, argv)                        \
         NLSUI_INIT_HOOK_MAYBE(argc, argv)                        \
+        NLSUI_SET_7BIT_MAYBE                                     \
+        NLSUI_STORE_CMDLINE(argc, argv)                          \
         nlsui_initialize();                                      \
         return nlsui_main3( argc, argv, envp );                  \
       }                                                          \
@@ -2544,6 +2663,8 @@ externC int  nlsui_main3      ( int argc, SAP_UC *argv[],
         MAINU_INIT_HOOK_MAYBE(argc, argv)                        \
         w_argv = nlsui_alloc_wcsar( argc, argv );                \
         NLSUI_INIT_HOOK_MAYBE(argc, w_argv)                      \
+        NLSUI_SET_7BIT_MAYBE                                     \
+        NLSUI_STORE_CMDLINE(argc, w_argv)                        \
         nlsui_initialize();                                      \
         return nlsui_main( argc, w_argv );                       \
       }                                                          \
@@ -2557,6 +2678,8 @@ externC int  nlsui_main3      ( int argc, SAP_UC *argv[],
         w_argv = nlsui_alloc_wcsar( argc, argv );                \
         w_envp = nlsui_alloc_env( envp );                        \
         NLSUI_INIT_HOOK_MAYBE(argc, w_argv)                      \
+        NLSUI_SET_7BIT_MAYBE                                     \
+        NLSUI_STORE_CMDLINE(argc, w_argv)                        \
         nlsui_initialize();                                      \
         return nlsui_main3( argc, w_argv, w_envp );              \
       }                                                          \
@@ -2582,7 +2705,7 @@ externC SAPRETURN CDCL_U loadIcu( SAP_BOOL doReturn );
 #endif
 
 /* function to enhance the ICU search path, to be used with MAINU_INIT_HOOK */
-#if defined(SAPwithICU) && !defined(SAPUCX_H)
+#if !defined(SAPUCX_H)
 externC void CDCL_U nlsui_addIcuSearchPath( char *path );
 #endif
 
@@ -2718,7 +2841,7 @@ externC void CDCL_U nlsui_addIcuSearchPath( char *path );
  *
  *  Other similar constants are defined in nlsui1.c and nlsui2.c.
  *  If used as string length, the terminating zero is included in this length.
- *  Typical file name buffer declaration b[MAX_PATH_LN+1], for b as string.
+ *  Typical file name buffer declaration b[MAX_PATH_LN], for b as string.
  *----------------------------------------------------------------------------*/
 #define MAX_ALIASES           64       /* hostname aliases (struct hostentU)  */
 #define MAX_ADDRESSES         64       /* hostname adresses (struct hostentU) */
@@ -2732,7 +2855,7 @@ externC void CDCL_U nlsui_addIcuSearchPath( char *path );
  #define MAX_PATH_LN     1024
  #define SAP_SYS_NMLN    256
 #else
- #define MAX_PATH_LN     PATH_MAX+1      /* <sys/limits.h>, no terminating 0  */
+ #define MAX_PATH_LN     (PATH_MAX+1)    /* <sys/limits.h>, no terminating 0  */
  #define SAP_SYS_NMLN    256
 #endif
 
@@ -3394,6 +3517,8 @@ SAP_U16_PROTOTYPE(getservbyport)
 
 #if defined(WCHAR_is_2B)
   typedef wchar_t      SAP_U2;
+#elif defined(SAP_UC_is_char16)
+  typedef char16_t     SAP_U2;
 #else
   typedef SAP_USHORT   SAP_U2 ;
 #endif
@@ -3497,6 +3622,28 @@ typedef unsigned char   SAP_UTF8 ;
 #define                 UTF8Null    ((SAP_UTF8)0)
 
 /* All other routines are in "sapuc2.h". */
+
+
+/**********************************************************************/
+/* SAP_CESU8:  similar to UTF8, preserving UTF-16 binary collation    */
+/*--------------------------------------------------------------------*/
+/* Cf http://www.unicode.org/reports/tr26/                            */
+/* "... 8-bit Compatibility Encoding Scheme for UTF-16 (CESU) that is */
+/* intended for internal use within systems processing Unicode        */
+/* in order to provide an ASCII-compatible 8-bit encoding that        */
+/* is similar to UTF-8 but preserves UTF-16 binary collation.         */
+/* It is not intended nor recommended as an encoding used for         */
+/* open information exchange. The Unicode Consortium, does not        */
+/* encourage the use of CESU-8, but does recognize the existence of   */
+/* data in this encoding and supplies this technical report to        */
+/* clearly define the format and to distinguish it from UTF-8.        */
+/* This encoding does not replace or amend the definition of UTF-8.   */
+/*--------------------------------------------------------------------*/
+/* Conversion UTF-16 <> CESU-8: rscputf.h                             */
+/*--------------------------------------------------------------------*/
+
+typedef unsigned char   SAP_CESU8 ;
+#define                 CESU8Null    ((SAP_CESU8)0)
 
 
 /**********************************************************************/
@@ -3613,6 +3760,7 @@ typedef void (* TRACE_FUNC_T)  ( const SAP_B7 *  buffer,
                                  int             number_of_chars );
 
 externC void CDCL_U nlsui_set_trace( TRACE_FUNC_T p, NlsuiTraceLevel l );
+externC void CDCL_U nlsui_set_trace_func( TRACE_FUNC_T p );
 
 
 /*-----------------------------------------------------------------------------
@@ -3820,6 +3968,26 @@ typedef signed char          ICU_BOOL;
 
   #ifdef SAPonOS400
     #define stat_R                        stat
+    #if defined(EXT_RELEASE)
+    struct stat_U16 {
+      mode_t          st_mode;
+      ino_t           st_ino;
+      uid_t           st_uid;
+      gid_t           st_gid;
+      long long       st_size;
+      long long       st_atime;
+      long long       st_mtime;
+      long long       st_ctime;
+      dev_t           st_dev;
+      long long       st_blksize;
+	  nlink_t         st_nlink;
+	  unsigned short  st_codepage;
+      unsigned long long st_allocsize;
+	  unsigned int    st_ino_gen_id;
+      SAP_UC          st_objtype[11];
+      unsigned short  st_ccsid;
+    };
+	#else
     struct stat_U16 {
       mode_t          st_mode;
       ino_t           st_ino;
@@ -3838,6 +4006,7 @@ typedef signed char          ICU_BOOL;
       unsigned short  st_codepage;
       unsigned int    st_ino_gen_id;
     };
+	#endif
     SAP_U16_PROTOTYPE(stat)
     externC int fstatU16 ( int filedes, struct stat_U16 *buffer );
     SAP_U16_PROTOTYPE(lstat)
@@ -3960,6 +4129,8 @@ typedef signed char          ICU_BOOL;
 	externC int as4_fputcU ( int c, FILE* f );
 	externC int as4_fprintfU ( FILE* f, const SAP_UC* format, ... );
 	externC SAP_A7* setlocalePASE(int cat, const SAP_A7* locale);
+	externC SAP_UC* as4_ctime64 ( const time_t* timer );
+    externC SAP_UC* as4_ctime64_r ( const time_t* timer, SAP_CHAR* res );
     #undef  popenU
 	#undef  freadU
 	#undef  fgetsU
@@ -3973,12 +4144,18 @@ typedef signed char          ICU_BOOL;
 	#define fputsU as4_fputsU
 	#define fputcU as4_fputcU
 	#define fprintfU as4_fprintfU
-	#define O4popenU(command, type)      SAP_UNAME_(popen)(command, type)
 	#define o4freadU(buf, s, n, stream)  SAP_UNAME(fread)(buf, s, n, stream)
 	#define o4fgetsU(s, n, stream)       SAP_UNAME(fgets)(s, n, stream)
 	#define o4fputsU(s, stream)          SAP_UNAME(fputs)(s, stream)
 	#define o4fputcU(c, stream)          SAP_UNAME(fputc)(c, stream)
 	#define o4fprintfU                   SAP_UNAME(fprintf)
+	#if defined(SAPonOS400) && defined(EXT_RELEASE)
+	#undef  ctimeU
+	#undef  ctime_rU
+	#define ctimeU   as4_ctime64
+	#define ctime_rU as4_ctime64_r
+	#endif
+	#define O4TRC_WITHOUT_WORK_AREA
 #endif
 
 
@@ -4066,26 +4243,30 @@ externC DECL_EXP SAP_UTF16 * gets_sU16(SAP_UTF16 *s, size_tU n);
 #define sscanf_sU16_TPARAMS            (const SAP_UTF16* s,const SAP_UTF16 *format, ...)
 #define sscanf_sU16_PARAMS             (s, format, rest_args)
 BEGIN_NS_STD_C_HEADER
-  SAP_U16_PROTOTYPE_FLIKE(sscanf_s)   /* SCANFLIKE2 */;
+  SAP_U16_PROTOTYPE_FLIKE(sscanf_s)    /* SCANFLIKE2 */;
 END_NS_STD_C_HEADER
 /* #define sscanf_sU                   SAP_UNAME_UR(sscanf_s)
  * #define sscanf_saU                  SAP_UNAME_UR(sscanf_s)
  */
 
-/*sprintf_s*/
+/* sprintf_sU */
 externC DECL_EXP int sprintf_sRFB(char * s, size_tR s1max, const char *format, ...) /* PRINTFLIKE3 */;
-#define sprintf_sR  sprintf_sRFB
+#define sprintf_sR                     sprintf_sRFB
 #define sprintf_sU16_RETURN            intU
 #define sprintf_sU16_TPARAMS           (SAP_UTF16* s, size_tU s1max,const SAP_UTF16 *format, ...)
 #define sprintf_sU16_PARAMS            (s, s1max, format, rest_args)
 BEGIN_NS_STD_C_HEADER
-  SAP_U16_PROTOTYPE_FLIKE(sprintf_s)    /* PRINTFLIKE3 */;
+  SAP_U16_PROTOTYPE_FLIKE(sprintf_s)   /* PRINTFLIKE3 */;
 END_NS_STD_C_HEADER
 #define sprintf_sU                     SAP_UNAME_UR(sprintf_s)
 
+/* sprintf_saU() can be defined as follows, but variadic macros are a C99 feature:
+ * #define sprintf_saU( s, ... )  SAP_UNAME_UR(sprintf_s)( s, sizeofU(s), __VA_ARGS__ )
+ */
+
 /*snprintf_s*/
 externC DECL_EXP int snprintf_sRFB(char * s, size_tR n,const char *format, ...) /* PRINTFLIKE3 */;
-#define snprintf_sR  snprintf_sRFB
+#define snprintf_sR                    snprintf_sRFB
 #define snprintf_sU16_RETURN           intU
 #define snprintf_sU16_TPARAMS          (SAP_UTF16* s, size_tU n,const SAP_UTF16 *format, ...)
 #define snprintf_sU16_PARAMS           (s, n, format, rest_args)

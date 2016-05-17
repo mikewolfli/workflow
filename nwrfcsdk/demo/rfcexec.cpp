@@ -1,8 +1,11 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include <errno.h>
 #include <time.h>
 
 
 #ifdef SAPonNT
+#include <direct.h>
 #include <process.h>
 #include <windows.h>
 #include <tchar.h>
@@ -12,17 +15,14 @@
 #include <signal.h>
 #endif
 
+#ifdef SAPwithPASE400
+	#include "as4exec.h"
+	#define SAPUCX_H
+#endif
 #include "rfcexec.h"
 
 #ifdef SAPonOS400
 	#include <spawn.h>
-
-	#ifndef SAPwithUNICODE
-	// This code should never be compiled in UNICODE on ILE side. If so,
-	// the compiler will warn us with the error.
-	//   'The name lookup for "spawnU" did not find a declaration.'
-	#define spawnU spawn
-	#endif
 
 	#ifdef SAPwithCHAR_EBCDIC
 	#include <qp0z1170.h>     // weil’s der CPP Compiler im Gegensatz zum C Compiler für GetEnvironU braucht
@@ -31,8 +31,7 @@
 	externC int o4_convert_environ_a(void);
 	DECLAREenvironU;
 #endif
-
-#if defined(SAPonOS400) || defined(SAPwithPASE400)
+#if defined(SAPonOS400)
 	/* o4fprintfU, o4fgetsU
 	 * calling o4xxxU instead of xxxU produces much smaller code,
 	 * because it directly expands to xxxU16, while xxxU expands to
@@ -51,6 +50,13 @@
 	#define fgetsU o4fgetsU
 #endif
 
+#ifdef SAPonNT
+#    ifndef pclose
+#        define pclose _pclose
+#    endif
+#endif
+
+#define ERROR_MESSAGE_SIZE 511
 
 /**
  * \ingroup rfcexec
@@ -64,6 +70,7 @@
  */
 
 RFC_FUNCTION_DESC_HANDLE RfcExecServer::rfc_exec;
+RFC_FUNCTION_DESC_HANDLE RfcExecServer::rfc_pipe;
 
 RfcExecServer* theServer = NULL;
 
@@ -109,6 +116,7 @@ RFC_RC RfcExecServer::handleRequest(RFC_CONNECTION_HANDLE rfcHandle, RFC_FUNCTIO
 	RFC_RC rc = RFC_OK;
 	RFC_ATTRIBUTES attributes;
 	SAP_UC command[256] = iU("");
+	SAP_UC readPipe[2] = iU("");
 
 	rc = RfcGetConnectionAttributes(rfcHandle, &attributes, errorInfo);
 	if (rc != RFC_OK){
@@ -136,6 +144,8 @@ RFC_RC RfcExecServer::handleRequest(RFC_CONNECTION_HANDLE rfcHandle, RFC_FUNCTIO
 		trace(cU("Reading COMMAND value failed"), errorInfo->message, 1);
 		return RFC_EXTERNAL_FAILURE;
 	}
+	RfcGetString(funcHandle, cU("READ"), readPipe, sizeofU(readPipe), NULL, NULL);
+
 	if (!checkAuthorization(attributes.user, attributes.sysId, attributes.client, command, attributes.progName)){
 		/*CCQ_SECURE_LIB_OK*/
 		sprintfU(errorInfo->message, cU("Access denied"));
@@ -198,85 +208,51 @@ RFC_RC RfcExecServer::handleRequest(RFC_CONNECTION_HANDLE rfcHandle, RFC_FUNCTIO
 	delete[] args;
 	if (pid == -1) {
         /*CCQ_SECURE_LIB_OK*/
-		strncpyU(errorInfo->message, strerrorU(errno), 512);
-		trace(cU("Starting process failed"), errorInfo->message, 1);
-		return RFC_EXTERNAL_FAILURE;
-	}
-	else trace(cU("Process started successfully"), NULL, 1);
-#elif defined(SAPonNT)
-	SAP_UC** args;
-	int numArgs = 1;
-	bool inArg = false;
-	intptr_t err;
-	size_t len, i;
-
-	len = strlenU(command);
-	for (i=0; i<len; i++){
-		switch(command[i]){
-			case cU('"'): if (command[i-1] != cU('\\')) inArg = !inArg;
-				break;
-			case cU(' '): if (inArg) continue;
-				numArgs++;
-				command[i] = cU('\0');
-				break;
-		}
-	}
-	args = new SAP_UC*[numArgs+1];
-	args[0] = command;
-	numArgs = 1;
-	for (i=0; i<len; i++){
-		if (command[i] == cU('\0')){
-			args[numArgs++] = command+(i+1);
-			trace(cU("args parameter"), command+(i+1), 2);
-		}
-	}
-	args[numArgs] = NULL;
-
-	if (traceFile){
-		SAP_UC numVal[16] = iU("");
-		/*CCQ_SECURE_LIB_OK*/
-		sprintfU(numVal, cU("%d"), numArgs-1);
-		trace(cU("Number of arguments"), numVal, 1);
-	}
-
-	err = _tspawnvp(_P_DETACH, command, args);
-	delete[] args;
-	if (err == -1){
-		/*CCQ_SECURE_LIB_OK*/
-		strncpyU(errorInfo->message, strerrorU(errno), sizeofU(errorInfo->message));
+		strncpyU(errorInfo->message, strerrorU(errno), ERROR_MESSAGE_SIZE);
+		errorInfo->message[ERROR_MESSAGE_SIZE] = 0;
 		trace(cU("Starting process failed"), errorInfo->message, 1);
 		return RFC_EXTERNAL_FAILURE;
 	}
 	else trace(cU("Process started successfully"), NULL, 1);
 #else
-  #ifdef SAPwithPASE400
-    // for RFCEXEC we only support the standard UNIX SAP Implementation 
-	// O4popenU -> popenU16 and not the platform dependent popenU -> as4_popenU.
-	// Otherwise we will have to link against the ILE O4PRTLIB.
-	// Doing so we loose the ability of executing ILE commands, but 
-	// for this version of UNICODE UNIX rfcexec we accept this.
-	FILE* pipe = O4popenU(command, cU("rt"));
-  #else
-	FILE* pipe = popenU(command, cU("rt"));
-  #endif
-	//RFC_STRUCTURE_HANDLE line;
+	FILE* pipe = popenU(command, cU("r"));
+
 	if (pipe == NULL){
         /*CCQ_SECURE_LIB_OK*/
-		strncpyU(errorInfo->message, strerrorU(errno), 512);
+		strncpyU(errorInfo->message, strerrorU(errno), ERROR_MESSAGE_SIZE);
+		errorInfo->message[ERROR_MESSAGE_SIZE] = 0;
 		trace(cU("Starting process failed"), errorInfo->message, 1);
 		return RFC_EXTERNAL_FAILURE;
 	}
 	else trace(cU("Process started successfully"), NULL, 1);
 
-/*	while(fgetsU(command, 80, pipe)){
-		line = RfcAppendNewRow(pipedata, errorInfo);
-		if (line == NULL) return RFC_EXTERNAL_FAILURE;
-		RfcSetString(line, cU("PIPEDATA"), command, strlenU(command), errorInfo);
-	}*/
+	if (*readPipe == cU('X')){
+		RFC_TABLE_HANDLE pipedata;
 
-	fclose(pipe);
+		rc = RfcGetTable(funcHandle, cU("PIPEDATA"), &pipedata, errorInfo);
+		if (rc != RFC_OK){
+			trace(cU("Getting PIPEDATA table failed"), errorInfo->message, 1);
+			rc = RFC_EXTERNAL_FAILURE;
+			goto cleanup;
+		}
+		while(fgetsU(command, 80, pipe)){
+			RfcAppendNewRow(pipedata, errorInfo);
+			if (errorInfo->code != RFC_OK){
+				rc = RFC_EXTERNAL_FAILURE;
+				goto cleanup;
+			}
+			RfcSetChars(pipedata, cU("PIPEDATA"), command, strlenU(command), errorInfo);
+			if (errorInfo->code != RFC_OK){
+				rc = RFC_EXTERNAL_FAILURE;
+				goto cleanup;
+			}
+		}
+	}
+
+	cleanup:
+	pclose(pipe);
 #endif
-	return RFC_OK;
+	return rc;
 }
 
 /**
@@ -315,6 +291,7 @@ extern "C" void shutdownHandler(int sig)
  */
 int mainU (int argc, SAP_UC** argv){
 	RFC_ERROR_INFO errorInfo;
+	memsetR(&errorInfo, 0, sizeofR(RFC_ERROR_INFO));
 
 #ifdef SAPonNT
 	SetConsoleCtrlHandler(shutdownHandler, TRUE);
@@ -328,6 +305,9 @@ int mainU (int argc, SAP_UC** argv){
 		RfcExecServer::initMetadata();
 
 		if (RfcInstallServerFunction(NULL, RfcExecServer::rfc_exec, RFC_REMOTE_EXEC, &errorInfo) != RFC_OK){
+			throw errorInfo;
+		}
+		if (RfcInstallServerFunction(NULL, RfcExecServer::rfc_pipe, RFC_REMOTE_EXEC, &errorInfo) != RFC_OK){
 			throw errorInfo;
 		}
 
@@ -370,15 +350,27 @@ int mainU (int argc, SAP_UC** argv){
 RfcExecServer::RfcExecServer(int argc, SAP_UC** argv)
 :running(true), connectionParams(NULL), connection(NULL), secureMode(false), traceFile(NULL), backendRequestedTrace(false){
 	int i;
-	size_t len;
 	RFC_ERROR_INFO errorInfo;
     SAP_UC error[256] = iU("");
 
-	*system = cU('\0');
+	memsetU(system, cU('\0'), sizeofU(system));
 
-	if (argc > 1 && !strncmpU(argv[1], cU("/H/"), 3)){ //Started Server
+	if (	argc > 4 &&
+			(!strncmpU(argv[2],cU("sapgw"),5) || !strncmpU(argv[2],cU("33"),2) || !strncmpU(argv[2],cU("48"),2)) &&
+			strlenU(argv[3]) == 8 && 
+			isdigitU(argv[3][0]) && 
+			isdigitU(argv[3][1]) && 
+			isdigitU(argv[3][2]) && 
+			isdigitU(argv[3][3]) && 
+			isdigitU(argv[3][4]) && 
+			isdigitU(argv[3][5]) && 
+			isdigitU(argv[3][6]) && 
+			isdigitU(argv[3][7])
+		){ //Started Server
 		registered = false;
-		for (i=2; i<argc; i++) if (!strncmpU(argv[i], cU("-t"), 2)) openTrace();
+		for (i=2; i<argc; i++) if (!strncmpU(argv[i], cU("-t"), 2)
+					|| (!strncmpU(argv[i], cU("CPIC_TRACE="), 11) && argv[i][11] > cU('0'))) openTrace();
+		parseCommandFile(cU("rfcexec.sec"));
 		connection = RfcStartServer(argc, argv, NULL, 0, &errorInfo);
 		if (connection == NULL) goto cleanup;
 	}
@@ -389,11 +381,9 @@ RfcExecServer::RfcExecServer(int argc, SAP_UC** argv)
 		connectionParams = new RFC_CONNECTION_PARAMETER[3];
 
 		for (i=1; i<argc; i++){
-			len = strlenU(argv[i]);
-
 			if (!strcmpU(cU("-a"), argv[i])){
 				if ((flags & 1) == 1){
-                    /*CCQ_SECURE_LIB_OK*/
+					/*CCQ_SECURE_LIB_OK*/
 					strncpyU(error, cU("Duplicate parameter \"-a\""), 25);
 					goto cleanup;
 				}
@@ -402,7 +392,7 @@ RfcExecServer::RfcExecServer(int argc, SAP_UC** argv)
 			}
 			else if (!strcmpU(cU("-g"), argv[i])){
 				if ((flags & 2) == 2){
-                    /*CCQ_SECURE_LIB_OK*/
+					/*CCQ_SECURE_LIB_OK*/
 					strncpyU(error, cU("Duplicate parameter \"-g\""), 25);
 					goto cleanup;
 				}
@@ -411,7 +401,7 @@ RfcExecServer::RfcExecServer(int argc, SAP_UC** argv)
 			}
 			else if (!strcmpU(cU("-x"), argv[i])){
 				if ((flags & 4) == 4){
-                    /*CCQ_SECURE_LIB_OK*/
+					/*CCQ_SECURE_LIB_OK*/
 					strncpyU(error, cU("Duplicate parameter \"-x\""), 25);
 					goto cleanup;
 				}
@@ -424,44 +414,43 @@ RfcExecServer::RfcExecServer(int argc, SAP_UC** argv)
 			}
 			else if (!strcmpU(cU("-f"), argv[i])){
 				if ((flags & 8) == 8){
-                    /*CCQ_SECURE_LIB_OK*/
+					/*CCQ_SECURE_LIB_OK*/
 					strncpyU(error, cU("Duplicate parameter \"-f\""), 25);
 					goto cleanup;
 				}
 				flags |= 8;
 				if (i == argc-1){
-                    /*CCQ_SECURE_LIB_OK*/
+					/*CCQ_SECURE_LIB_OK*/
 					strncpyU(error, cU("Missing file name"), 18);
 					goto cleanup;
 				}
 				parseCommandFile(argv[++i]);
-				secureMode = true;
 				continue;
 			}
 			else if (!strcmpU(cU("-s"), argv[i])){
 				if ((flags & 16) == 16){
-                    /*CCQ_SECURE_LIB_OK*/
+					/*CCQ_SECURE_LIB_OK*/
 					strncpyU(error, cU("Duplicate parameter \"-s\""), 25);
 					goto cleanup;
 				}
 				flags |= 16;
 				if (i == argc-1){
-                    /*CCQ_SECURE_LIB_OK*/
+					/*CCQ_SECURE_LIB_OK*/
 					strncpyU(error, cU("Missing system name"), 20);
 					goto cleanup;
 				}
-                /*CCQ_SECURE_LIB_OK*/
-				strncpyU(system, argv[++i], 9); 
+				/*CCQ_SECURE_LIB_OK*/
+				strncpyU(system, argv[++i], 8);
 				continue;
 			}
 			else{
-                /*CCQ_SECURE_LIB_OK*/
+				/*CCQ_SECURE_LIB_OK*/
 				sprintfU(error, cU("Unknown parameter: %s"), argv[i]); 
 				goto cleanup;
 			}
 
 			if (i == argc-1){
-                /*CCQ_SECURE_LIB_OK*/
+				/*CCQ_SECURE_LIB_OK*/
 				sprintfU(error, cU("Missing value for parameter %s"), argv[i]);
 				goto cleanup;
 			}
@@ -470,8 +459,8 @@ RfcExecServer::RfcExecServer(int argc, SAP_UC** argv)
 		}
 
 		if ((flags & 7) != 7){
-            /*CCQ_SECURE_LIB_OK*/
-            strncpyU(error, cU("Not all mandatory parameters specified"), 39); 
+			/*CCQ_SECURE_LIB_OK*/
+			strncpyU(error, cU("Not all mandatory parameters specified"), 39); 
 			goto cleanup;
 		}
 
@@ -525,7 +514,7 @@ RfcExecServer::~RfcExecServer(void){
 void RfcExecServer::usage(SAP_UC* param){
 	if (param) printfU(cU("Error: %s\n"), param);
 	printfU(cU("\tPlease start the program in the following way:\n"));
-	printfU(cU("\trfcexec -t -a <program ID> -g <gateway host> -x <gateway service>\n\t\t-f <file with list of allowed commands> -s <allowed Sys ID>"));
+	printfU(cU("\trfcexec -t -a <program ID> -g <gateway host> -x <gateway service>\n\t\t-f <file with list of allowed commands> -s <allowed Sys ID>\n"));
 	printfU(cU("The options \"-t\" (trace), \"-f\" and \"-s\" are optional.\n"));
 }
 
@@ -571,6 +560,7 @@ void RfcExecServer::run(void){
 				printfU(cU("Communication Failure: %s\n"), errorInfo.message);
 				trace(cU("Communication Failure"), errorInfo.message);
 				refresh = true;
+				connection = NULL;
 				break;
             default:
                 break;
@@ -580,7 +570,7 @@ void RfcExecServer::run(void){
 			trace(cU("Trying to reconnect..."), NULL);
 			connection = RfcRegisterServer(connectionParams, 3, &errorInfo);
 			if (connection == NULL){
-				printfU(cU("Error: unable to reconnect to %s. %s\n"), system,
+				printfU(cU("Error: unable to reconnect to %s. %s:%s\n"), system,
 						RfcGetRcAsString(errorInfo.code), errorInfo.message);
 				printfU(cU("Stopping to listen at %s\n"), system);
 				trace(cU("Error: unable to reconnect"), errorInfo.message);
@@ -607,9 +597,17 @@ void RfcExecServer::initMetadata(void){
 	RFC_TYPE_DESC_HANDLE tableStruct;
 	RFC_FIELD_DESC fieldDescr;
 
+	memsetU(paramDescr.defaultValue, cU('\0'), sizeofU(RFC_PARAMETER_DEFVALUE));
+	paramDescr.extendedDescription = 0;
+	paramDescr.optional = 0;
+	memsetU(paramDescr.parameterText, cU('\0'), sizeofU(RFC_PARAMETER_TEXT));
+
 	rfc_exec = RfcCreateFunctionDesc(cU("RFC_REMOTE_EXEC"), &errorInfo);
 	if (rfc_exec == NULL) throw errorInfo;
-    /*CCQ_SECURE_LIB_OK*/
+	rfc_pipe = RfcCreateFunctionDesc(cU("RFC_REMOTE_PIPE"), &errorInfo);
+	if (rfc_pipe == NULL) throw errorInfo;
+
+	/*CCQ_SECURE_LIB_OK*/
 	strncpyU(paramDescr.name, cU("COMMAND"), 8);
 	paramDescr.type = RFCTYPE_CHAR;
 	paramDescr.direction = RFC_IMPORT;
@@ -618,17 +616,25 @@ void RfcExecServer::initMetadata(void){
 	paramDescr.decimals = 0;
 	paramDescr.typeDescHandle = NULL;
 	rc = RfcAddParameter(rfc_exec, &paramDescr, &errorInfo);
-	if (rc != RFC_OK){
-		RfcDestroyFunctionDesc(rfc_exec, NULL);
-		throw errorInfo;
-	}
+	if (rc != RFC_OK) throw errorInfo;
+	rc = RfcAddParameter(rfc_pipe, &paramDescr, &errorInfo);
+	if (rc != RFC_OK) throw errorInfo;
+
+	/*CCQ_SECURE_LIB_OK*/
+	strncpyU(paramDescr.name, cU("READ"), 5);
+	paramDescr.type = RFCTYPE_CHAR;
+	paramDescr.direction = RFC_IMPORT;
+	paramDescr.nucLength = 1;
+	paramDescr.ucLength = 2;
+	paramDescr.decimals = 0;
+	paramDescr.typeDescHandle = NULL;
+	rc = RfcAddParameter(rfc_pipe, &paramDescr, &errorInfo);
+	if (rc != RFC_OK) throw errorInfo;
 
 	tableStruct = RfcCreateTypeDesc(cU("PIPEDATA"), &errorInfo);
-	if (tableStruct == NULL){
-		RfcDestroyFunctionDesc(rfc_exec, NULL);
-		throw errorInfo;
-	}
-    /*CCQ_SECURE_LIB_OK*/
+	if (tableStruct == NULL) throw errorInfo;
+
+	/*CCQ_SECURE_LIB_OK*/
 	strncpyU(fieldDescr.name, cU("PIPEDATA"), 9);
 	fieldDescr.type = RFCTYPE_CHAR;
 	fieldDescr.nucLength = 80;
@@ -639,19 +645,12 @@ void RfcExecServer::initMetadata(void){
 	fieldDescr.typeDescHandle = NULL;
 	fieldDescr.extendedDescription = NULL;
 	rc = RfcAddTypeField(tableStruct, &fieldDescr, &errorInfo);
-	if (rc != RFC_OK){
-		RfcDestroyTypeDesc(tableStruct, NULL);
-		RfcDestroyFunctionDesc(rfc_exec, NULL);
-		throw errorInfo;
-	}
+	if (rc != RFC_OK) throw errorInfo;
 
 	rc = RfcSetTypeLength(tableStruct,80, 160, &errorInfo);
-	if (rc != RFC_OK){
-		RfcDestroyTypeDesc(tableStruct, NULL);
-		RfcDestroyFunctionDesc(rfc_exec, NULL);
-		throw errorInfo;
-	}
-    /*CCQ_SECURE_LIB_OK*/
+	if (rc != RFC_OK) throw errorInfo;
+
+	/*CCQ_SECURE_LIB_OK*/
 	strncpyU(paramDescr.name, cU("PIPEDATA"), 9);
 	paramDescr.type = RFCTYPE_TABLE;
 	paramDescr.direction = RFC_TABLES;
@@ -660,11 +659,9 @@ void RfcExecServer::initMetadata(void){
 	paramDescr.decimals = 0;
 	paramDescr.typeDescHandle = tableStruct;
 	rc = RfcAddParameter(rfc_exec, &paramDescr, &errorInfo);
-	if (rc != RFC_OK){
-		RfcDestroyTypeDesc(tableStruct, NULL);
-		RfcDestroyFunctionDesc(rfc_exec, NULL);
-		throw errorInfo;
-	}
+	if (rc != RFC_OK) throw errorInfo;
+	rc = RfcAddParameter(rfc_pipe, &paramDescr, &errorInfo);
+	if (rc != RFC_OK) throw errorInfo;
 }
 
 /**
@@ -679,13 +676,16 @@ void RfcExecServer::openTrace(void){
     if (traceFile == NULL)
     {
 	    SAP_UC tracefile_name[128] = iU("");
-	    sprintfU (tracefile_name, cU("rfcexec%.5d_%05d.trc"), getpid(), currTime); 
+	    sprintfU (tracefile_name, /*CCQ_FORMAT_STRING_OK*/cU("rfcexec%.5d_%05llu.trc"), getpid(), (long long)currTime); 
         traceFile = fopenU(tracefile_name, cU("wt"));
     }
 	if (traceFile){
-        /*CCQ_CLIB_LOCTIME_OK*/ 
+		SAP_UC cwd[512];
+		/*CCQ_CLIB_LOCTIME_OK*/ 
 		fprintfU(traceFile, cU("***** Rfcexec trace file opened at %s\n"), ctimeU(&currTime));
 		trace(cU("NW RFC SDK Version"), RfcGetVersion(NULL, NULL, NULL));
+		getcwdU(cwd,sizeofU(cwd));
+		fprintfU(traceFile, cU("***** Current working directory: %s\n"), cwd);
 	}
 }
 
@@ -696,7 +696,7 @@ void RfcExecServer::openTrace(void){
 void RfcExecServer::closeTrace(void){
 	if (traceFile){
         time_t     currTime = time( NULL );
-        /*CCQ_CLIB_LOCTIME_OK*/ 
+		/*CCQ_CLIB_LOCTIME_OK*/ 
 		fprintfU(traceFile, cU("***** Rfcexec trace file closed at %s\n"), ctimeU(&currTime));
 		fclose(traceFile);
 		traceFile = NULL;
@@ -720,7 +720,7 @@ void RfcExecServer::printTraceHeader(void){
 		}
 	}
 	else{
-		trace(cU("Using default mode. Allowing connections only from Report SAPLEDI6 and System"), system);
+		trace(cU("Using default mode. Allowing connections only from Report SAPLEDI7 and System"), system);
 	}
 	trace(cU("\t----------\n"), NULL);
 }
@@ -767,11 +767,18 @@ void RfcExecServer::parseCommandFile(const SAP_UC* filePath)
 	commandFile = fopenU(filePath, cU("rt"));
 
 	if (commandFile == NULL){
-        throw strerrorU(errno);
+		if (errno == ENOENT && !registered) return; // No file is ok, we use the default mode (ALE scenario).
+
+		trace(cU("Error in parseCommandFile"), strerrorU(errno));
+		closeTrace();
+		throw strerrorU(errno);
 	}
+
+	trace(cU("Reading command file"), filePath, 1);
 
 	while(fgetsU(buf, sizeofU(buf), commandFile)){
 		line++;
+		trace(buf, NULL, 1);
 		/*CCQ_SECURE_LIB_OK*/
 		lineLength = strlenU(buf);
 		if (lineLength == 1024 && buf[1023] != cU('\n')){
@@ -825,10 +832,14 @@ void RfcExecServer::parseCommandFile(const SAP_UC* filePath)
 
 		allowed.push_back(temp);
 	}
+
+	secureMode = true;
 	fclose(commandFile);
+	trace(cU("End of file"), NULL, 1);
 	return;
 
 	error: fclose(commandFile);
+	trace(cU("Error"), buf);
 	throw buf;
 }
 
@@ -841,7 +852,7 @@ void RfcExecServer::parseCommandFile(const SAP_UC* filePath)
  * Access is allowed, only if an exact match can be found.
  *
  * Otherwise the program verifies only, that the call came from the correct SAP system and
- * that the calling program is the ALE layer (SAPLEDI6).
+ * that the calling program is the ALE layer (SAPLEDI7).
  * 
  * \in user The current backend user calling the server program
  * \in sysid System ID of the calling backend
@@ -871,13 +882,35 @@ bool RfcExecServer::checkAuthorization(SAP_UC* user, SAP_UC* sysid, SAP_UC* clie
 		vector<SAP_UC*>::iterator it = allowed.begin();
 		vector<SAP_UC*>::iterator end = allowed.end();
 		while (it != end && strncmpU(temp, *it, len) != 0) it++;
-		delete[] temp;
 
-		if (it == end) return false;
-		else return true;
+		if (it == end){
+			SAP_UC* allowedPath;
+			size_t allowedPathLen;
+			it = allowed.begin();
+			/*CCQ_SECURE_LIB_OK*/
+			sprintfU(temp, cU("U:%sS:%sC:%sP:"), user, sysid, client);
+			len -= (strlenU(path)+1);
+			while (it != end){
+				if (strncmpU(temp, *it, len) == 0){
+					allowedPath = (*it) + len;
+					allowedPathLen = strlenU(allowedPath);
+					if (allowedPath[allowedPathLen-1] == cU('*') && strncmpU(allowedPath, path, allowedPathLen-1) == 0){
+						delete[] temp;
+						return true;
+					}
+				}
+				it++;
+			}
+			delete[] temp;
+			return false;
+		}
+		else{
+			delete[] temp;
+			return true;
+		}
 	}
 	else{
-		if (strcmpU(caller, cU("SAPLEDI6")) == 0 && (*system == cU('\0') || strcmpU(sysid, system) == 0)) return true;
+		if (strcmpU(caller, cU("SAPLEDI7")) == 0 && (*system == cU('\0') || strcmpU(sysid, system) == 0)) return true;
 		else return false;
 	}
 }

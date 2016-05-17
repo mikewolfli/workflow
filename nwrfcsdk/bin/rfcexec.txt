@@ -1,5 +1,0 @@
-FILE QUARANTINED
-----------------
-
-Our mail system removed nwrfcsdk.zip->rfcexec.exe since it
-was found to match the FILE FILTER= *.exe file filter.

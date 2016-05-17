@@ -27,6 +27,7 @@ public:
 	bool running;
 
 	static RFC_FUNCTION_DESC_HANDLE rfc_exec;
+	static RFC_FUNCTION_DESC_HANDLE rfc_pipe;
 
 private:
 	void parseCommandFile(const SAP_UC* filePath);

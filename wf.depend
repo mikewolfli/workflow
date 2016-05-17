@@ -1906,7 +1906,7 @@
 	"wfMain.h"
 	<wx/image.h>
 
-1463118956 d:\develop\code\workspace\wfcode\wf\version.h
+1463389061 d:\develop\code\workspace\wfcode\wf\version.h
 
 1458268239 d:\develop\code\workspace\wfcode\wf\wfmain.h
 	<wx/menu.h>
@@ -2113,22 +2113,24 @@
 	<stdio.h>
 	<wx/string.h>
 
-1224529232 d:\develop\code\workspace\wfcode\wf\nwrfcsdk\include\sapnwrfc.h
+1460747108 d:\develop\code\workspace\wfcode\wf\nwrfcsdk\include\sapnwrfc.h
 	<stdlib.h>
 	<stdio.h>
 	"sapucx.h"
 	"sapuc.h"
 
-1207645262 d:\develop\code\workspace\wfcode\wf\nwrfcsdk\include\sapucx.h
+1446659825 d:\develop\code\workspace\wfcode\wf\nwrfcsdk\include\sapucx.h
+	<uchar.h>
+	<uchar.h>
 	<stddef.h>
 	<stdio.h>
 	<ctype.h>
 	<string.h>
 	<limits.h>
 
-1225483240 d:\develop\code\workspace\wfcode\wf\nwrfcsdk\include\sapuc.h
-	<cstdarg>
+1447362310 d:\develop\code\workspace\wfcode\wf\nwrfcsdk\include\sapuc.h
 	<stdarg.h>
+	<cstdarg>
 	<cwchar>
 	<wchar.h>
 	<cwchar>
@@ -2176,8 +2178,18 @@
 	<dirent.h>
 	<cwchar>
 	<wchar.h>
+	<cwchar>
+	<cwctype>
+	<wchar.h>
+	<wctype.h>
 	<cstdarg>
 	<stdarg.h>
+	<sys/types.h>
+	<time.h>
+	<utime.h>
+	<sys/stat.h>
+	<sys/sem.h>
+	<sys/shm.h>
 	<ctime>
 	<time.h>
 	<sys/stat.h>
