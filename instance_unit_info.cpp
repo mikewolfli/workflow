@@ -1183,18 +1183,19 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
 
 
 
-        int i_restart = check_is_start_flow(str_instance, wf_str_configure);
-
-        if(i_restart == 1)
-        {
-            wxLogMessage(str_instance+_("配置工作流已经激活状态，无法重复启动!"));
-            return;
-        }
+        int i_restart;
 
         start_mils = wxGetLocalTimeMillis();
 
         if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type))//新的配置工作流，由非标负责
         {
+            i_restart = check_is_start_flow(str_instance, wf_str_configure);
+
+            if(i_restart == 1)
+            {
+                wxLogMessage(str_instance+_("配置工作流已经激活状态，无法重复启动!"));
+                return;
+            }
             if(i_restart ==0)
             {
                 wf_configure = new wf_operator(str_instance, wf_str_configure, t_template);
@@ -1220,6 +1221,14 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
             }
         }else
         {
+            i_restart = check_is_start_flow(str_instance, wf_str_new_config);
+
+            if(i_restart == 1)
+            {
+                wxLogMessage(str_instance+_("配置工作流已经激活状态，无法重复启动!"));
+                return;
+            }
+
             if(i_restart ==0)
             {
                 for(int j=0; j<i_ways;j++)
