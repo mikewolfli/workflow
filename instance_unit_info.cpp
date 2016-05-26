@@ -82,6 +82,7 @@ const long instance_unit_info::idMenu_Cancel = wxNewId();
 const long instance_unit_info::idMenu_contract_id = wxNewId();
 const long instance_unit_info::idMenu_Prj = wxNewId();
 const long instance_unit_info::idMenu_Wbs = wxNewId();
+const long instance_unit_info::idMenu_Project_name = wxNewId();
 const long instance_unit_info::idMenu_delivery_date = wxNewId();
 const long instance_unit_info::idMenu_Filt_basic_info = wxNewId();
 const long instance_unit_info::idMenu_syc_din_units = wxNewId();
@@ -248,6 +249,8 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     menu_project_filter.Append(MenuItem13);
     MenuItem14 = new wxMenuItem((&menu_project_filter), idMenu_Wbs, _("按WBS NO筛选(&W)"), _("按WBS NO筛选"), wxITEM_NORMAL);
     menu_project_filter.Append(MenuItem14);
+    mi_proj_name = new wxMenuItem((&menu_project_filter), idMenu_Project_name, _("按项目名称筛选(&E)"), _("按项目名称筛选"), wxITEM_NORMAL);
+    menu_project_filter.Append(mi_proj_name);
     mi_delivery_date = new wxMenuItem((&menu_project_filter), idMenu_delivery_date, _("按发运日期筛选(&T)"), _("按发运日期筛选"), wxITEM_NORMAL);
     menu_project_filter.Append(mi_delivery_date);
     MenuItem_Basic_Info = new wxMenuItem((&menu_project_filter), idMenu_Filt_basic_info, _("需同步基本信息的项目(&B)"), _("列出所有需同步基本信息的项目"), wxITEM_NORMAL);
@@ -315,6 +318,7 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     Connect(idMenu_contract_id,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_contractSelected);
     Connect(idMenu_Prj,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem13Selected);
     Connect(idMenu_Wbs,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem14Selected);
+    Connect(idMenu_Project_name,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_proj_nameSelected);
     Connect(idMenu_delivery_date,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_delivery_dateSelected);
     Connect(idMenu_Filt_basic_info,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem_Basic_InfoSelected);
     Connect(idMenu_syc_din_units,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_syc_dinSelected);
@@ -4259,4 +4263,32 @@ void instance_unit_info::Onmi_contract_br_searchSelected(wxCommandEvent& event)
     dlg.set_mode(0);
     dlg.refresh_list(s_case, 1);
     dlg.ShowModal();
+}
+
+void instance_unit_info::Onmi_proj_nameSelected(wxCommandEvent& event)
+{
+    if (!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,不能进行任何操作!"));
+        return;
+    }
+    wxString s_sql;
+
+
+    wxTextEntryDialog tdlg(this, _("请输入项目名称(支持模糊查询)"), _("按项目名称查询"), wxT(""), wxTextEntryDialogStyle, wxDefaultPosition);
+    tdlg.SetTextValidator(wxFILTER_EMPTY);
+    if (tdlg.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+
+    wxString s_case = tdlg.GetValue();
+
+//   event.Skip();
+    s_sql = wxT(" WHERE  project_name ILIKE '%") + s_case + wxT("%' and status >=0 ");
+
+    Set_Where_clause(s_sql);
+    b_refresh = true;
+    refresh_list();
+    b_refresh = false;
 }

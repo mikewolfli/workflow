@@ -400,6 +400,11 @@
 				<help>按WBS NO筛选</help>
 				<handler function="OnMenuItem14Selected" entry="EVT_MENU" />
 			</object>
+			<object class="wxMenuItem" name="idMenu_Project_name" variable="mi_proj_name" member="yes">
+				<label>按项目名称筛选(&amp;E)</label>
+				<help>按项目名称筛选</help>
+				<handler function="Onmi_proj_nameSelected" entry="EVT_MENU" />
+			</object>
 			<object class="wxMenuItem" name="idMenu_delivery_date" variable="mi_delivery_date" member="yes">
 				<label>按发运日期筛选(&amp;T)</label>
 				<help>按发运日期筛选</help>
