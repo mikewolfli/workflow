@@ -765,6 +765,49 @@ wxArrayString wfApp::get_role_member(int &i_count, wxString s_role,wxString s_gr
      return app_sql_update(s_sql);
  }
 
+ wxDateTime wfApp::get_prj_auth_date(wxString s_wbs)
+ {
+     wxString s_sql = wxT("select finish_date, group_id from l_proc_act where instance_id='")+s_wbs+wxT("' and action_id='AT00000003';");
+
+     wxPostgreSQLresult * res = app_sql_select(s_sql);
+
+
+    wxArrayString a_group = get_group();
+
+    if(a_group.IsEmpty())
+        return wxDateTime::Today();
+
+    if(res->Status()!= PGRES_TUPLES_OK)
+    {
+        return wxDateTime::Today();
+    }
+
+    int i_count = res->GetRowsNumber();
+
+    if(i_count==0)
+    {
+        return wxDateTime::Today();
+    }else if (i_count==1)
+        return res->GetDate(wxT("finish_date"));
+    else
+    {
+        int i_group = a_group.GetCount();
+        res->MoveFirst();
+        for(int i=0;i<i_count;i++)
+        {
+            for(int j=0;j<i_group;j++)
+            {
+                if(res->GetVal(wxT("group_id"))==a_group.Item(j))
+                   return res->GetDate(wxT("finish_date"));
+            }
+            res->MoveNext();
+
+        }
+
+        return wxDateTime::Today();
+    }
+ }
+
 wxString wfApp::get_nstd_from_unit(wxString s_wbs, wxString s_flag)
 {
     wxString s_sql, str;

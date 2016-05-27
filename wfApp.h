@@ -62,6 +62,8 @@ public:
     bool update_new_nstd_config(wxString s_nstd_id, int i_status);
     wxString get_nstd_from_unit(wxString s_wbs, wxString s_flag);
 
+    wxDateTime get_prj_auth_date(wxString s_wbs);
+
 
     // Critical Section for multi-thread background
 

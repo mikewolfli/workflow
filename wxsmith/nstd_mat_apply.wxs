@@ -264,6 +264,16 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT14" variable="StaticText10" member="yes">
+									<label>项目授权日</label>
+								</object>
+								<col>1</col>
+								<row>4</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
 								<object class="wxDatePickerCtrl" name="ID_DATEPICKERCTRL_DRAW_REQ" variable="dp_draw_req" member="yes">
 									<style>wxDP_DEFAULT|wxDP_DROPDOWN|wxDP_SHOWCENTURY</style>
 									<handler function="Ondp_draw_reqChanged" entry="EVT_DATE_CHANGED" />
@@ -387,6 +397,17 @@
 								<col>5</col>
 								<row>1</row>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxDatePickerCtrl" name="ID_DATEPICKERCTRL_AU_DATE" variable="dp_proj_au_date" member="yes">
+									<style>wxDP_DEFAULT|wxDP_DROPDOWN|wxDP_SHOWCENTURY</style>
+								</object>
+								<colspan>2</colspan>
+								<col>2</col>
+								<row>4</row>
+								<flag>wxALL|wxEXPAND</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>

@@ -74,6 +74,7 @@ class nstd_mat_apply: public wxPanel
 
         void remove_batch();
 		//(*Declarations(nstd_mat_apply)
+		wxStaticText* StaticText10;
 		wxStaticText* st_low_nstd_reason;
 		wxStaticText* StaticText9;
 		wxButton* Button_Unit;
@@ -128,6 +129,7 @@ class nstd_mat_apply: public wxPanel
 		wxButton* Button_Previous;
 		wxTextCtrl* tc_low_nstd_reason;
 		wxButton* Button_End;
+		wxDatePickerCtrl* dp_proj_au_date;
 		wxTextCtrl* tc_index_id;
 		wxTextCtrl* tc_res_person;
 		wxSpinButton* spb_batch_id;
@@ -180,6 +182,7 @@ class nstd_mat_apply: public wxPanel
 		static const long ID_STATICTEXT4;
 		static const long ID_DATEPICKERCTRL1;
 		static const long ID_STATICTEXT5;
+		static const long ID_STATICTEXT14;
 		static const long ID_DATEPICKERCTRL_DRAW_REQ;
 		static const long ID_COMBOBOX_NSTD_ITEM_CATALOG;
 		static const long ID_STATICTEXT6;
@@ -190,6 +193,7 @@ class nstd_mat_apply: public wxPanel
 		static const long ID_STATICTEXT9;
 		static const long ID_STATICTEXT13;
 		static const long ID_TEXTCTRL_RES_PERSON;
+		static const long ID_DATEPICKERCTRL_AU_DATE;
 		static const long ID_STATICTEXT10;
 		static const long ID_TEXTCTRL_NSTD_ENGINEER;
 		static const long ID_BUTTON_ENGINEER;

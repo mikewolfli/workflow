@@ -46,6 +46,7 @@ const long nstd_mat_apply::ID_BUTTON_HEADER = wxNewId();
 const long nstd_mat_apply::ID_STATICTEXT4 = wxNewId();
 const long nstd_mat_apply::ID_DATEPICKERCTRL1 = wxNewId();
 const long nstd_mat_apply::ID_STATICTEXT5 = wxNewId();
+const long nstd_mat_apply::ID_STATICTEXT14 = wxNewId();
 const long nstd_mat_apply::ID_DATEPICKERCTRL_DRAW_REQ = wxNewId();
 const long nstd_mat_apply::ID_COMBOBOX_NSTD_ITEM_CATALOG = wxNewId();
 const long nstd_mat_apply::ID_STATICTEXT6 = wxNewId();
@@ -56,6 +57,7 @@ const long nstd_mat_apply::ID_SPINBUTTON_BATCH_ID = wxNewId();
 const long nstd_mat_apply::ID_STATICTEXT9 = wxNewId();
 const long nstd_mat_apply::ID_STATICTEXT13 = wxNewId();
 const long nstd_mat_apply::ID_TEXTCTRL_RES_PERSON = wxNewId();
+const long nstd_mat_apply::ID_DATEPICKERCTRL_AU_DATE = wxNewId();
 const long nstd_mat_apply::ID_STATICTEXT10 = wxNewId();
 const long nstd_mat_apply::ID_TEXTCTRL_NSTD_ENGINEER = wxNewId();
 const long nstd_mat_apply::ID_BUTTON_ENGINEER = wxNewId();
@@ -174,6 +176,8 @@ nstd_mat_apply::nstd_mat_apply(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	GridBagSizer1->Add(dp_mat_req, wxGBPosition(3, 0), wxDefaultSpan, wxALL|wxEXPAND, 5);
 	StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("图纸需求日"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
 	GridBagSizer1->Add(StaticText5, wxGBPosition(2, 1), wxDefaultSpan, wxALL|wxEXPAND, 5);
+	StaticText10 = new wxStaticText(this, ID_STATICTEXT14, _("项目授权日"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT14"));
+	GridBagSizer1->Add(StaticText10, wxGBPosition(4, 1), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	dp_draw_req = new wxDatePickerCtrl(this, ID_DATEPICKERCTRL_DRAW_REQ, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxDP_DEFAULT|wxDP_DROPDOWN|wxDP_SHOWCENTURY, wxDefaultValidator, _T("ID_DATEPICKERCTRL_DRAW_REQ"));
 	GridBagSizer1->Add(dp_draw_req, wxGBPosition(3, 1), wxDefaultSpan, wxALL|wxEXPAND, 5);
 	combo_nstd_item_catalog = new wxComboBox(this, ID_COMBOBOX_NSTD_ITEM_CATALOG, wxEmptyString, wxDefaultPosition, wxSize(165,22), 0, 0, 0, wxDefaultValidator, _T("ID_COMBOBOX_NSTD_ITEM_CATALOG"));
@@ -209,6 +213,8 @@ nstd_mat_apply::nstd_mat_apply(wxWindow* parent,wxWindowID id,const wxPoint& pos
 	GridBagSizer1->Add(st_res_person, wxGBPosition(0, 5), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tc_res_person = new wxTextCtrl(this, ID_TEXTCTRL_RES_PERSON, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_TEXTCTRL_RES_PERSON"));
 	GridBagSizer1->Add(tc_res_person, wxGBPosition(1, 5), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	dp_proj_au_date = new wxDatePickerCtrl(this, ID_DATEPICKERCTRL_AU_DATE, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxDP_DEFAULT|wxDP_DROPDOWN|wxDP_SHOWCENTURY, wxDefaultValidator, _T("ID_DATEPICKERCTRL_AU_DATE"));
+	GridBagSizer1->Add(dp_proj_au_date, wxGBPosition(4, 2), wxGBSpan(1, 2), wxALL|wxEXPAND, 5);
 	StaticBoxSizer1->Add(GridBagSizer1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
 	BoxSizer1->Add(StaticBoxSizer1, 1, wxALL|wxEXPAND, 0);
 	StaticBoxSizer5 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("分任务信息"));
@@ -585,9 +591,17 @@ void nstd_mat_apply::refresh_top_gui()
 
         str = _res->GetVal(wxT("link_list"));
         if(!str.IsEmpty())
+        {
             m_units = wxStringTokenize(str ,wxT(";"), wxTOKEN_DEFAULT  );
-        else m_units.Clear();
 
+            dp_proj_au_date->SetValue(wxGetApp().get_prj_auth_date(m_units.Item(0)));
+
+        }
+        else
+        {
+            m_units.Clear();
+            dp_proj_au_date->SetValue( wxDateTime::Today());
+        }
 
         _res->Clear();
 
@@ -3279,6 +3293,7 @@ void nstd_mat_apply::OnButton_CONF_APPLYClick(wxCommandEvent& event)
         tc_project_name->SetValue(dlg_task.m_proj);
         dp_mat_req->SetValue(wxDateTime::Today()+wxDateSpan(0,0,0,2));
         dp_draw_req->SetValue(dlg_task.m_req_finish);
+        dp_proj_au_date->SetValue(wxGetApp().get_prj_auth_date(m_units.Item(0)));
 
         wxString str_serial_id = wxGetApp().get_ser_id(wxT("l_nonstd_app_header"), wxT("nonstd_id"));
 
@@ -3398,6 +3413,7 @@ void nstd_mat_apply::Ontc_nstd_reasonTextEnter(wxCommandEvent& event)
 
 void nstd_mat_apply::enable_configure_control(bool b_sure)
 {
+     dp_proj_au_date->Enable(false);
      dp_draw_req->Enable(b_sure);
      dp_mat_req->Enable(b_sure);
      tc_nstd_reason->Enable(b_sure);
