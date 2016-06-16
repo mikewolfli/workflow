@@ -63,7 +63,7 @@ nstd_author_panel::nstd_author_panel(wxWindow* parent,wxWindowID id,const wxPoin
 
 	Connect(ID_GRID_TASK,wxEVT_GRID_CELL_RIGHT_CLICK,(wxObjectEventFunction)&nstd_author_panel::Ongd_task_listCellRightClick);
 	Connect(ID_GRID_TASK,wxEVT_GRID_LABEL_RIGHT_CLICK,(wxObjectEventFunction)&nstd_author_panel::Ongd_task_listCellRightClick);
-//	Connect(ID_GRID_TASK,wxEVT_GRID_SELECT_CELL,(wxObjectEventFunction)&nstd_author_panel::Ongd_task_listCellChange);
+	//Connect(ID_GRID_TASK,wxEVT_GRID_SELECT_CELL,(wxObjectEventFunction)&nstd_author_panel::Ongd_task_listCellChange);
 	Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&nstd_author_panel::OnButton2Click);
 	Connect(ID_BUTTON_REFRESH,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&nstd_author_panel::OnButton3Click);
 	Connect(ID_BUTTON_APPROVE,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&nstd_author_panel::OnButton_APPROVEClick);

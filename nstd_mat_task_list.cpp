@@ -37,8 +37,8 @@ nstd_mat_task_list::nstd_mat_task_list(wxWindow* parent,wxWindowID id,const wxPo
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("清单"));
 	gd_task_list = new sqlResultGrid(this, ID_GRID_TASK_LIST, wxDefaultPosition, wxSize(838,240));
-	StaticBoxSizer1->Add(gd_task_list, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
-	BoxSizer1->Add(StaticBoxSizer1, 8, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+	StaticBoxSizer1->Add(gd_task_list, 1, wxALL|wxEXPAND, 0);
+	BoxSizer1->Add(StaticBoxSizer1, 8, wxALL|wxEXPAND, 0);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	Button_OK = new wxButton(this, ID_BUTTON1, _("确定"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
 	BoxSizer2->Add(Button_OK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);

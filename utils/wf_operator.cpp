@@ -395,12 +395,19 @@ int wf_process::FindSteps(wxString t_action_id)
 int wf_process::MoveNext()
 {
     cr_flow_ser  = cr_flow_ser + 1;
+
+    if(cr_flow_ser>total_step)
+        cr_flow_ser=total_step;
+
     return cr_flow_ser;
 }
 
 int wf_process::MovePrevious()
 {
     cr_flow_ser = cr_flow_ser -1;
+
+    if(cr_flow_ser==0)
+        cr_flow_ser =1;
 
     return cr_flow_ser;
 }
@@ -1271,6 +1278,25 @@ void wf_operator::restart_instance(int i_times)
     update_process_status(l_instance, true);
 }
 
+void wf_operator::restart_instance(int i_times,wxString s_operator, wxString s_group )
+{
+    restart_log(i_times);
+    wf_proc_act->MoveFirst();
+
+    v_wf_instance l_instance = wf_proc_act->get_cur_instance_action();
+
+
+    l_instance.is_active = true;
+    l_instance.is_restart = true;
+    l_instance.t_start = wxDateTime::Now();
+
+    l_instance.s_action.s_operator_id = s_operator;
+    l_instance.s_action.s_group_id = s_group;
+//   l_instance.t_finish =  wxDateTime::Now();
+
+    update_process_status(l_instance, true);
+}
+
 void wf_operator::close_instance()
 {
     if(wf_proc_act->MoveToActive()<=0)
@@ -1362,6 +1388,30 @@ wxString wf_operator::Get_Desc_id()
 bool wf_operator::update_desc(wxString str_id, wxString str_desc, bool b_update)
 {
     return wxGetApp().update_desc(str_id, str_desc, b_update);
+}
+
+void wf_operator::start_proc(wxString s_operator, wxString s_group, wxString str_desc)
+{
+    if(wf_proc_act->GetCurrentStep()!=0)
+        return;
+
+    wf_proc_act->create_step_action(wf_proc_template);
+    v_wf_instance l_instance;
+    l_instance = wf_proc_act->get_cur_instance_action();
+    l_instance.is_active=true;
+    l_instance.t_start=wxDateTime::Now();
+    l_instance.s_action.s_operator_id = s_operator;
+    l_instance.s_action.s_group_id = s_group;
+    if(!str_desc.IsEmpty())
+    {
+        wxString str_temp = Get_Desc_id();
+        update_desc(str_temp,str_desc,false);
+        l_instance.step_desc = str_temp;
+    }
+    else l_instance.step_desc = str_desc;
+
+    update_process_status(l_instance, false);
+
 }
 
 void wf_operator::start_proc(wxString str_desc, bool start_sec, bool b_log_pass)//start_sec表示启动后激活第二步操作。
@@ -1592,6 +1642,7 @@ void wf_operator::cancel_log(int i_times)
                   wxT("','")+l_instance.s_action.s_group_id+wxT("','")+
                   l_instance.s_action.s_operator_id+wxT("','")+l_instance.step_desc+ wxT("','")+NumToStr(i_times)+
                   wxT("'),");
+
         wf_proc_act->MoveNext();
     }
 

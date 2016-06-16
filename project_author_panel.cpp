@@ -4,6 +4,7 @@
 #include "utils/wf_operator.h"
 #include "mydatepicker.h"
 #include "proj_configure_history.h"
+#include "evaluate_dlg.h"
 
 //(*InternalHeaders(project_author_panel)
 #include <wx/intl.h>
@@ -16,6 +17,7 @@ const long project_author_panel::ID_BUTTON_REVIEW = wxNewId();
 const long project_author_panel::ID_BUTTON3 = wxNewId();
 const long project_author_panel::ID_BUTTON4 = wxNewId();
 const long project_author_panel::ID_BUTTON_NSTD_LEVEL = wxNewId();
+const long project_author_panel::ID_BUTTON_CHANGE_auth = wxNewId();
 const long project_author_panel::ID_BUTTON2 = wxNewId();
 const long project_author_panel::ID_LISTCTRL_RESPERSON = wxNewId();
 const long project_author_panel::idMenu_Expand = wxNewId();
@@ -58,6 +60,8 @@ project_author_panel::project_author_panel(wxWindow* parent,wxWindowID id,const 
 	BoxSizer2->Add(Button4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button_Nstd_level = new wxButton(this, ID_BUTTON_NSTD_LEVEL, _("更新非标等级"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON_NSTD_LEVEL"));
 	BoxSizer2->Add(Button_Nstd_level, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	Button_AUTH = new wxButton(this, ID_BUTTON_CHANGE_auth, _("授权变更"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON_CHANGE_auth"));
+	BoxSizer2->Add(Button_AUTH, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Button2 = new wxButton(this, ID_BUTTON2, _("刷新项目"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
 	BoxSizer2->Add(Button2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_TOP, 0);
@@ -95,6 +99,7 @@ project_author_panel::project_author_panel(wxWindow* parent,wxWindowID id,const 
 	Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&project_author_panel::OnButton3Click);
 	Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&project_author_panel::OnButton4Click);
 	Connect(ID_BUTTON_NSTD_LEVEL,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&project_author_panel::OnButton_Nstd_levelClick);
+	Connect(ID_BUTTON_CHANGE_auth,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&project_author_panel::OnButton_AUTHClick);
 	Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&project_author_panel::OnButton2Click);
 	Connect(ID_LISTCTRL_RESPERSON,wxEVT_COMMAND_LIST_ITEM_ACTIVATED,(wxObjectEventFunction)&project_author_panel::Onlc_resItemActivated);
 	Connect(idMenu_Expand,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_author_panel::OnMenuItem1Selected);
@@ -130,21 +135,34 @@ project_author_panel::project_author_panel(wxWindow* parent,wxWindowID id,const 
         Button_Review->Show(false);
         Button4->Show(false);
         refresh_new_res_list(m_group);
+        Button_AUTH->Show(false);
     }else if(m_leader && m_group == "G0014")
     {
         Button4->Show(false);
   //      Button1->SetLabel(_("项目授权"));
         Button_Review->Show(false);
         mi_review->Enable(false);
+        Button_AUTH->Show(true);
 
-        refresh_res_list();
+        refresh_res_list("CF");
     }
-    else
+    else if (m_leader && m_group=="G0004")
+    {
+        Button4->Show(false);
+  //      Button1->SetLabel(_("项目授权"));
+        Button_Review->Show(false);
+        mi_review->Enable(true);
+        Button_AUTH->Show(true);
+
+        refresh_res_list("CFM");
+
+    }else
     {
         MenuItem3->Enable(false);
         MenuItem4->Enable(false);
         mi_review->Enable(false);
         MenuItem5->Enable(false);
+        Button_AUTH->Show(false);
         return;
     }
 
@@ -155,7 +173,7 @@ project_author_panel::project_author_panel(wxWindow* parent,wxWindowID id,const 
 
     wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
                          instance_id as wbs_no, lift_no, elevator_id, elevator_type, project_catalog, action_id, action_name, req_configure_finish, \
-                         (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent, nonstd_level from v_task_list1 WHERE action_id = 'AT00000003' \
+                         (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent, nonstd_level,conf_batch_id from v_task_list1 WHERE action_id = 'AT00000003' \
                          AND is_active = true AND operator_id = '")+gr_para.login_user+ wxT("' ");
 
     Set_Clause(strSql);
@@ -222,6 +240,7 @@ void project_author_panel::BuildDataViewCtrl()
     tlc_proj_list->AddColumn(_("是否紧急"),0,wxALIGN_LEFT,-1,false,false);//10-8
     tlc_proj_list->AddColumn(_("非标等级"),100,wxALIGN_LEFT,-1,true,false);//11-9
     tlc_proj_list->AddColumn(_("梯型ID"),0,wxALIGN_LEFT,-1,false,false);//12
+    tlc_proj_list->AddColumn(_("任务批次"), 0, wxALIGN_LEFT, -1, false, false);//13
 
     wxTreeItemId root = tlc_proj_list->AddRoot (_("配置项目"));
 }
@@ -287,7 +306,7 @@ void project_author_panel::refresh_list()
     int i_status;
     bool is_urgent;
 
-    wxString l_index, s_project_name, s_wbs, s_lift_id, s_elevator_type, s_project_type, s_req_finish, s_res_person,s_action_id, s_action_name, s_lifttype_id;
+    wxString l_index, s_project_name, s_wbs, s_lift_id, s_elevator_type, s_project_type, s_req_finish, s_res_person,s_action_id, s_action_name, s_lifttype_id, s_index;
 
     wxTreeItemId prj_item,leaf_item;
     int i_type;
@@ -298,12 +317,14 @@ void project_author_panel::refresh_list()
     for(int i = 0; i<irow;i++)
     {
         s_project_name = _res->GetVal(wxT("project_name"));
+        s_index=_res->GetVal(wxT("conf_batch_id"));
 
         if(_res->GetVal(wxT("project_id")) != l_index || s_req_finish != DateToStrFormat(_res->GetDate(wxT("req_configure_finish"))) || s_elevator_type != _res->GetVal(wxT("elevator_type"))|| i_type != _res->GetInt(wxT("project_catalog"))|| s_action_id !=_res->GetVal(wxT("action_id")))
         {
             l_index = _res->GetVal(wxT("project_id"));
             prj_item = tlc_proj_list->AppendItem(root,s_project_name+"-"+l_index);
             tlc_proj_list->SetItemText(prj_item,1,l_index);
+            tlc_proj_list->SetItemText(prj_item, 13, s_index);
 
         }
 
@@ -346,6 +367,7 @@ void project_author_panel::refresh_list()
         tlc_proj_list->SetItemText(leaf_item, 10, BoolToStr(is_urgent));
         tlc_proj_list->SetItemText(leaf_item, 11, nstd_level_to_str(_res->GetInt(wxT("nonstd_level"))));
         tlc_proj_list->SetItemText(leaf_item, 12, s_lifttype_id);
+        tlc_proj_list->SetItemText(leaf_item, 13, s_index);
 
         _res->MoveNext();
     }
@@ -353,6 +375,74 @@ void project_author_panel::refresh_list()
     refresh_project_level();
  //   tlc_proj_list->Expand(root);
     _res->Clear();
+
+}
+
+bool project_author_panel::make_evaluate(wf_process * s_process, wxString s_batch_id)
+{
+     v_wf_instance active_step, eval_step;
+
+     s_process->MoveToActive();
+
+     active_step = s_process->get_cur_instance_action();
+
+     if(!active_step.s_action.b_is_evaluate && !active_step.s_action.b_is_check)
+        return true;
+
+     bool  b_move;
+     int i_step;
+
+     do{
+        i_step = s_process->MovePrevious();
+
+        if(i_step == 0)
+            return true;
+
+        eval_step = s_process->get_cur_instance_action();
+
+        if(eval_step.s_action.b_is_evaluate)
+            return true;
+/*
+        if(eval_step.s_action.b_is_evaluate&&active_step.s_action.b_is_evaluate)
+            return true;
+
+        if(eval_step.s_action.b_is_check && active_step.s_action.b_is_check)
+            return true;*/
+
+        if(eval_step.s_action.b_is_need_eval)
+            b_move = false;
+        else
+            b_move = true;
+
+     }while(b_move);
+
+     evaluate_dlg dlg;
+
+     if(active_step.s_action.b_is_evaluate)
+     {
+        dlg.m_evaluator_id = active_step.s_action.s_operator_id;
+        dlg.m_status = 2;
+     }
+
+     if(active_step.s_action.b_is_check)
+     {
+        dlg.m_check_id = active_step.s_action.s_operator_id;
+        dlg.m_status = 1;
+     }
+
+     dlg.m_action_id = eval_step.s_action.s_action_id;
+     dlg.m_workflow_id = eval_step.s_action.s_workflow_id;
+     dlg.m_operator_id = eval_step.s_action.s_operator_id;
+
+     dlg.m_op_start_date = DateToAnsiStr(eval_step.t_start);
+     dlg.m_op_finish_date = DateToAnsiStr(eval_step.t_finish);
+     dlg.m_task = s_batch_id;
+
+     if(dlg.ShowModal() == wxID_CANCEL)
+        return false;
+
+     return true;
+
 
 }
 
@@ -518,13 +608,13 @@ void project_author_panel::refresh_new_res_list(wxString s_group)
     _res->Clear();
 }
 
-void project_author_panel::refresh_res_list()
+void project_author_panel::refresh_res_list(wxString s_group_cata)
 {
     lc_res->DeleteAllItems();
 
     wxString strSql = wxT("SELECT concat(employee_id,'-',name) AS res_person, (select count(*) from l_proc_act \
                           where operator_id = employee_id AND is_active=true AND action_id = 'AT00000004') AS proj_qty, \
-                          group_name, group_id FROM v_group_member WHERE group_catalog = 'CF' AND plant = '")+gr_para.plant+wxT("' and status=true ORDER BY group_name ,res_person ASC;");
+                          group_name, group_id FROM v_group_member WHERE group_catalog = '")+s_group_cata+wxT("' AND plant = '")+gr_para.plant+wxT("' and status=true ORDER BY group_name ,res_person ASC;");
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(strSql);
 
     if(_res->Status()!= PGRES_TUPLES_OK)
@@ -835,7 +925,9 @@ void project_author_panel::OnButton1Click(wxCommandEvent& event)
     {
         refresh_new_res_list(m_group);
     }else if(m_leader && m_group == "G0014")
-        refresh_res_list();
+        refresh_res_list("CF");
+    else if (m_leader && m_group=="G0004")
+        refresh_res_list("CFM");
     else
         return;
 
@@ -846,6 +938,12 @@ void project_author_panel::OnButton_ReviewClick(wxCommandEvent& event)
 {
     if(!m_leader)
         return;
+
+    if(m_case!=2)
+    {
+        wxMessageBox(_("目前阁下没有切换到项目审核状态，无法操作，请切换到项目审核状态"),_("提示"));
+        return;
+    }
 
     wxString s_flag=wxEmptyString;
 
@@ -860,14 +958,20 @@ void project_author_panel::OnButton_ReviewClick(wxCommandEvent& event)
     {
          s_flag =wxT("M");
          b_way = true;
-    }
+    }else
+        b_way=false;
 
-    if(m_case!=2)
+    if(b_way)
     {
-        wxMessageBox(_("目前阁下没有切换到项目审核状态，无法操作，请切换到项目审核状态"),_("提示"));
-        return;
+        pass_proc_new(s_flag);
+    }else
+    {
+        pass_proc();
     }
+}
 
+void project_author_panel::pass_proc_new(wxString s_flag)
+{
 
     wxArrayTreeItemIds items;
     wxTreeItemId root = tlc_proj_list->GetRootItem();
@@ -881,9 +985,6 @@ void project_author_panel::OnButton_ReviewClick(wxCommandEvent& event)
         return;
     }
 
-    v_wf_action * t_new_template=get_template_action(wf_str_new_config);
-    wf_operator_ex * wf_new_active=0;
-
     wxTreeItemId sel_item, child_item;
     wxTreeItemIdValue cookie;
     wxTreeItemId del_item;
@@ -891,12 +992,15 @@ void project_author_panel::OnButton_ReviewClick(wxCommandEvent& event)
     wxArrayString a_operator, a_flag;
     wxLongLong mils_used, start_mils;
     wxString s_wbs,s_lift_type,s_flag_ex;
-    wxString s_group, s_operator, s_role;
+    wxString s_group, s_operator, s_role, s_index;
 
     wf_process * l_proc_act =0;
 
     v_wf_instance now_step, next_step;
     bool b_active;
+
+    v_wf_action * t_new_template=get_template_action(wf_str_new_config);
+    wf_operator_ex * wf_new_active=0;
 
     for(iter=items.begin();iter<items.end();iter++)
     {
@@ -1036,6 +1140,177 @@ void project_author_panel::OnButton_ReviewClick(wxCommandEvent& event)
     delete [] t_new_template;
 }
 
+void project_author_panel::pass_proc()
+{
+    wxArrayTreeItemIds items;
+    wxTreeItemId root = tlc_proj_list->GetRootItem();
+
+    wxArrayTreeItemIds::iterator iter;
+    tlc_proj_list->GetSelections( items );
+
+    if(items.IsEmpty())
+    {
+        wxLogMessage(_("请选择项目！"));
+        return;
+    }
+
+    wxTreeItemId sel_item, child_item;
+    wxTreeItemIdValue cookie;
+    wxTreeItemId del_item;
+
+    wxArrayString a_operator, a_flag;
+    wxLongLong mils_used, start_mils;
+    wxString s_wbs,s_lift_type,s_flag_ex;
+    wxString s_group, s_operator, s_role, s_index;
+
+    wf_process * l_proc_act =0;
+
+    v_wf_instance now_step, next_step;
+    bool b_active;
+
+    v_wf_action * t_template=get_template_action(wf_str_configure);
+    wf_operator* wf_active=0;
+
+    for(iter=items.begin();iter<items.end();iter++)
+    {
+        sel_item = *iter;
+
+        if(tlc_proj_list->GetItemParent(sel_item)==root)
+        {
+           child_item = tlc_proj_list->GetFirstChild(sel_item,cookie);
+            while(child_item.IsOk())
+            {
+                b_active=true;
+                a_operator.Clear();
+                a_flag.Clear();
+
+                s_wbs = tlc_proj_list->GetItemText(child_item, 0);
+
+                s_lift_type = tlc_proj_list->GetItemText(child_item, 12);
+
+                start_mils = wxGetLocalTimeMillis();
+
+                wf_active = new wf_operator(s_wbs, wf_str_configure, t_template);
+
+                l_proc_act = wf_active->get_current_process();
+
+                if(s_index != tlc_proj_list->GetItemText(child_item, 13))
+                {
+                    s_index = tlc_proj_list->GetItemText(child_item, 13);
+                    if(!make_evaluate(l_proc_act, s_index))
+                    {
+                        if(wf_active)
+                             delete wf_active;
+
+                        l_proc_act = 0;
+                        return;
+                    }
+
+                }
+
+                l_proc_act->MoveToActive();
+                now_step = l_proc_act->get_cur_instance_action();
+
+                if(now_step.s_action.s_operator_id!=gr_para.login_user && now_step.is_active)
+                    continue;
+
+                if(!now_step.is_active)
+                    continue;
+
+                if(l_proc_act->GetCurrentStep() == l_proc_act->GetTotalSteps()&&l_proc_act->GetTotalSteps()!= now_step.s_action.i_total_flow)
+                {
+
+                    next_step.s_action = t_template[now_step.s_action.i_flow_ser];
+                    next_step.s_instance_id = s_wbs;
+                }
+                else if(l_proc_act->GetCurrentStep() != l_proc_act->GetTotalSteps())
+                {
+                    next_step = l_proc_act->get_next_instance_action();
+                    if(next_step.s_action.i_flow_ser != now_step.s_action.i_flow_ser+1)
+                    {
+                        next_step.s_action = t_template[now_step.s_action.i_flow_ser];
+                        next_step.s_instance_id = s_wbs;
+                    }
+                }
+
+                s_group = next_step.s_action.s_group_id;
+                s_operator = next_step.s_action.s_operator_id;
+
+                wf_active->Pass_proc(s_operator, s_group, wxEmptyString, false);
+                l_proc_act = 0;
+                if(wf_active)
+                    delete wf_active;
+
+                del_item = child_item;
+                child_item = tlc_proj_list->GetNextSibling(child_item);
+//
+                tlc_proj_list->Delete(del_item);
+
+                if(tlc_proj_list->GetChildrenCount(sel_item)==0)
+                    tlc_proj_list->Delete(sel_item);
+
+                mils_used = wxGetLocalTimeMillis() - start_mils;
+
+                wxLogMessage(s_wbs+_("任务完成!  耗时:")+NumToStr(mils_used)+_("毫秒"));
+            }
+        }else if(sel_item.IsOk())
+        {
+            b_active=true;
+            a_operator.Clear();
+            a_flag.Clear();
+
+            s_wbs = tlc_proj_list->GetItemText(sel_item, 0);
+            s_lift_type = tlc_proj_list->GetItemText(sel_item, 12);
+
+            start_mils = wxGetLocalTimeMillis();
+
+            wf_active = new wf_operator(s_wbs, wf_str_configure, t_template);
+            l_proc_act = wf_active->get_current_process();
+
+            if(s_index != tlc_proj_list->GetItemText(sel_item, 13))
+            {
+                s_index = tlc_proj_list->GetItemText(sel_item, 13);
+                if(!make_evaluate(l_proc_act, s_index))
+                {
+                    if(wf_active)
+                        delete wf_active;
+
+                    l_proc_act = 0;
+                    return;
+                }
+
+            }
+
+            l_proc_act->MoveToActive();
+            now_step = l_proc_act->get_cur_instance_action();
+            next_step = l_proc_act->get_next_instance_action();
+            if(next_step.s_action.i_flow_ser != now_step.s_action.i_flow_ser+1)
+            {
+                next_step.s_action = t_template[now_step.s_action.i_flow_ser];
+                next_step.s_instance_id = s_wbs;
+            }
+            s_group = next_step.s_action.s_group_id;
+            s_operator = next_step.s_action.s_operator_id;
+
+            wf_active->Pass_proc(s_operator, s_group, wxEmptyString, false);
+            l_proc_act = 0;
+            if(wf_active)
+                delete wf_active;
+
+            mils_used = wxGetLocalTimeMillis() - start_mils;
+
+            wxLogMessage(s_wbs+_("任务完成!  耗时:")+NumToStr(mils_used)+_("毫秒"));
+
+            wxTreeItemId parent_item = tlc_proj_list->GetItemParent(sel_item);
+            tlc_proj_list->Delete(sel_item);
+
+            if(tlc_proj_list->GetChildrenCount(parent_item)== 0)
+               tlc_proj_list->Delete(parent_item);
+        }
+    }
+
+    delete [] t_template;
+}
 
 bool project_author_panel::check_other_way(wxString s_instance, wxString s_flag)
 {
@@ -1238,11 +1513,12 @@ void project_author_panel::OnMenuItem3Selected(wxCommandEvent& event)
      Button1->Show(true);
      Button4->Show(false);
      Button_Review->Show(false);
+     Button_AUTH->Enable(true);
 
     m_case = 0;
     wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
                          instance_id as wbs_no, lift_no,elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, \
-                         (SELECT concat(operator_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level from v_task_list1 WHERE action_id = 'AT00000003' \
+                         (SELECT concat(operator_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000003' \
                          AND is_active = true AND operator_id = '")+gr_para.login_user+ wxT("' ");
     Set_Clause(strSql);
     refresh_list();
@@ -1263,7 +1539,7 @@ void project_author_panel::OnMenuItem4Selected(wxCommandEvent& event)
     Button1->Show(true);
     Button4->Show(false);
      Button_Review->Show(false);
-
+     Button_AUTH->Enable(false);
     m_case=1;
     wxString strSql;
 
@@ -1271,13 +1547,13 @@ void project_author_panel::OnMenuItem4Selected(wxCommandEvent& event)
     {
             strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
                          instance_id as wbs_no, lift_no,elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, \
-                         (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level from v_task_list1 WHERE action_id = 'AT00000004' \
+                         (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000004' \
                          AND is_active = true and group_id='")+m_group+wxT("' ");
-    }else if(m_leader && m_group == "G0014")
+    }else if(m_leader && (m_group == "G0014" || m_group=="G0004"))
             strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
                          instance_id as wbs_no, lift_no, elevator_id,elevator_type, project_catalog,action_id, action_name, req_configure_finish, \
-                         (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level from v_task_list1 WHERE action_id = 'AT00000004' \
-                         AND is_active = true and workflow_id='WF0002' ");
+                         (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000004' \
+                         AND is_active = true ");
     else
         return;
 
@@ -1431,7 +1707,9 @@ void project_author_panel::OnButton2Click(wxCommandEvent& event)
     {
         refresh_new_res_list(m_group);
     }else if(m_leader && m_group == "G0014")
-        refresh_res_list();
+        refresh_res_list("CF");
+    else if(m_leader && m_group=="G0004")
+        refresh_res_list("CFM");
     else
         return;
 }
@@ -2017,6 +2295,11 @@ void project_author_panel::OnButton4Click(wxCommandEvent& event)
         return;
     }
 
+    if(m_case!=2)
+    {
+        wxLogMessage(_("目前阁下停留在非审核项目状态，无法操作，请切换到项目审核状态"));
+        return;
+    }
 
     wxString s_flag=wxEmptyString;
 
@@ -2031,17 +2314,29 @@ void project_author_panel::OnButton4Click(wxCommandEvent& event)
     {
          s_flag =wxT("M");
          b_way = true;
+    }else if(m_group == wxT("G0004"))
+    {
+        b_way=false;
+
     }else
     {
         wxLogMessage(_("此功能仅向机械，电气，高速梯非标组提供!"));
         return;
     }
 
-    if(m_case!=2)
+    if(b_way)
     {
-        wxLogMessage(_("目前阁下停留在非审核项目状态，无法操作，请切换到项目审核状态"));
-        return;
+        feed_back_new(s_flag);
+    }else
+    {
+        feed_back();
     }
+
+
+}
+
+void project_author_panel::feed_back_new(wxString s_flag)
+{
 
     wxArrayTreeItemIds items;
     wxTreeItemId root = tlc_proj_list->GetRootItem();
@@ -2142,6 +2437,101 @@ void project_author_panel::OnButton4Click(wxCommandEvent& event)
     }
 }
 
+void project_author_panel::feed_back()
+{
+    wxArrayTreeItemIds items;
+    wxTreeItemId root = tlc_proj_list->GetRootItem();
+
+    wxArrayTreeItemIds::iterator iter;
+    tlc_proj_list->GetSelections( items );
+
+    if(items.IsEmpty())
+    {
+        wxLogMessage(_("请选择项目！"));
+        return;
+    }
+
+
+    wxTextEntryDialog tdlg(this,_("退回提示输入:"),_("确认退回给工程师？"),wxT(""),wxOK | wxCANCEL | wxTE_MULTILINE,wxDefaultPosition );
+    wxString str_desc;
+    if(tdlg.ShowModal()== wxID_OK)
+    {
+        str_desc= tdlg.GetValue();
+    }
+    else return;
+
+    wxLongLong mils_used, start_mils;
+    wxString s_instance;
+
+    v_wf_action * t_template = get_template_action(wf_str_configure);
+    wf_operator* wf_active=0;
+
+    wxTreeItemId del_item;
+
+    wxString s_action_id=wxT("AT00000004");
+
+    for( iter = items.begin(); iter<items.end(); iter++)
+    {
+        wxTreeItemId sel_item = *iter;
+        if(tlc_proj_list->GetItemParent(sel_item)==root)
+        {
+
+            wxTreeItemIdValue cookie;
+            wxTreeItemId child_item = tlc_proj_list->GetFirstChild(sel_item,cookie);
+            while(child_item.IsOk())
+            {
+                start_mils = wxGetLocalTimeMillis();
+
+                s_instance = tlc_proj_list->GetItemText(child_item, 0);
+                wf_active = new wf_operator(s_instance,wf_str_configure, t_template);
+                wf_active->Feed_back(str_desc, s_action_id);
+
+                delete wf_active;
+                mils_used = wxGetLocalTimeMillis() - start_mils;
+
+                wxLogMessage(s_instance+_("任务已退回!  耗时:")+NumToStr(mils_used)+_("毫秒"));
+
+                // tlc_proj_list->Delete(child_item);
+                del_item = child_item;
+                child_item = tlc_proj_list->GetNextSibling(child_item);
+//               child_item = tlc_proj_list->GetNextChild(sel_item,cookie);
+                tlc_proj_list->Delete(del_item);
+
+            }
+
+            if(!tlc_proj_list->HasChildren(sel_item))
+                tlc_proj_list->Delete(sel_item);
+        }
+        else if(sel_item.IsOk())
+        {
+            wxTreeItemId parent_item = tlc_proj_list->GetItemParent(sel_item);
+
+            if(tlc_proj_list->IsSelected(parent_item))
+                continue;
+
+
+            start_mils = wxGetLocalTimeMillis();
+
+            s_instance = tlc_proj_list->GetItemText(sel_item, 0);
+            wf_active = new wf_operator(s_instance, wf_str_configure, t_template);
+            wf_active->Feed_back(str_desc, s_action_id);
+
+            delete wf_active;
+
+            mils_used = wxGetLocalTimeMillis() - start_mils;
+
+            wxLogMessage(s_instance+_("任务已退回!  耗时:")+NumToStr(mils_used)+_("毫秒"));
+
+
+            tlc_proj_list->Delete(sel_item);
+
+            if(tlc_proj_list->GetChildrenCount(parent_item)== 0)
+                tlc_proj_list->Delete(parent_item);
+
+        }
+    }
+}
+
 bool project_author_panel::update_unit_nstd_status(wxString s_wbs, int i_status, wxString s_flag)
 {
     wxString s_sql = wxT(" select e_nstd_id, m_nstd_id from s_unit_info where wbs_no = '")+s_wbs+wxT("';");
@@ -2198,8 +2588,8 @@ void project_author_panel::Onmi_reviewSelected(wxCommandEvent& event)
 
     strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
                          instance_id as wbs_no, lift_no, elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, \
-                         (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level from v_task_list1 WHERE action_id = 'AT00000006' \
-                         AND is_active = true and operator_id='")+gr_para.login_user+wxT("' and workflow_id='WF0006' ");
+                         (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000006' \
+                         AND is_active = true and operator_id='")+gr_para.login_user+wxT("' ");// and workflow_id='WF0006' ");
 
 
 
@@ -2271,5 +2661,117 @@ void project_author_panel::save_item(wxString s_nstd_app_id,wxString s_link_list
  //   wxLogMessage(str_sql);
     str_sql.Replace(wxT("''"),wxT("NULL"));
     wxGetApp().app_sql_update(str_sql);
+}
+
+
+void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
+{
+    if(!m_leader)
+        return;
+
+    if(m_case==1)
+    {
+        wxLogMessage(_("目前阁下停留在已授权项目列表状态，无法操作，请切换到待授权项目状态"));
+        return;
+    }
+
+    wxArrayTreeItemIds items;
+    wxTreeItemId root = tlc_proj_list->GetRootItem();
+
+    wxArrayTreeItemIds::iterator iter;
+    tlc_proj_list->GetSelections( items );
+
+    if(items.IsEmpty())
+    {
+        wxLogMessage(_("请选择项目！"));
+        return;
+    }
+
+
+    wxString s_wbs, s_sql;
+
+    wxString s_own_group = wxGetApp().get_only_group();
+
+    wxString s_aim_operator, s_aim_group;
+
+    if(s_own_group==wxT("G0014"))
+    {
+        s_aim_group=wxT("G0004");
+        s_aim_operator= wxGetApp().get_leader(s_aim_group);
+    }else if(s_own_group==wxT("G0004"))
+    {
+        s_aim_group=wxT("G0014");
+        s_aim_operator= wxGetApp().get_leader(s_aim_group);
+    }else
+        return;
+
+
+    if(wxMessageBox(_("授权人更改为:")+wxGetApp().get_name(s_aim_operator),_("此操作变更授权人，是否继续？"),wxYES_NO,this)!=wxYES)
+        return;
+
+    wxTreeItemId del_item;
+
+    for( iter = items.begin(); iter<items.end(); iter++)
+    {
+        wxTreeItemId sel_item = *iter;
+        if(tlc_proj_list->GetItemParent(sel_item)==root)
+        {
+            wxTreeItemIdValue cookie;
+            wxTreeItemId child_item = tlc_proj_list->GetFirstChild(sel_item,cookie);
+            while(child_item.IsOk())
+            {
+                bool b_del=false;
+                s_wbs = tlc_proj_list->GetItemText(child_item, 0);
+                s_sql=wxT("UPDATE l_proc_act SET operator_id='")+s_aim_operator+wxT("', group_id='")+s_aim_group+wxT("', modify_date='")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where \
+                              instance_id='")+s_wbs+wxT("' and workflow_id='WF0002' AND action_id='AT00000003' and is_active=true;")  ;
+                if (wxGetApp().app_sql_update(s_sql))
+                {
+                    wxLogMessage(s_wbs+":授权人成功变更为:"+wxGetApp().get_name(s_aim_operator)+":成功!");
+                    wxGetApp().change_log("l_proc_act",s_wbs+"-AT00000003","operator_id",gr_para.login_user,s_aim_operator,"by hand");
+                    //wxGetApp().change_log("l_proc_act",s_wbs+"-AT00000003","group_id",s_own_group,s_aim_group,"by hand");
+                    del_item = child_item;
+                    b_del=true;
+                }else
+                {
+                    wxLogMessage(s_wbs+"变更授权人失败!");
+                }
+
+                child_item = tlc_proj_list->GetNextSibling(child_item);
+
+                if(b_del)
+                    tlc_proj_list->Delete(del_item);
+
+            }
+
+            if(tlc_proj_list->GetChildrenCount(sel_item)== 0)
+                tlc_proj_list->Delete(sel_item);
+
+        }else
+        {
+
+                s_wbs = tlc_proj_list->GetItemText(sel_item, 0);
+                wxTreeItemId parent_item = tlc_proj_list->GetItemParent(sel_item);
+
+                s_sql=wxT("UPDATE l_proc_act SET operator_id='")+s_aim_operator+wxT("', group_id='")+s_aim_group+wxT("', modify_date='")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where \
+                              instance_id='")+s_wbs+wxT("' and workflow_id='WF0002' AND action_id='AT00000003' and is_active=true;")  ;
+            if (wxGetApp().app_sql_update(s_sql))
+            {
+                wxLogMessage(s_wbs+":授权人成功变更为:"+wxGetApp().get_name(s_aim_operator)+":成功!");
+                wxGetApp().change_log("l_proc_act",s_wbs+"-AT00000003","operator_id",gr_para.login_user,s_aim_operator,"by hand");
+                //wxGetApp().change_log("l_proc_act",s_wbs+"-AT00000003","group_id",s_own_group,s_aim_group,"by hand");
+
+                tlc_proj_list->Delete(sel_item);
+
+                if(tlc_proj_list->GetChildrenCount(parent_item)== 0)
+                    tlc_proj_list->Delete(parent_item);
+            }
+            else
+            {
+                wxLogMessage(s_wbs+"变更授权人失败!");
+            }
+        }
+    }
+
+
 }
 

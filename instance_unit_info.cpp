@@ -1120,7 +1120,7 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
     wxString s_project, s_lift_no, s_lift_type;
 
     wxArrayString array_wbs, array_group, array_flag;
-    int i_ways;
+    int i_ways, i_catalog;
     for (int i = 0; i < i_count; i++)
     {
         str_instance = gd_unit_info->GetCellValue(array_sel_line.Item(i), 1);
@@ -1129,6 +1129,7 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
         s_project = gd_unit_info->GetCellValue(array_sel_line.Item(i),0).Trim();
         s_lift_no = gd_unit_info->GetCellValue(array_sel_line.Item(i),5).Trim();
         s_lift_type = gd_unit_info->GetCellValue(array_sel_line.Item(i),2).Trim();
+        i_catalog=  prj_str_to_catalog(gd_unit_info->GetCellValue(array_sel_line.Item(i), 9).Trim());
 
         check_same_lift_no(s_project,s_lift_no);
 
@@ -1202,8 +1203,16 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
             }
             if(i_restart ==0)
             {
+
                 wf_configure = new wf_operator(str_instance, wf_str_configure, t_template);
-                wf_configure->start_proc(str_desc, false, b_log_pass);
+                if (i_catalog!=6)
+                    wf_configure->start_proc(str_desc, false, b_log_pass);
+                else
+                {
+                    wxString s_operator = wxGetApp().get_leader(wxT("G0004"));
+                    wxString s_group = wxT("G0004");
+                    wf_configure->start_proc(s_operator, s_group);
+                }
                 wf_configure->update_instance(1);
                 if (wf_configure)
                     delete wf_configure;

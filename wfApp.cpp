@@ -922,6 +922,37 @@ bool wfApp::check_new_config(wxArrayString &a_group, wxArrayString &a_flag,int &
 
 }
 
+wxString wfApp::get_name(wxString s_id)
+{
+    wxString s_sql = wxT(" select name from s_employee where employee_id='")+s_id+wxT("';");
+    wxPostgreSQLresult * res = app_sql_select(s_sql);
+    if(res->Status()!= PGRES_TUPLES_OK)
+    {
+        res->Clear();
+        return wxEmptyString;
+    }
+
+    int i_count = res->GetRowsNumber();
+
+    if (i_count==0)
+    {
+        res->Clear();
+        return wxEmptyString;
+    }
+
+    wxString str=wxEmptyString;
+
+    if(i_count !=0)
+    {
+        str = res->GetVal(wxT("name"));
+    }
+
+    res->Clear();
+
+    return str;
+
+}
+
 wxString wfApp::get_direct_leader(wxString _user)
 {
     wxString s_sql = wxT("select direct_leader from s_hierarchy where employee_id = '")+_user+wxT("';");

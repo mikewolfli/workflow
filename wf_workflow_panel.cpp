@@ -534,8 +534,6 @@ void wf_workflow_panel::OnButton2Click(wxCommandEvent& event)
 
 }
 
-
-
 bool wf_workflow_panel::make_evaluate(wf_process * s_process)
 {
      v_wf_instance active_step, eval_step;

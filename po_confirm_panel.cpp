@@ -1291,8 +1291,8 @@ bool po_confirm_panel::check_psn(const wxString s_wbs)
 
 bool po_confirm_panel::check_configure_start(const wxString s_wbs)
 {
-    wxString str_sql = wxT("select count(*) as count from l_proc_act where instance_id='")+s_wbs + wxT("' and workflow_id=\
-                        '")+wf_str_configure+wxT("';");
+    wxString str_sql = wxT("select count(*) as count from l_proc_act where instance_id='")+s_wbs + wxT("' and (workflow_id=\
+                        '")+wf_str_configure+wxT("'  or workflow_id='")+wf_str_new_config+wxT("');");
 
       wxPostgreSQLresult * _res =  wxGetApp().app_sql_select(str_sql);
 

@@ -10,6 +10,7 @@
 //*)
 
 #include "ctrl/treelistctrl.h"
+#include "utils/wf_operator.h"
 #include <wx/imaglist.h>
 
 class project_author_panel: public wxPanel
@@ -37,15 +38,21 @@ class project_author_panel: public wxPanel
 		wxListCtrl* lc_res;
 		wxMenu menu_authority;
 		wxMenuItem* mi_review;
+		wxButton* Button_AUTH;
 		//*)
 		wxcode::wxTreeListCtrl* tlc_proj_list;
 
 		void BuildDataViewCtrl();
 		void init_list_header();
 		void refresh_list();
-		void refresh_res_list();
+		void refresh_res_list(wxString s_group_cata);
 
 		void refresh_new_res_list(wxString s_group);
+		void pass_proc_new(wxString s_flag);
+		void pass_proc();
+
+		void feed_back_new(wxString s_flag);
+		void feed_back();
 
 
 		void Set_Clause(wxString strquery)
@@ -55,6 +62,7 @@ class project_author_panel: public wxPanel
 
 
 		void InitImageList();
+		bool make_evaluate(wf_process * s_process, wxString s_batch_id);
 
  //       wxArrayString old_array, new_array;
 
@@ -69,6 +77,7 @@ class project_author_panel: public wxPanel
 		static const long ID_BUTTON3;
 		static const long ID_BUTTON4;
 		static const long ID_BUTTON_NSTD_LEVEL;
+		static const long ID_BUTTON_CHANGE_auth;
 		static const long ID_BUTTON2;
 		static const long ID_LISTCTRL_RESPERSON;
 		static const long idMenu_Expand;
@@ -104,6 +113,7 @@ class project_author_panel: public wxPanel
 		void OnButton4Click(wxCommandEvent& event);
 		void Onmi_reviewSelected(wxCommandEvent& event);
 		void OnButton_ReviewClick(wxCommandEvent& event);
+		void OnButton_AUTHClick(wxCommandEvent& event);
 		//*)
 		void OnTreeListCtrlRightClick(wxTreeEvent& event);
 		bool update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_temp);

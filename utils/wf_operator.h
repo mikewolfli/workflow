@@ -199,6 +199,7 @@ public:
     bool update_header_status(int i_status, wxString key_value, wxString key_name, wxString s_table);
     void restart_instance(wxString l_act_id, int i_times);
     void restart_instance(int i_times);
+    void restart_instance(int i_times,wxString s_operator, wxString s_group );
     void cancel_restart(int i_times, wxString s_workflow=wf_str_configure);
     void close_instance();
 
@@ -207,6 +208,7 @@ public:
     void cancel_task(int i_times = 0);
     wxString Get_Desc_id();
     void start_proc(wxString str_desc, bool start_sec, bool b_log_pass=false);
+    void start_proc(wxString s_operator, wxString s_group, wxString str_desc=wxEmptyString);
     bool update_process_status(v_wf_instance l_instance, bool b_update);
 
     bool delete_process();
