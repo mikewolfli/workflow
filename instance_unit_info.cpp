@@ -1797,9 +1797,15 @@ void instance_unit_info::OnMenuItem18Selected(wxCommandEvent& event)
     int i_count = array_sel_line.GetCount();
     wxArrayString array_sel_wbs;
     wxString str_temp;
+    int i_status;
     for (int i = 0; i < i_count; i++)
     {
         str_temp = gd_unit_info->GetCellValue(array_sel_line.Item(i), 1).Upper().Trim();
+        i_status= prj_str_to_status(gd_unit_info->GetCellValue(array_sel_line.Item(i), 6));
+        if(i_status ==2 || i_status ==0)
+        {
+            continue;
+        }
         array_sel_wbs.Add(str_temp);
     }
     ins_proc_log ipl_dlg;

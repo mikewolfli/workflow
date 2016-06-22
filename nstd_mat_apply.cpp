@@ -14,6 +14,7 @@
 #include "configure_mat_list_editor.h"
 #include <wx/textdlg.h>
 #include "nstd_ins_doc.h"
+#include "unit_info_attach_dlg.h"
 
 //(*InternalHeaders(nstd_mat_apply)
 #include <wx/font.h>
@@ -1560,6 +1561,15 @@ void nstd_mat_apply::OnButton_PASS_NSTDClick(wxCommandEvent& event)
 
     }else
     {
+        if(s_flag=="M")
+        {
+
+            if(!check_prj_info_attach_finished(a_wbs))
+            {
+                return;
+            }
+        }
+
         t_template = get_template_action(wf_str_new_config);
 
         int i_wbs = a_wbs.GetCount();
@@ -1622,6 +1632,82 @@ void nstd_mat_apply::OnButton_PASS_NSTDClick(wxCommandEvent& event)
     Button_Return->Enable(false);
     enable_grid(false);
 
+}
+
+bool nstd_mat_apply::check_prj_info_attach_finished(wxArrayString& a_wbs)
+{
+    wxString str_sql = wxT("select wbs_no, (select is_basic_finish from s_unit_info_attach where wbs_no = v_unit_info.wbs_no) as \
+                           is_finished from v_unit_info where ");
+
+    int i_count = a_wbs.GetCount();
+
+    bool b_pass = true;
+
+    wxArrayString a_no_finish_wbs;
+
+    for(int i=0;i<i_count;i++)
+    {
+       if(i_count ==1)
+         str_sql = str_sql +wxT(" wbs_no='")+a_wbs.Item(i)+wxT("' ");
+       else
+       {
+           if(i==0)
+            str_sql = str_sql+wxT(" wbs_no in ('")+a_wbs.Item(i)+wxT("', ");
+           else if(i== i_count -1)
+             str_sql  = str_sql + wxT("'")+a_wbs.Item(i)+wxT("') ");
+           else
+            str_sql = str_sql + wxT(" '")+a_wbs.Item(i)+wxT("', ");
+       }
+    }
+
+    str_sql = str_sql+ wxT(" and elevator_type in ('TE-GL1','TE-GL','TE-Evolution1','RF1','RF2','TE-HP61','TE-Synergy','RF3') order by wbs_no ASC;");
+
+   // wxMessageBox(str_sql ,_(""));
+    wxPostgreSQLresult * _res = wxGetApp().app_sql_select(str_sql);
+
+
+    if(_res->Status()!= PGRES_TUPLES_OK)
+    {
+         _res->Clear();
+        return false;
+    }
+
+    int i_rows = _res->GetRowsNumber();
+    wxString str;
+    bool b_finish;
+
+    bool b_return = true;
+
+    for(int j=0;j<i_rows;j++)
+    {
+         str = _res->GetVal(wxT("wbs_no"));
+         a_no_finish_wbs.Add(str);
+
+         b_finish = _res->GetBool(wxT("is_finished"));
+
+         if(!b_finish)
+            b_return =false;
+
+         _res->MoveNext();
+
+    }
+    _res->Clear();
+
+    if(!b_return)
+    {
+         wxLogMessage(_("任务中有相关项目基本参数未填写完整，请在弹出窗口中填写完整后，再继续!"));
+        unit_info_attach_dlg dlg;
+        dlg.Set_Editable(true);
+        dlg.refresh_control();
+        dlg.array_wbs = a_no_finish_wbs;
+
+        dlg.refresh_list();
+
+        if(dlg.ShowModal()==wxID_CANCEL)
+            return false;
+    }
+
+    return true;
 }
 
 

@@ -529,15 +529,15 @@ bool workflow_wf::check_prj_info_attach_finished(wxArrayString& a_wbs)
        else
        {
            if(i==0)
-            str_sql = str_sql+wxT(" (wbs_no ='")+a_wbs.Item(i)+wxT("' ");
+            str_sql = str_sql+wxT(" wbs_no in ('")+a_wbs.Item(i)+wxT("', ");
            else if(i== i_count -1)
-             str_sql  = str_sql + wxT("or  wbs_no='")+a_wbs.Item(i)+wxT("') ");
+             str_sql  = str_sql + wxT("'")+a_wbs.Item(i)+wxT("') ");
            else
-            str_sql = str_sql + wxT(" or wbs_no = '")+a_wbs.Item(i)+wxT("' ");
+            str_sql = str_sql + wxT(" '")+a_wbs.Item(i)+wxT("', ");
        }
     }
 
-    str_sql = str_sql+ wxT(" and (elevator_type='TE-GL' or elevator_type='TE-Evolution1' or elevator_type='RF1' or elevator_type='RF2') order by wbs_no ASC;");
+    str_sql = str_sql+ wxT(" and elevator_type in ('TE-GL1','TE-GL','TE-Evolution1','RF1','RF2','TE-HP61','TE-Synergy','RF3') order by wbs_no ASC;");
 
    // wxMessageBox(str_sql ,_(""));
     wxPostgreSQLresult * _res = wxGetApp().app_sql_select(str_sql);
@@ -572,7 +572,7 @@ bool workflow_wf::check_prj_info_attach_finished(wxArrayString& a_wbs)
 
     if(!b_return)
     {
-         wxLogMessage(_("任务中有相关项目基本参数未填写完整(仅适用TE-GL/TE-EV01/RF1/RF2梯型)，请在弹出窗口中填写完整后，再继续!"));
+         wxLogMessage(_("任务中有相关项目基本参数未填写完整，请在弹出窗口中填写完整后，再继续!"));
         unit_info_attach_dlg dlg;
         dlg.Set_Editable(true);
         dlg.refresh_control();
@@ -580,9 +580,8 @@ bool workflow_wf::check_prj_info_attach_finished(wxArrayString& a_wbs)
 
         dlg.refresh_list();
 
-        dlg.ShowModal();
-
-         return false;
+        if(dlg.ShowModal()==wxID_CANCEL)
+            return false;
     }
 
     return true;

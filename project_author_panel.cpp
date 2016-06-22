@@ -291,7 +291,7 @@ void project_author_panel::refresh_list()
 
     wxString strSql = where_clause + str_freeze +  wxT(" ORDER BY req_configure_finish,instance_id,project_catalog, elevator_type ASC ;");
 
- //   wxLogMessage(strSql);
+    wxLogMessage(strSql);
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(strSql);
 
  //   wxSleep(10);
@@ -1702,14 +1702,21 @@ void project_author_panel::OnButton2Click(wxCommandEvent& event)
 
     }*/
 
-    refresh_list();
+
     if(m_leader&&(m_group=="G0006"||m_group=="G0007"||m_group=="G0008"))
     {
+        refresh_list();
         refresh_new_res_list(m_group);
     }else if(m_leader && m_group == "G0014")
+    {
+        refresh_list();
         refresh_res_list("CF");
+    }
     else if(m_leader && m_group=="G0004")
+    {
+        refresh_list();
         refresh_res_list("CFM");
+    }
     else
         return;
 }

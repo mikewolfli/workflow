@@ -285,6 +285,7 @@ class nstd_mat_apply: public wxPanel
 
 		bool ck_jump_proc();
 		bool active_configure_mat_list();
+		bool check_prj_info_attach_finished(wxArrayString& a_wbs);
 
 
 		wxString str_mat_header,m_group,m_project_id;

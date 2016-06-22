@@ -396,18 +396,12 @@ int wf_process::MoveNext()
 {
     cr_flow_ser  = cr_flow_ser + 1;
 
-    if(cr_flow_ser>total_step)
-        cr_flow_ser=total_step;
-
     return cr_flow_ser;
 }
 
 int wf_process::MovePrevious()
 {
     cr_flow_ser = cr_flow_ser -1;
-
-    if(cr_flow_ser==0)
-        cr_flow_ser =1;
 
     return cr_flow_ser;
 }
@@ -1646,6 +1640,9 @@ void wf_operator::cancel_log(int i_times)
         wf_proc_act->MoveNext();
     }
 
+    if(wf_proc_act->Eof())
+        wf_proc_act->MoveFirst();
+
     l_query.Replace(wxT("''"),wxT("NULL"));
     l_query.RemoveLast();
     l_query = l_query+wxT(";");
@@ -2390,6 +2387,9 @@ void wf_operator_ex::cancel_log(int i_times)
                   wxT("'),");
         wf_proc_act->MoveNext();
     }
+
+    if(wf_proc_act->Eof())
+        wf_proc_act->MoveFirst();
 
     l_query.Replace(wxT("''"),wxT("NULL"));
     l_query.RemoveLast();

@@ -1175,7 +1175,7 @@
 	<wx/dialog.h>
 	"wfApp.h"
 
-1466070080 source:d:\develop\code\workspace\wfcode\wf\instance_unit_info.cpp
+1466075316 source:d:\develop\code\workspace\wfcode\wf\instance_unit_info.cpp
 	"instance_unit_info.h"
 	"wfApp.h"
 	<wx/choicdlg.h>
@@ -1598,7 +1598,7 @@
 	<wx/dialog.h>
 	"interface/wxPostgreSQL.h"
 
-1464335704 source:d:\develop\code\workspace\wfcode\wf\nstd_mat_apply.cpp
+1466580915 source:d:\develop\code\workspace\wfcode\wf\nstd_mat_apply.cpp
 	"nstd_mat_apply.h"
 	"nstd_mat_task_list.h"
 	"wfApp.h"
@@ -1615,11 +1615,12 @@
 	"configure_mat_list_editor.h"
 	<wx/textdlg.h>
 	"nstd_ins_doc.h"
+	"unit_info_attach_dlg.h"
 	<wx/font.h>
 	<wx/intl.h>
 	<wx/string.h>
 
-1465883651 d:\develop\code\workspace\wfcode\wf\nstd_mat_apply.h
+1466575648 d:\develop\code\workspace\wfcode\wf\nstd_mat_apply.h
 	"interface/nstdapptable.h"
 	"utils/wf_operator.h"
 	<wx/sizer.h>
@@ -1718,7 +1719,7 @@
 	<wx/dialog.h>
 	"wfApp.h"
 
-1465871671 source:d:\develop\code\workspace\wfcode\wf\project_author_panel.cpp
+1466579940 source:d:\develop\code\workspace\wfcode\wf\project_author_panel.cpp
 	"project_author_panel.h"
 	"wfApp.h"
 	<wx/bitmap.h>
@@ -1908,7 +1909,7 @@
 	"wfMain.h"
 	<wx/image.h>
 
-1466074110 d:\develop\code\workspace\wfcode\wf\version.h
+1466582198 d:\develop\code\workspace\wfcode\wf\version.h
 
 1458268239 d:\develop\code\workspace\wfcode\wf\wfmain.h
 	<wx/menu.h>
@@ -1978,7 +1979,7 @@
 	<wx/intl.h>
 	<wx/string.h>
 
-1463118711 source:d:\develop\code\workspace\wfcode\wf\workflow_wf.cpp
+1466580973 source:d:\develop\code\workspace\wfcode\wf\workflow_wf.cpp
 	"workflow_wf.h"
 	<wx/textdlg.h>
 	<wx/bitmap.h>
@@ -1994,7 +1995,7 @@
 	"nstd_mat_task_list.h"
 	"contractbook_br_dlg.h"
 
-1466071995 source:d:\develop\code\workspace\wfcode\wf\utils\wf_operator.cpp
+1466126334 source:d:\develop\code\workspace\wfcode\wf\utils\wf_operator.cpp
 	"wf_operator.h"
 	"wfApp.h"
 
