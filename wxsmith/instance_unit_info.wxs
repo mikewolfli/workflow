@@ -287,6 +287,11 @@
 				<enabled>0</enabled>
 				<handler function="OnMenuItem7Selected" entry="EVT_MENU" />
 			</object>
+			<object class="wxMenuItem" name="idMenu_special_Info" variable="mi_special_info" member="yes">
+				<label>增加特殊标识(&amp;X)</label>
+				<help>增加特殊标识</help>
+				<handler function="Onmi_special_infoSelected" entry="EVT_MENU" />
+			</object>
 			<object class="wxMenuItem" name="idMenu_Update" variable="MenuItem8" member="yes">
 				<label>暂停项目(&amp;Z)</label>
 				<help>暂停项目</help>

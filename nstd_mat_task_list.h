@@ -75,6 +75,7 @@ class nstd_mat_task_list: public wxDialog
 
         wxString str_tasks_header;
         wxString m_query;
+        int m_use;
 		//(*Handlers(nstd_mat_task_list)
 		void OnButton_OKClick(wxCommandEvent& event);
 		void OnButton_CancelClick(wxCommandEvent& event);

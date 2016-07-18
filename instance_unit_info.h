@@ -44,6 +44,7 @@ class instance_unit_info: public wxPanel
 		wxMenuItem* mi_add_contract_id;
 		wxButton* Button1;
 		wxMenuItem* mi_delivery_date;
+		wxMenuItem* mi_special_info;
 		wxMenu menu_unit_info_renew;
 		wxMenuItem* mi_urgent;
 		wxMenuItem* MenuItem1;
@@ -168,6 +169,7 @@ class instance_unit_info: public wxPanel
 		static const long idMenu_PrjCata;
 		static const long idMenu_Urgent;
 		static const long idMenu_NonStd;
+		static const long idMenu_special_Info;
 		static const long idMenu_Update;
 		static const long idMenu_unFreezed;
 		static const long idMenu_CANRESTART;
@@ -260,6 +262,7 @@ class instance_unit_info: public wxPanel
 		void Onmi_change_lenderSelected(wxCommandEvent& event);
 		void Onmi_contract_br_searchSelected(wxCommandEvent& event);
 		void Onmi_proj_nameSelected(wxCommandEvent& event);
+		void Onmi_special_infoSelected(wxCommandEvent& event);
 		//*)
 
 		int get_same_project_count(wxString s_project, const wxArrayString s_unit_list);

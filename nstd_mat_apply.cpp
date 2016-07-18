@@ -381,11 +381,15 @@ nstd_mat_apply::nstd_mat_apply(wxWindow* parent,wxWindowID id,const wxPoint& pos
     m_draw_req = cb_nstd_drawing->IsChecked();
 
     m_group = wxGetApp().get_only_group();
+    m_design = wxGetApp().is_design(m_group);
+    m_cs_mode=false;
 
    if(m_group == wxT("G0003")||m_group == wxT("G0004")|| m_group == wxT("G0005")||m_group==wxT("G0018"))
     {
+
         StaticText8->SetLabel(wxT("批次"));
         Button_Generate->SetLabel(wxT("生成非标申请(CS等)"));
+
         m_use_status = 0;
     }else if(m_group == wxT("G0006")||m_group == wxT("G0007")|| m_group == wxT("G0008"))
     {
@@ -428,23 +432,34 @@ nstd_mat_apply::~nstd_mat_apply()
 void nstd_mat_apply::OnButton_ReceiveClick(wxCommandEvent& event)
 {
    StaticText8->SetLabel(wxT("分任务号"));
+   int answer ;
+
+    if(m_design)
+    {
+        m_receive_mode=1;
+    }
+    else
+    {
 
 
-   int answer = wxMessageBox("非标整梯BOM任务?(否-配置非标申请)", "确认", wxYES_NO | wxCANCEL);
+        answer = wxMessageBox("非标整梯BOM任务?(否-配置非标申请)", "确认", wxYES_NO | wxCANCEL);
 
-   if(answer == wxCANCEL)
-   {
-       m_receive_mode=-1;
-       return;
-   }
+        if(answer == wxCANCEL)
+        {
+            m_receive_mode=-1;
+            return;
+        }
 
-   if(answer == wxYES)
-       m_receive_mode = 1;
-   else
-       m_receive_mode = 0;
+        if(answer == wxYES)
+            m_receive_mode = 1;
+        else
+            m_receive_mode = 0;
+
+    }
 
    nstd_mat_muti_level_task_list dlg(m_receive_mode);
    m_units.Clear();
+   m_cs_mode=false;
 
    combo_nstd_item_catalog->Enable(false);
 
@@ -478,7 +493,10 @@ void nstd_mat_apply::refresh_nstd_status()
           tc_mat_wf_status->SetValue(s_wf_status);
 
           if((m_use_status==0 || m_use_status ==2 || m_use_status == 3 || m_use_status == 4) && m_engineer.s_res_id == gr_para.login_user)
+          {
+
               Button_Submit->Enable(true);
+          }
           else Button_Submit->Enable(false);
           Button_workflow_mat->Enable(true);
 
@@ -575,6 +593,11 @@ void nstd_mat_apply::refresh_top_gui()
                 m_use_status = 3;
             }
         }
+
+        if(m_project_id == wxT("CS") || m_project_id == wxT("OTHER"))
+            m_cs_mode=true;
+        else
+            m_cs_mode=false;
 /*
         if(m_use_status == 0 || m_use_status == 3 || m_use_status ==4)
         {
@@ -637,10 +660,22 @@ void nstd_mat_apply::refresh_gui_check()
 
     if(m_use_status ==0 || m_use_status==3 || m_use_status == 4)
     {
-        if(m_res_person.s_res_id == gr_para.login_user)
+        if(m_res_person.s_res_id == gr_para.login_user&&m_group!="G0004")
         {
            enable_check(true);
            enable_grid(false);
+        }else  if(m_group=="G0004")
+        {
+            if(m_engineer.s_res_id==gr_para.login_user||m_cs_mode)
+            {
+               enable_check(true);
+               enable_grid(true);
+            }else
+            {
+               enable_check(false);
+               enable_grid(false);
+            }
+
         }else
         {
             enable_check(false);
@@ -691,6 +726,7 @@ void nstd_mat_apply::refresh_low_gui()
     get_low_level_info();
     refresh_nstd_status();
     refresh_gui_check();
+    Layout();
 }
 
 void nstd_mat_apply::refresh_list()
@@ -836,8 +872,10 @@ void nstd_mat_apply::get_low_level_info()
 {
 
     wxPostgreSQLresult* t_res;
+    //wxLogMessage(m_group);
     wxString l_query = wxT("SELECT nstd_mat_app_id,res_engineer,instance_nstd_desc,instance_remarks,status, (select name from s_employee where employee_id = res_engineer) as res_engineer_name, has_nonstd_mat,has_nonstd_draw  FROM l_nonstd_app_item_instance \
                            where index_id = '")+m_index_id+wxT("' AND batch_id = '")+m_batch_id+wxT("';");
+
     t_res = wxGetApp().app_sql_select(l_query);
     if(t_res->Status()!= PGRES_TUPLES_OK)
     {
@@ -871,7 +909,7 @@ void nstd_mat_apply::get_low_level_info()
     tc_nstd_mat_app_id->SetValue(m_nstd_mat_app_id);
 
     int i_status=0;
-    if(m_use_status==1 || m_use_status == 2)
+    if(m_use_status==1 || m_use_status == 2 || m_use_status==0)
     {
         m_engineer.s_res_id = t_res->GetVal(wxT("res_engineer"));
         m_engineer.s_res_name = t_res->GetVal(wxT("res_engineer_name"));
@@ -896,7 +934,7 @@ void nstd_mat_apply::get_low_level_info()
 
     t_res->Clear();
 
-    if(m_use_status == 1 && m_res_person.s_res_id == gr_para.login_user)
+    if((m_use_status == 1|| m_use_status==0 ) && m_res_person.s_res_id == gr_para.login_user )
     {
         if(i_status==0 || i_status == -2)
         {
@@ -904,20 +942,23 @@ void nstd_mat_apply::get_low_level_info()
               tc_low_nstd_feedback->Enable(false);
               Button_Engineer->Enable(true);
               Button_Return->Enable(false);
+              Button_Low_Confirm->Enable(false);
         }else if(i_status == 2)
         {
             tc_low_nstd_reason->Enable(false);
             tc_low_nstd_feedback->Enable(false);
             Button_Engineer->Enable(false);
             Button_Return->Enable(true);
+            Button_Low_Confirm->Enable(false);
         }else if(i_status == 5 || i_status ==1)
         {
             tc_low_nstd_reason->Enable(false);
             tc_low_nstd_feedback->Enable(false);
             Button_Engineer->Enable(false);
             Button_Return->Enable(false);
+            Button_Low_Confirm->Enable(false);
         }
-    }else if(m_use_status == 2 && m_engineer.s_res_id == gr_para.login_user)
+    }else if((m_use_status == 2 || m_use_status==0 ) && m_engineer.s_res_id == gr_para.login_user)
     {
         if(i_status == 1)
         {
@@ -925,14 +966,16 @@ void nstd_mat_apply::get_low_level_info()
             tc_low_nstd_feedback->Enable(true);
             Button_Low_Confirm->Enable(true);
             Button_Return->Enable(true);
+            Button_Engineer->Enable(false);
         }else
         {
             tc_low_nstd_reason->Enable(false);
             tc_low_nstd_feedback->Enable(false);
             Button_Low_Confirm->Enable(false);
             Button_Return->Enable(false);
+            Button_Engineer->Enable(false);
         }
-    }else if(m_use_status==1 || m_use_status== 2 )
+    }else if(m_use_status==1 || m_use_status== 2 ||  m_use_status==0 )
     {
             tc_low_nstd_reason->Enable(false);
             tc_low_nstd_feedback->Enable(false);
@@ -992,6 +1035,7 @@ void nstd_mat_apply::OnButton_GenerateClick(wxCommandEvent& event)
     }
 
     int i_choice;
+    m_cs_mode=true;
     wxString str_project_id,s_nstd_catalog;
     if(m_use_status == 4)
     {
@@ -1026,6 +1070,8 @@ void nstd_mat_apply::OnButton_GenerateClick(wxCommandEvent& event)
 
     }
 
+    m_cs_mode=true;
+
     combo_nstd_item_catalog->Enable(false);
     combo_nstd_item_catalog->SetValue(s_nstd_catalog);
     wxString str_nstd_id;
@@ -1055,6 +1101,9 @@ void nstd_mat_apply::OnButton_GenerateClick(wxCommandEvent& event)
     show_control(false);
     refresh_top_gui();
     refresh_low_gui();
+
+    //cb_nstd_drawing->Enable(true);
+    //cb_nstd_mat->Enable(true);
 }
 
 void nstd_mat_apply::Ontc_remarksText(wxCommandEvent& event)
@@ -1788,6 +1837,12 @@ void nstd_mat_apply::OnButton_SearchClick(wxCommandEvent& event)
     str=_("合同号");
     array_choice.Add(str);
 
+    str = _("本人处理的一级任务");
+    array_choice.Add(str);
+
+    str = _("本人处理的二级任务");
+    array_choice.Add(str);
+
     dlg.set_search_case(array_choice);
 
     int i_choice;
@@ -1819,6 +1874,14 @@ void nstd_mat_apply::OnButton_SearchClick(wxCommandEvent& event)
         break;
     case 5:
         str_sql = wxT("select index_id from v_nonstd_app_item_instance where contract_id = '")+str_search+wxT("' order by index_id ASC;");
+        break;
+
+    case 6:
+        str_sql = wxT("select index_id from v_nonstd_app_item_instance where res_person='")+gr_para.login_user+wxT("' order by index_id ASC;");
+        break;
+
+    case 7:
+        str_sql = wxT("select index_id from v_nonstd_app_item_instance where res_engineer='")+gr_para.login_user+wxT("' order by index_id ASC;");
         break;
     default:
         break;
@@ -1856,8 +1919,10 @@ void nstd_mat_apply::OnButton_SearchClick(wxCommandEvent& event)
 
    if(m_group == wxT("G0003")||m_group == wxT("G0004")|| m_group == wxT("G0005")||m_group==wxT("G0018"))
     {
-
-        StaticText8->SetLabel(wxT("批次"));
+        if(m_group==wxT("G0004"))
+            StaticText8->SetLabel(wxT("分任务号"));
+        else
+            StaticText8->SetLabel(wxT("批次"));
         m_use_status = 0;
     }else if(m_group == wxT("G0006")|| m_group == wxT("G0007") ||m_group == wxT("G0008"))
     {
@@ -1888,6 +1953,7 @@ void nstd_mat_apply::OnButton_SearchClick(wxCommandEvent& event)
 
     show_gui_control();
     m_search_mode = false;
+    m_cs_mode=false;
 }
 
 void nstd_mat_apply::OnButton_PrintClick(wxCommandEvent& event)
@@ -2028,6 +2094,7 @@ void nstd_mat_apply::OnButton_NextClick(wxCommandEvent& event)
 
     if(m_use_status == 3)
         m_use_status=1;
+
  //   m_use_status =0;
     refresh_top_gui();
     refresh_low_gui();
@@ -2318,16 +2385,19 @@ void nstd_mat_apply::add_batch( )
     m_nstd_mat_app_id.Empty();
     tc_nstd_mat_app_id->Clear();
 
-    add_nstd_mat_id();
+    if(m_group!=wxT("G0004"))
+        add_nstd_mat_id();
+    else
+        add_nstd_mat_id(false);
 
 }
 
-void nstd_mat_apply::add_nstd_mat_id()
+void nstd_mat_apply::add_nstd_mat_id(bool b_check)
 {
     if(!m_nstd_mat_app_id.IsEmpty())
         return;
 
-    if(m_use_status !=1)
+    if(m_use_status !=1&&b_check)
     {
         m_nstd_mat_app_id = wxGetApp().get_ser_id(wxT("l_nonstd_app_item_instance"),wxT("nstd_mat_app_id"));
 
@@ -2563,7 +2633,8 @@ void nstd_mat_apply::Oncb_nstd_drawingClick(wxCommandEvent& event)
         add_batch();
     }
 
-    add_nstd_mat_id();
+    if(m_nstd_mat_app_id.IsEmpty())
+        add_nstd_mat_id();
 
     if(m_draw_req)
     {
@@ -2684,7 +2755,7 @@ void nstd_mat_apply::OnButton_Import_MatClick(wxCommandEvent& event)
     }
 
     wxString str_group = wxGetApp().get_only_group();
-    if(str_group != wxT("G0006") && str_group != wxT("G0007") && str_group != wxT("G0008"))
+    if(str_group != wxT("G0006") && str_group != wxT("G0007") && str_group != wxT("G0008")&& str_group!=wxT("G0004")&&!m_design)
     {
         wxLogMessage(_("您所属的组无此权限!"));
         return;
@@ -2970,30 +3041,70 @@ void nstd_mat_apply::show_gui_control()
 
         enable_configure_control(true);
 
-        Button_Receive->Show(false);
-        Button_task_list->Show(false);
-        Button_Generate->Show(true);
-        sb_low_task->Show(false);
-        st_nstd_engineer->Show(false);
-        st_low_nstd_feedback->Show(false);
-        st_low_nstd_reason->Show(false);
-        tc_engineer->Show(false);
-        tc_low_status->Show(false);
-        Button_Engineer->Show(false);
-        Button_Return->Show(false);
-        tc_low_nstd_feedback->Show(false);
-        tc_low_nstd_reason->Show(false);
-        Button_Low_Confirm->Show(false);
-        Button_Low_Rel->Show(false);
-        Button_CONF_APPLY->Show(true);
+        if(m_design)
+        {
 
-        sb_feedback_configure->Show(false);
-        tc_remarks->Show(false);
-        Button_PASS_NSTD->Show(false);
+            Button_Receive->Show(true);
+            Button_task_list->Show(true);
+            Button_CONF_APPLY->Show(false);
+
+        }else
+        {
+            Button_Receive->Show(false);
+            Button_task_list->Show(false);
+            Button_CONF_APPLY->Show(true);
+        }
+
+        Button_Generate->Show(true);
+
+        if((m_group=="G0004")&&!m_cs_mode)
+        {
+            sb_low_task->Show(true);
+            st_nstd_engineer->Show(true);
+            st_low_nstd_feedback->Show(true);
+            st_low_nstd_reason->Show(true);
+            tc_engineer->Show(true);
+            tc_low_status->Show(true);
+            Button_Engineer->Show(true);
+            Button_Return->Show(true);
+            tc_low_nstd_feedback->Show(true);
+            tc_low_nstd_reason->Show(true);
+            Button_Low_Confirm->Show(true);
+            Button_Low_Rel->Show(true);
+
+            tc_remarks->Show(true);
+            Button_PASS_NSTD->Show(true);
+            sb_feedback_configure->Show(true);
+
+            Button_PASS_NSTD->SetLabel("关闭非标处理");
+            sb_feedback_configure->SetLabel("非标处理结束");
+
+
+        }
+        else
+        {
+            sb_low_task->Show(false);
+            st_nstd_engineer->Show(false);
+            st_low_nstd_feedback->Show(false);
+            st_low_nstd_reason->Show(false);
+            tc_engineer->Show(false);
+            tc_low_status->Show(false);
+            Button_Engineer->Show(false);
+            Button_Return->Show(false);
+            tc_low_nstd_feedback->Show(false);
+            tc_low_nstd_reason->Show(false);
+            Button_Low_Confirm->Show(false);
+            Button_Low_Rel->Show(false);
+
+            tc_remarks->Show(false);
+            Button_PASS_NSTD->Show(false);
+            sb_feedback_configure->Show(false);
+        }
+
 
         sb_att_info->Show(true);
-        cb_nstd_drawing->Enable(true);
-        cb_nstd_mat->Enable(true);
+        //cb_nstd_drawing->Enable(true);
+        //cb_nstd_mat->Enable(true);
 
         Button_Cancel->Show(true);
   //      Button_Restore->Show(true);
@@ -3080,8 +3191,8 @@ void nstd_mat_apply::show_gui_control()
         Button_PASS_NSTD->Show(false);
 
         sb_att_info->Show(true);
-        cb_nstd_drawing->Enable(true);
-        cb_nstd_mat->Enable(true);
+       // cb_nstd_drawing->Enable(true);
+       // cb_nstd_mat->Enable(true);
 
         Button_Submit->Enable(false);
         Button_drawing->Enable(false);
@@ -3124,8 +3235,8 @@ void nstd_mat_apply::show_gui_control()
         Button_PASS_NSTD->Show(false);
 
         sb_att_info->Show(true);
-        cb_nstd_drawing->Enable(true);
-        cb_nstd_mat->Enable(true);
+       // cb_nstd_drawing->Enable(true);
+       // cb_nstd_mat->Enable(true);
 
         Button_Cancel->Show(true);
    //     Button_Restore->Show(true);
@@ -3165,8 +3276,8 @@ void nstd_mat_apply::show_gui_control()
         Button_PASS_NSTD->Show(false);
 
         sb_att_info->Show(true);
-        cb_nstd_drawing->Enable(true);
-        cb_nstd_mat->Enable(true);
+        //cb_nstd_drawing->Enable(true);
+        //cb_nstd_mat->Enable(true);
 
         Button_Cancel->Show(true);
   //      Button_Restore->Show(true);
@@ -3505,7 +3616,7 @@ void nstd_mat_apply::enable_configure_control(bool b_sure)
      tc_nstd_reason->Enable(b_sure);
      tc_remarks->Enable(!b_sure);
      Button_PASS_NSTD->Enable(!b_sure);
-     Button_Engineer->Enable(!b_sure);
+     //Button_Engineer->Enable(!b_sure);
 }
 
 void nstd_mat_apply::OnButton_EngineerClick(wxCommandEvent& event)
@@ -3523,7 +3634,7 @@ void nstd_mat_apply::OnButton_EngineerClick(wxCommandEvent& event)
         return;
     }
 
-    if(m_status !=3 && m_receive_mode!=1)
+    if(m_status !=3 && m_receive_mode!=1&& m_use_status!=0)
     {
         wxLogMessage(_("非标申请非标负责人已经处理完成，子任务无法退回!"));
          return;
@@ -3566,6 +3677,8 @@ void nstd_mat_apply::OnButton_EngineerClick(wxCommandEvent& event)
     wxString l_query = wxT("UPDATE l_nonstd_app_item_instance SET modify_emp_id ='")+gr_para.login_user+wxT("',modify_date ='")+DateToAnsiStr(wxDateTime::Now())+wxT("', res_engineer = '")+m_engineer.s_res_id+wxT("', instance_nstd_desc='")+
                       tc_low_nstd_reason->GetValue()+wxT("', status = '1',ins_start_date='")+DateToAnsiStr(wxDateTime::Now())+wxT("' where index_id = '")+m_index_id+wxT("' AND batch_id = '")+m_batch_id+wxT("';");
     l_query.Replace(wxT("''"),wxT("NULL"));
+
+    wxLogMessage(l_query);
     if(wxGetApp().app_sql_update(l_query))
     {
 
@@ -3676,14 +3789,14 @@ void nstd_mat_apply::OnButton_ReturnClick(wxCommandEvent& event)
     if(m_index_id.IsEmpty())
         return;
 
-    if(m_status !=3 && m_receive_mode!=1)
+    if(m_status !=3 && m_receive_mode!=1&&m_use_status!=0)
     {
         if(wxMessageBox(_("非标申请非标负责人已经处理完成，子任务无法退回!"),_("错误"),wxYES)==wxYES)
              wxLogMessage(_("非标申请非标负责人已经处理完成，子任务无法退回!"));
          return;
     }
 
-    if(m_use_status == 2)
+    if(m_use_status == 2||(m_use_status==0 && m_design))
     {
         if(prj_str_to_status(tc_low_status->GetValue())==0)
         {
@@ -3724,7 +3837,7 @@ void nstd_mat_apply::OnButton_ReturnClick(wxCommandEvent& event)
         }
     }
 
-    if(m_use_status == 1)
+    if(m_use_status == 1||(m_use_status==0 && !m_design))
     {
         if(prj_str_to_status(tc_low_status->GetValue())<0)
         {

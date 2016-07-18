@@ -29,13 +29,13 @@ nstd_mat_muti_level_task_list::nstd_mat_muti_level_task_list(int _receive_mode, 
 	wxBoxSizer* BoxSizer1;
 	wxStaticBoxSizer* StaticBoxSizer1;
 
-	Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
-	SetClientSize(wxSize(800,400));
+	Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX, _T("wxID_ANY"));
+	SetClientSize(wxSize(1000,700));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxVERTICAL, this, _("任务清单"));
 	BoxSizer1->Add(StaticBoxSizer1, 5, wxALL|wxEXPAND, 0);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("红色:关联项目全部暂停;黄色:关联项目部分暂停;绿色:加急;天蓝色:非本人任务"), wxDefaultPosition, wxSize(466,33), 0, _T("ID_STATICTEXT1"));
-	BoxSizer1->Add(StaticText1, 1, wxALL|wxALIGN_LEFT, 0);
+	BoxSizer1->Add(StaticText1, 1, wxALL, 0);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	cb_filter = new wxCheckBox(this, ID_CHECKBOX_FILTER, _("含已指定工程师任务"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_FILTER"));
 	cb_filter->SetValue(true);
@@ -50,6 +50,7 @@ nstd_mat_muti_level_task_list::nstd_mat_muti_level_task_list(int _receive_mode, 
 	menu_info.Append(MenuItem1);
 	SetSizer(BoxSizer1);
 	Layout();
+	Center();
 
 	Connect(ID_CHECKBOX_FILTER,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&nstd_mat_muti_level_task_list::Oncb_filterClick);
 	Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&nstd_mat_muti_level_task_list::OnButton1Click);
@@ -150,10 +151,11 @@ void nstd_mat_muti_level_task_list::refresh_list()
 
         str_sql2 = wxT("(SELECT index_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
                           nonstd_catalog, nonstd_desc,  res_person,(select name from s_employee where employee_id = res_person) as res_person_name, header_status as status,\
-                          nonstd_value, link_list from  v_nonstd_app_item_instance  where header_status=3 AND res_engineer ='")+gr_para.login_user+wxT("' AND status=1 )" );
+                          nonstd_value, link_list from  v_nonstd_app_item_instance  where (header_status=3 or header_status=10) AND res_engineer ='")+gr_para.login_user+wxT("' AND status=1 )" );
 
         str_sql = str_sql1 +wxT(" UNION ")+str_sql2 + wxT(" ORDER BY drawing_req_date, index_id ASC;");
     }
+
 
     wxPostgreSQLresult* _res;
      _res = wxGetApp().app_sql_select(str_sql);
@@ -321,7 +323,7 @@ void nstd_mat_muti_level_task_list::refresh_task_list(wxArrayString & a_members)
     }
     str_sql2 = wxT("(SELECT index_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
                           nonstd_catalog, nonstd_desc,  res_person,(select name from s_employee where employee_id = res_person) as res_person_name, header_status ,\
-                          nonstd_value, link_list from  v_nonstd_app_item_instance  where (header_status=1 or header_status=3) AND status=1 and (");
+                          nonstd_value, link_list from  v_nonstd_app_item_instance  where (header_status=1 or header_status=3 or header_status=10) AND status=1 and (");
 
    for(int j=0;j<i_count;j++)
    {
@@ -420,7 +422,7 @@ void nstd_mat_muti_level_task_list::refresh_task_list(wxString s_member)
 
     str_sql2 = wxT("(SELECT index_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
                           nonstd_catalog, nonstd_desc,  res_person,(select name from s_employee where employee_id = res_person) as res_person_name, header_status ,\
-                          nonstd_value, link_list from  v_nonstd_app_item_instance  where (header_status=1 or header_status=3) AND status=1 and res_engineer ='")+s_member+wxT("')" );
+                          nonstd_value, link_list from  v_nonstd_app_item_instance  where (header_status=1 or header_status=3 or header_status=10) AND status=1 and res_engineer ='")+s_member+wxT("')" );
 
 
     str_sql = str_sql1 +wxT(" UNION ")+str_sql2 + wxT(" ORDER BY drawing_req_date, index_id ASC;");

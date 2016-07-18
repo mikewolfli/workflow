@@ -89,6 +89,11 @@ void nstd_task_author::init_header()
     itemCol.SetImage(-1);
     itemCol.SetWidth(80);
     lc_taskinfo->InsertColumn(6, itemCol);
+
+    itemCol.SetText(_("特殊标识"));
+    itemCol.SetImage(-1);
+    itemCol.SetWidth(100);
+    lc_taskinfo->InsertColumn(7, itemCol);
 }
 
 void nstd_task_author::OnButton1Click(wxCommandEvent& event)
@@ -101,7 +106,7 @@ void nstd_task_author::refresh_list()
     if(m_units.IsEmpty())
         return;
 
-    wxString str_sql = wxT("select wbs_no, concat(contract_id,' ', project_name) as project_name, lift_no, elevator_type, load, speed, status FROM v_unit_info_parameter where ");
+    wxString str_sql = wxT("select wbs_no, concat(contract_id,' ', project_name) as project_name, lift_no, elevator_type, load, speed, status, special_info FROM v_unit_info_parameter where ");
 
     int i_count = m_units.GetCount();
 
@@ -152,6 +157,9 @@ void nstd_task_author::refresh_list()
 
         if (i_status==4)
             lc_taskinfo->SetItemBackgroundColour(tmp, *wxRED);
+
+        str = _res->GetVal(wxT("special_info"));
+        lc_taskinfo->SetItem(tmp, 7, str);
 
 
         _res->MoveNext();

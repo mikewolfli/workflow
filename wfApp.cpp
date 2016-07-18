@@ -518,6 +518,34 @@ wxString wfApp::get_only_group()
     return NumToStr(array_group.GetCount());
 }
 
+bool wfApp::is_design(wxString s_group)
+{
+    wxPostgreSQLresult *t_res;
+    wxString l_query;
+    l_query = wxT("SELECT count(1) as row_num FROM s_group_member WHERE group_id = '")+s_group+wxT("' AND is_design = true AND employee_id = '")+gr_para.login_user+wxT("' and status = true;");
+    t_res = conn->Execute(l_query);
+
+
+    if(t_res->Status()!= PGRES_TUPLES_OK)
+    {
+        return false;
+    }
+
+    int icount = t_res->GetInt(wxT("row_num"));
+
+    if(icount >=1)
+    {
+        t_res->Clear();
+        return true;
+    }
+    else
+    {
+        t_res->Clear();
+        return false;
+    }
+    return false;
+}
+
 bool wfApp::is_leader(wxString s_group)
 {
 

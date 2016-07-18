@@ -58,6 +58,7 @@ class workflow_wf: public wxPanel
         wxImageList* m_imageList;
         void refresh_task_level();
         void refresh_group_level(bool b_sure);
+        bool close_finished_nonstd(wxString s_wbs, wxString s_flag);
 	protected:
 
 		//(*Identifiers(workflow_wf)

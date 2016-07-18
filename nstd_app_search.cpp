@@ -68,7 +68,7 @@ void nstd_app_search::OnButton1Click(wxCommandEvent& event)
 {
     i_choice = choice_select->GetSelection();
 
-    if(tc_value->IsEmpty() && i_choice >= 4)
+    if(tc_value->IsEmpty() && i_choice >= 4 && i_choice<6)
     {
         wxMessageBox(_("请输入查询条件!"),_("提示"),wxOK);
         return;

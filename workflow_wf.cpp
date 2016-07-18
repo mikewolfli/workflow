@@ -214,14 +214,16 @@ void workflow_wf::BuildTreeListCtrl()
     tlc_task_list->AddColumn(_("项目状态"), 100, wxALIGN_LEFT, -1,true,false );//7
     tlc_task_list->AddColumn(_("发货期"), 100, wxALIGN_LEFT, -1,true,false );//8
     tlc_task_list->AddColumn(_("非标等级"), 100, wxALIGN_LEFT,-1, true,false);//9
-    tlc_task_list->AddColumn(_("备注"), 400, wxALIGN_LEFT, -1,true,false );//10
-    tlc_task_list->AddColumn(_("工作流ID"), 0, wxALIGN_LEFT, -1,false,false );//11
-    tlc_task_list->AddColumn(_("工作步ID"), 0, wxALIGN_LEFT, -1,false,false );//12
-    tlc_task_list->AddColumn(_("紧急项目"), 0, wxALIGN_LEFT, -1,false,false );//13
-    tlc_task_list->AddColumn(_("退回次数"), 0, wxALIGN_LEFT, -1,false,false );//14
-    tlc_task_list->AddColumn(_("项目类型"), 0, wxALIGN_LEFT, -1,false,false );//15
-    tlc_task_list->AddColumn(_("工作步顺序号"), 0, wxALIGN_LEFT, -1,false,false );//16
-    tlc_task_list->AddColumn(_("标识"),0, wxALIGN_LEFT, -1, false, false);//17
+    tlc_task_list->AddColumn(_("特殊标识"), 100, wxALIGN_LEFT, -1, true, false); //18-10
+    tlc_task_list->AddColumn(_("备注"), 100, wxALIGN_LEFT, -1,true,false );//10-11
+    tlc_task_list->AddColumn(_("工作流ID"), 0, wxALIGN_LEFT, -1,false,false );//11-12
+    tlc_task_list->AddColumn(_("工作步ID"), 0, wxALIGN_LEFT, -1,false,false );//12-13
+    tlc_task_list->AddColumn(_("紧急项目"), 0, wxALIGN_LEFT, -1,false,false );//13-14
+    tlc_task_list->AddColumn(_("退回次数"), 0, wxALIGN_LEFT, -1,false,false );//14-15
+    tlc_task_list->AddColumn(_("项目类型"), 0, wxALIGN_LEFT, -1,false,false );//15-16
+    tlc_task_list->AddColumn(_("工作步顺序号"), 0, wxALIGN_LEFT, -1,false,false );//16-17
+    tlc_task_list->AddColumn(_("标识"),0, wxALIGN_LEFT, -1, false, false);//17-18
+
 
     tlc_task_list->AddRoot (_("配置项目"));
 
@@ -241,11 +243,13 @@ void workflow_wf::BuildTreeListCtrl()
     tlc_group_task_list->AddColumn(_("项目状态"), 100, wxALIGN_LEFT, -1,true,false );//8
     tlc_group_task_list->AddColumn(_("发货期"), 100, wxALIGN_LEFT, -1,true,false );//9
     tlc_group_task_list->AddColumn(_("非标等级"), 100, wxALIGN_LEFT,-1, true,false);//10
-    tlc_group_task_list->AddColumn(_("备注"), 400, wxALIGN_LEFT, -1,true,false );//11
-    tlc_group_task_list->AddColumn(_("工作步ID"), 0, wxALIGN_LEFT, -1,false,false );//12
-    tlc_group_task_list->AddColumn(_("紧急项目"), 0, wxALIGN_LEFT, -1,false,false );//13
-    tlc_group_task_list->AddColumn(_("退回次数"), 0, wxALIGN_LEFT, -1,false,false );//14
-    tlc_group_task_list->AddColumn(_("项目类型"), 0, wxALIGN_LEFT, -1,false,false );//15
+    tlc_group_task_list->AddColumn(_("特殊标识"), 100, wxALIGN_LEFT, -1, true, false);//16-11
+    tlc_group_task_list->AddColumn(_("备注"), 100, wxALIGN_LEFT, -1,true,false );//11-12
+    tlc_group_task_list->AddColumn(_("工作步ID"), 0, wxALIGN_LEFT, -1,false,false );//12-13
+    tlc_group_task_list->AddColumn(_("紧急项目"), 0, wxALIGN_LEFT, -1,false,false );//13-14
+    tlc_group_task_list->AddColumn(_("退回次数"), 0, wxALIGN_LEFT, -1,false,false );//14-15
+    tlc_group_task_list->AddColumn(_("项目类型"), 0, wxALIGN_LEFT, -1,false,false );//15-16
+
 
     tlc_group_task_list->AddRoot (_("配置项目"));
 
@@ -280,7 +284,7 @@ void workflow_wf::refresh_list()
     wxTreeItemId root = tlc_task_list->GetRootItem();
     tlc_task_list->DeleteChildren (root);
 
-    str_query = wxT("SELECT  conf_batch_id, instance_id, action_id, workflow_id, action_name, concat(elevator_id,'-',elevator_type) as elevator_type, concat(contract_id, ' ', project_name) as project_name, \
+    str_query = wxT("SELECT  conf_batch_id, instance_id, action_id, workflow_id, action_name, concat(elevator_id,'-',elevator_type) as elevator_type, concat(contract_id, ' ', project_name) as project_name,special_info, \
                     lift_no , req_configure_finish as req_finish_date , is_return, req_delivery_date, nonstd_level, (select doc_desc from s_doc where doc_id = step_desc_id) as doc_desc , workflow_id, status, is_urgent, return_time, project_catalog, flow_ser,flag FROM v_task_list1 WHERE \
                     is_active = true AND operator_id = '")+gr_para.login_user+wxT("' AND (workflow_id = 'WF0002' or workflow_id='WF0006') ORDER BY  req_finish_date, conf_batch_id, action_id, instance_id ASC ;");
 
@@ -339,14 +343,16 @@ void workflow_wf::refresh_list()
         tlc_task_list->SetItemText(leaf_item, 7, prj_status_to_str(_res->GetInt(wxT("status"))));
         tlc_task_list->SetItemText(leaf_item, 8, DateToStrFormat(_res->GetDate(wxT("req_delivery_date"))));
         tlc_task_list->SetItemText(leaf_item, 9, nstd_level_to_str(_res->GetInt(wxT("nonstd_level"))));
-        tlc_task_list->SetItemText(leaf_item, 10, _res->GetVal(wxT("doc_desc")));
-        tlc_task_list->SetItemText(leaf_item, 11, _res->GetVal(wxT("workflow_id")));
-        tlc_task_list->SetItemText(leaf_item, 12, s_action_id);
-        tlc_task_list->SetItemText(leaf_item, 13, BoolToY(_res->GetBool(wxT("is_urgent"))));
-        tlc_task_list->SetItemText(leaf_item, 14, _res->GetVal(wxT("return_time")));
-        tlc_task_list->SetItemText(leaf_item, 15, _res->GetVal(wxT("project_catalog")));
-        tlc_task_list->SetItemText(leaf_item, 16, _res->GetVal(wxT("flow_ser")));
-        tlc_task_list->SetItemText(leaf_item, 17, _res->GetVal(wxT("flag")));
+        tlc_task_list->SetItemText(leaf_item, 10, _res->GetVal(wxT("special_info")));
+        tlc_task_list->SetItemText(leaf_item, 11, _res->GetVal(wxT("doc_desc")));
+        tlc_task_list->SetItemText(leaf_item, 12, _res->GetVal(wxT("workflow_id")));
+        tlc_task_list->SetItemText(leaf_item, 13, s_action_id);
+        tlc_task_list->SetItemText(leaf_item, 14, BoolToY(_res->GetBool(wxT("is_urgent"))));
+        tlc_task_list->SetItemText(leaf_item, 15, _res->GetVal(wxT("return_time")));
+        tlc_task_list->SetItemText(leaf_item, 16, _res->GetVal(wxT("project_catalog")));
+        tlc_task_list->SetItemText(leaf_item, 17, _res->GetVal(wxT("flow_ser")));
+        tlc_task_list->SetItemText(leaf_item, 18, _res->GetVal(wxT("flag")));
+
 
         _res->MoveNext();
     }
@@ -396,7 +402,7 @@ void workflow_wf::refresh_group(bool b_sh)
 
     if(icount>0)
     {
-        str_query1 = wxT("SELECT  conf_batch_id, instance_id, action_id, name as operator_name, action_name, concat(elevator_id,'-',elevator_type) as elevator_type, concat(contract_id, ' ', project_name) as project_name,\
+        str_query1 = wxT("SELECT  conf_batch_id, instance_id, action_id, name as operator_name, action_name, concat(elevator_id,'-',elevator_type) as elevator_type, concat(contract_id, ' ', project_name) as project_name,special_info, \
                     lift_no , req_configure_finish as req_finish_date , is_return, req_delivery_date, nonstd_level, (select doc_desc from s_doc where doc_id = step_desc_id) as doc_desc , workflow_id, status, is_urgent, return_time, project_catalog  FROM v_task_list1 WHERE \
                      is_active = true AND operator_id != '")+gr_para.login_user+wxT("' AND group_id = '")+array_leader_group.Item(0)+wxT("' ");
 
@@ -498,11 +504,13 @@ void workflow_wf::refresh_group(bool b_sh)
         tlc_group_task_list->SetItemText(leaf_item, 8, prj_status_to_str(_res->GetInt(wxT("status"))));
         tlc_group_task_list->SetItemText(leaf_item, 9, DateToStrFormat(_res->GetDate(wxT("req_delivery_date"))));
         tlc_group_task_list->SetItemText(leaf_item, 10, nstd_level_to_str(_res->GetInt(wxT("nonstd_level"))));
-        tlc_group_task_list->SetItemText(leaf_item, 11, _res->GetVal(wxT("doc_desc")));
-        tlc_group_task_list->SetItemText(leaf_item, 12, s_action_id );
-        tlc_group_task_list->SetItemText(leaf_item, 13, BoolToY(_res->GetBool(wxT("is_urgent"))));
-        tlc_group_task_list->SetItemText(leaf_item, 14, _res->GetVal(wxT("return_time")));
-        tlc_group_task_list->SetItemText(leaf_item, 15, _res->GetVal(wxT("project_catalog")));
+        tlc_group_task_list->SetItemText(leaf_item, 11, _res->GetVal(wxT("special_info")));
+        tlc_group_task_list->SetItemText(leaf_item, 12, _res->GetVal(wxT("doc_desc")));
+        tlc_group_task_list->SetItemText(leaf_item, 13, s_action_id );
+        tlc_group_task_list->SetItemText(leaf_item, 14, BoolToY(_res->GetBool(wxT("is_urgent"))));
+        tlc_group_task_list->SetItemText(leaf_item, 15, _res->GetVal(wxT("return_time")));
+        tlc_group_task_list->SetItemText(leaf_item, 16, _res->GetVal(wxT("project_catalog")));
+
 
         _res->MoveNext();
     }
@@ -616,7 +624,7 @@ void workflow_wf::OnButton3Click(wxCommandEvent& event)
 
 bool workflow_wf::check_other_way(wxString s_instance, wxString s_flag)
 {
-     wxString s_sql = wxT("select * from l_proc_act where instance_id='")+s_instance+wxT("' and workflow_id='WF0006' and is_active=false and flow_ser<=4 and flag !='")+s_flag+wxT("';");
+     wxString s_sql = wxT("select * from l_proc_act where instance_id='")+s_instance+wxT("' and workflow_id='WF0006' and is_active=True and flow_ser<=3 and flag !='")+s_flag+wxT("';");
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(s_sql);
 
     if(_res->Status()!= PGRES_TUPLES_OK)
@@ -629,7 +637,7 @@ bool workflow_wf::check_other_way(wxString s_instance, wxString s_flag)
 
     _res->Clear();
 
-    if(i_count >=3)
+    if(i_count <1)
         return true;
     else
         return false;
@@ -721,7 +729,7 @@ bool workflow_wf::check_contract_br_log(wxString s_wbs, wxString &s_cid)
             return false;
         }
 
-        i_count = res->GetInt(wxT("counnt"));
+        i_count = res->GetInt(wxT("count"));
 
         if(i_count==0)
         {
@@ -735,6 +743,70 @@ bool workflow_wf::check_contract_br_log(wxString s_wbs, wxString &s_cid)
         return true;
 
     }
+}
+
+bool workflow_wf::close_finished_nonstd(wxString s_wbs, wxString s_flag)
+{
+     wxString s_sql = wxT(" select l_nonstd_app_header.nonstd_id,l_nonstd_app_item.index_id, l_nonstd_app_item_instance.index_mat_id, l_nonstd_app_item_instance.status from \
+                              l_nonstd_app_header join l_nonstd_app_item on l_nonstd_app_header.nonstd_id=l_nonstd_app_item.nonstd_id left join l_nonstd_app_item_instance on \
+                              l_nonstd_app_item.index_id=l_nonstd_app_item_instance.index_id where l_nonstd_app_item.link_list like '%")+s_wbs+wxT("%' and l_nonstd_app_item.item_catalog='")+s_flag+wxT("' and \
+                               l_nonstd_app_header.status>=0 and l_nonstd_app_header.status<10 and l_nonstd_app_item_instance.status>=0 and l_nonstd_app_item.res_person='")+gr_para.login_user+wxT("';");
+
+    wxPostgreSQLresult * res=wxGetApp().app_sql_select(s_sql);
+    if(res->Status()!= PGRES_TUPLES_OK)
+    {
+        res->Clear();
+        return false;
+    }
+
+    int i_count = res->GetRowsNumber();
+    wxString str;
+    wxArrayString a_nonstd_id;
+
+    bool b_result = true;
+
+    if(i_count==0)
+        return b_result;
+
+    for( int i=0;i<i_count;i++)
+    {
+        int i_status = res->GetInt(wxT("status"));
+        wxString s_nstd=res->GetVal(wxT("nonstd_id"));
+        int i_pos = a_nonstd_id.Index(s_nstd);
+        if (i_status==2)
+        {
+            if(i_pos==wxNOT_FOUND)
+            {
+                a_nonstd_id.Add(s_nstd);
+            }
+
+        }else
+        {
+            wxString s_temp= res->GetVal(wxT("index_id"));
+            str=str+s_temp+";";
+            b_result=false;
+
+            if(i_pos !=wxNOT_FOUND)
+            {
+                a_nonstd_id.Remove(s_nstd);
+            }
+        }
+
+    }
+
+    if(!b_result)
+    {
+        wxLogMessage(str+"非标处理未完成，请先处理完成后再确认!");
+    }else
+    {
+        int i_close = a_nonstd_id.GetCount();
+        for(int i=0;i<i_close;i++)
+        {
+            wxGetApp().update_new_nstd_config(a_nonstd_id.Item(i), 10);
+        }
+    }
+
+    return b_result;
 }
 
 void workflow_wf::OnButton2Click(wxCommandEvent& event)
@@ -828,11 +900,12 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
         }
     }
 
-
     if(wxMessageBox(_("确认所选项目已经完成?"),_("完成确认："),wxOK|wxCANCEL,this)==wxCANCEL)
     {
         return;
     }
+
+    bool b_active=true;
 
     for( iter = items.begin(); iter<items.end(); iter++)
     {
@@ -843,6 +916,7 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
            child_item = tlc_task_list->GetFirstChild(sel_item,cookie);
             while(child_item.IsOk())
             {
+                b_active=true;
                 a_operator.Clear();
                 a_flag.Clear();
 
@@ -850,9 +924,9 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
 
                 str_instance = tlc_task_list->GetItemText(child_item,1);
                 i_status = prj_str_to_status(tlc_task_list->GetItemText(child_item, 7));
-                s_flag = tlc_task_list->GetItemText(child_item, 17);
+                s_flag = tlc_task_list->GetItemText(child_item, 18);
                 s_lift_type = tlc_task_list->GetItemText(child_item, 4).Left(9);
-                i_flow_ser = StrToInt(tlc_task_list->GetItemText(child_item, 16));
+                i_flow_ser = StrToInt(tlc_task_list->GetItemText(child_item, 17));
 
                 if(i_status == 4)
                 {
@@ -865,9 +939,9 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
                     continue;
                 }
 
-                if(str_workflow_id != tlc_task_list->GetItemText(child_item, 11))//nonstd_level already done.
+                if(str_workflow_id != tlc_task_list->GetItemText(child_item, 12))//nonstd_level already done.
                 {
-                    str_workflow_id = tlc_task_list->GetItemText(child_item, 11);//nonstd_level already done.
+                    str_workflow_id = tlc_task_list->GetItemText(child_item, 12);//nonstd_level already done.
                     if(t_template)
                         delete [] t_template;
                     t_template = get_template_action(str_workflow_id);
@@ -908,10 +982,18 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
                 now_step = l_proc_act->get_cur_instance_action();
 
                 if(now_step.s_action.s_operator_id!=gr_para.login_user)
+                {
+                    child_item = tlc_task_list->GetNextSibling(child_item);
                     continue;
+                }
+
 
                 if(!now_step.is_active)
+                {
+                    child_item = tlc_task_list->GetNextSibling(child_item);
                     continue;
+                }
+
 
                 if(l_proc_act->GetCurrentStep() == l_proc_act->GetTotalSteps()&&l_proc_act->GetTotalSteps()!= now_step.s_action.i_total_flow)
                 {
@@ -1062,15 +1144,21 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
                     }
 
 
-
-
                     l_proc_act = 0;
 
                     if(wf_active)
                         delete wf_active;
                 }else if(str_workflow_id == wf_str_new_config)
                 {
-                    bool b_active=true;
+                    if(now_step.s_action.s_action_id==wxT("AT00000004"))
+                    {
+                        if(!close_finished_nonstd(str_instance, s_flag))
+                        {
+                            child_item = tlc_task_list->GetNextSibling(child_item);
+                            continue;
+
+                        }
+                    }
 
                     if(b_goto)//b_goto控制是否需要移向下一步。
                     {
@@ -1128,7 +1216,7 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
                                 b_active = true;
                                 if(now_step.s_action.i_flow_ser>=4)
                                 {
-                                     s_flag = tlc_task_list->GetItemText(child_item, 17);
+                                     s_flag = tlc_task_list->GetItemText(child_item, 18);
                                 }
 
                             }
@@ -1191,9 +1279,9 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
 
             str_instance = tlc_task_list->GetItemText(sel_item,1);
             i_status = prj_str_to_status(tlc_task_list->GetItemText(sel_item, 7));
-            s_flag = tlc_task_list->GetItemText(sel_item, 17);
+            s_flag = tlc_task_list->GetItemText(sel_item, 18);
             s_lift_type = tlc_task_list->GetItemText(sel_item, 4).Left(9);
-            i_flow_ser = StrToInt(tlc_task_list->GetItemText(sel_item, 16));
+            i_flow_ser = StrToInt(tlc_task_list->GetItemText(sel_item, 17));
             if(i_status == 4)
             {
                 wxLogMessage(_("项目")+str_instance +_("已经暂停! 无法继续!"));
@@ -1205,9 +1293,9 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
                 continue;
             }
 
-            if(str_workflow_id != tlc_task_list->GetItemText(sel_item, 11))//nonstd_level already done.
+            if(str_workflow_id != tlc_task_list->GetItemText(sel_item, 12))//nonstd_level already done.
             {
-                str_workflow_id = tlc_task_list->GetItemText(sel_item, 11);//nonstd_level already done.
+                str_workflow_id = tlc_task_list->GetItemText(sel_item, 12);//nonstd_level already done.
                 if(t_template)
                     delete [] t_template;
                 t_template = get_template_action(str_workflow_id);
@@ -1410,7 +1498,15 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
             }
             else if(str_workflow_id == wf_str_new_config)
             {
-                bool b_active=true;
+                if(now_step.s_action.s_action_id==wxT("AT00000004"))
+                {
+                    if(!close_finished_nonstd(str_instance, s_flag))
+                    {
+                        continue;
+
+                    }
+                }
+
 
                 if(b_goto)//b_goto控制是否需要移向下一步。
                 {
@@ -1469,7 +1565,7 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
                             b_active = true;
                             if(now_step.s_action.i_flow_ser>=4)
                             {
-                                s_flag = tlc_task_list->GetItemText(sel_item, 17);
+                                s_flag = tlc_task_list->GetItemText(sel_item, 18);
                             }
 
                         }
@@ -1649,10 +1745,10 @@ void workflow_wf::OnButton1Click(wxCommandEvent& event)
             {
 
                 str_instance = tlc_task_list->GetItemText(child_item, 1);
-                str_workflow_id = tlc_task_list->GetItemText(child_item, 11);//nonstd_level already done.
-                str_flow_ser = tlc_task_list->GetItemText(child_item, 16);//nonstd_level already done.
+                str_workflow_id = tlc_task_list->GetItemText(child_item, 12);//nonstd_level already done.
+                str_flow_ser = tlc_task_list->GetItemText(child_item, 17);//nonstd_level already done.
                 i_status = prj_str_to_status(tlc_task_list->GetItemText(child_item, 7));
-                s_flag = tlc_task_list->GetItemText(child_item, 17);
+                s_flag = tlc_task_list->GetItemText(child_item, 18);
                 if(!b_sel)
                 {
                     if(str_workflow_id == wf_str_configure)
@@ -1715,9 +1811,9 @@ void workflow_wf::OnButton1Click(wxCommandEvent& event)
                 start_mils = wxGetLocalTimeMillis();
 
 
-                if(str_workflow_id != tlc_task_list->GetItemText(child_item, 11))//nonstd_level already done.
+                if(str_workflow_id != tlc_task_list->GetItemText(child_item, 12))//nonstd_level already done.
                 {
-                    str_workflow_id = tlc_task_list->GetItemText(child_item, 11);//nonstd_level already done.
+                    str_workflow_id = tlc_task_list->GetItemText(child_item, 12);//nonstd_level already done.
                     if(t_template)
                         delete [] t_template;
                     t_template = get_template_action(str_workflow_id);
@@ -1818,10 +1914,10 @@ void workflow_wf::OnButton1Click(wxCommandEvent& event)
                 b_sel = false;
 
             str_instance = tlc_task_list->GetItemText(sel_item, 1);
-            str_workflow_id = tlc_task_list->GetItemText(sel_item, 11);//nonstd_level already done.
-            str_flow_ser = tlc_task_list->GetItemText(sel_item, 16);//nonstd_level already done.
+            str_workflow_id = tlc_task_list->GetItemText(sel_item, 12);//nonstd_level already done.
+            str_flow_ser = tlc_task_list->GetItemText(sel_item, 17);//nonstd_level already done.
             i_status = prj_str_to_status(tlc_task_list->GetItemText(sel_item, 7));
-            s_flag = tlc_task_list->GetItemText(sel_item, 17);
+            s_flag = tlc_task_list->GetItemText(sel_item, 18);
             if(!b_sel)
             {
                 if(str_workflow_id == wf_str_configure)
@@ -1880,9 +1976,9 @@ void workflow_wf::OnButton1Click(wxCommandEvent& event)
             start_mils = wxGetLocalTimeMillis();
 
 
-            if(str_workflow_id != tlc_task_list->GetItemText(sel_item, 11))//nonstd_level already done.
+            if(str_workflow_id != tlc_task_list->GetItemText(sel_item, 12))//nonstd_level already done.
             {
-                str_workflow_id = tlc_task_list->GetItemText(sel_item, 11);//nonstd_level already done.
+                str_workflow_id = tlc_task_list->GetItemText(sel_item, 12);//nonstd_level already done.
                 if(t_template)
                     delete [] t_template;
                 t_template = get_template_action(str_workflow_id);
@@ -2031,11 +2127,12 @@ void workflow_wf::refresh_task_level()
 
     wxTreeItemIdValue cookie;
     wxTreeItemId item = tlc_task_list->GetFirstChild(root,cookie);
-    wxString str_group, str_date, str_type, str_project_catalog,str;
+    wxString str_group, str_date, str_type, str_project_catalog,str, s_special_info;
     wxArrayString a_group;
 
     while(item.IsOk())
     {
+        s_special_info=wxEmptyString;
         wxTreeItemIdValue cookie_child;
         wxTreeItemId child_item = tlc_task_list->GetFirstChild(item,cookie_child);
         str_group.Empty();
@@ -2056,7 +2153,8 @@ void workflow_wf::refresh_task_level()
 
         while(child_item.IsOk())
         {
-            str_project_catalog=  tlc_task_list->GetItemText(child_item,15);//nonstd_level already done.
+
+            str_project_catalog=  tlc_task_list->GetItemText(child_item,16);//nonstd_level already done.
             int i_project_catalog = wxAtoi(str_project_catalog);
             str = tlc_task_list->GetItemText(child_item, 9);
             if(!str_nonstd_level.Contains(str))
@@ -2093,11 +2191,24 @@ void workflow_wf::refresh_task_level()
                 tlc_task_list->SetItemBackgroundColour(child_item,  *wxCYAN);
                 i_count_pre++;
             }
-            else if(tlc_task_list->GetItemText(child_item,13)==wxT("Y"))//nonstd_level already done.
+            else if(tlc_task_list->GetItemText(child_item,14)==wxT("Y"))//nonstd_level already done.
             {
                 tlc_task_list->SetItemBackgroundColour(child_item, *wxGREEN);
                 i_count_urgent++;
             }else tlc_task_list->SetItemBackgroundColour(child_item, *wxWHITE);
+
+            if(!s_special_info.Contains(tlc_task_list->GetItemText(child_item, 10)))
+            {
+                if(s_special_info.IsEmpty())
+                {
+                    s_special_info = tlc_task_list->GetItemText(child_item, 10);
+                }else
+                {
+                    s_special_info = s_special_info+wxT("+")+tlc_task_list->GetItemText(child_item, 10);
+                }
+            }
+
+
 
             child_item = tlc_task_list->GetNextSibling(child_item);
 
@@ -2136,6 +2247,7 @@ void workflow_wf::refresh_task_level()
         tlc_task_list->SetItemText(item, 3, str_group);
         tlc_task_list->SetItemText(item, 4, str_type+wxT("*")+NumToStr(i_count)+_("台"));
         tlc_task_list->SetItemText(item, 5, str_date);
+         tlc_task_list->SetItemText(item, 10, s_special_info);
 
         item = tlc_task_list->GetNextSibling(item);
     }
@@ -2158,11 +2270,12 @@ void workflow_wf::refresh_group_level(bool b_sure)
     wxString str_nonstd_level;
     wxTreeItemIdValue cookie;
     wxTreeItemId item = tlc_group_task_list->GetFirstChild(root,cookie);
-    wxString str_group, str_date, str_operator, str_type, str_project_catalog,str;
+    wxString str_group, str_date, str_operator, str_type, str_project_catalog,str,s_special_info;
     wxArrayString a_group;
 
     while(item.IsOk())
     {
+        s_special_info=wxEmptyString;
         wxTreeItemIdValue cookie_child;
         wxTreeItemId child_item = tlc_group_task_list->GetFirstChild(item,cookie_child);
         str_group.Empty();
@@ -2175,7 +2288,7 @@ void workflow_wf::refresh_group_level(bool b_sure)
         while(child_item.IsOk())
         {
 
-            str_project_catalog=  tlc_group_task_list->GetItemText(child_item,15);//nonstd_level already done.
+            str_project_catalog=  tlc_group_task_list->GetItemText(child_item,16);//nonstd_level already done.
             int i_project_catalog = wxAtoi(str_project_catalog);
 
             str=tlc_group_task_list->GetItemText(child_item, 10);
@@ -2211,11 +2324,22 @@ void workflow_wf::refresh_group_level(bool b_sure)
                 tlc_group_task_list->SetItemBackgroundColour(child_item,  *wxCYAN);
                 i_count_pre++;
             }
-            else if(tlc_group_task_list->GetItemText(child_item,13)==wxT("Y"))//nonstd_level already done.
+            else if(tlc_group_task_list->GetItemText(child_item,14)==wxT("Y"))//nonstd_level already done.
             {
                 tlc_group_task_list->SetItemBackgroundColour(child_item, *wxGREEN);
                 i_count_urgent++;
             }else tlc_group_task_list->SetItemBackgroundColour(child_item, *wxWHITE);
+
+            if(!s_special_info.Contains(tlc_group_task_list->GetItemText(child_item, 11)))
+            {
+                if(s_special_info.IsEmpty())
+                {
+                    s_special_info = tlc_group_task_list->GetItemText(child_item, 11);
+                }else
+                {
+                    s_special_info = s_special_info+wxT("+")+tlc_group_task_list->GetItemText(child_item, 11);
+                }
+            }
 
             child_item = tlc_group_task_list->GetNextSibling(child_item);
 
@@ -2253,6 +2377,7 @@ void workflow_wf::refresh_group_level(bool b_sure)
         tlc_group_task_list->SetItemText(item, 6, str_date);
         tlc_group_task_list->SetItemText(item, 5, str_type+wxT("*")+NumToStr(i_count)+_("台"));
         tlc_group_task_list->SetItemText(item, 3, str_operator);
+        tlc_group_task_list->SetItemText(item, 11, s_special_info);
 
         item = tlc_group_task_list->GetNextSibling(item);
     }
@@ -2588,7 +2713,7 @@ void workflow_wf::OnMenuItem2Selected(wxCommandEvent& event)
                     str = tlc_task_list->GetItemText(child_item,1);
                     array_return.Add(str);
 
-                    str = tlc_task_list->GetItemText(child_item, 14);//nonstd_level already done.
+                    str = tlc_task_list->GetItemText(child_item, 15);//nonstd_level already done.
                     array_return_time.Add(str);
                 }
                 child_item = tlc_task_list->GetNextSibling(child_item);
@@ -2600,7 +2725,7 @@ void workflow_wf::OnMenuItem2Selected(wxCommandEvent& event)
                     str = tlc_task_list->GetItemText(sel_item,1);
                     array_return.Add(str);
 
-                    str = tlc_task_list->GetItemText(sel_item, 14);//nonstd_level already done.
+                    str = tlc_task_list->GetItemText(sel_item, 15);//nonstd_level already done.
                     array_return_time.Add(str);
                 }
 
@@ -2774,7 +2899,7 @@ int workflow_wf::Copy()
     wxArrayTreeItemIds items;
     wxArrayTreeItemIds::iterator iter;
     tlc_task_list->GetSelections( items );
-    wxString s_wbsno, s_projec_name, s_step_desc, s_lift_type, s_lift_type_no, s_lift_no,s_req_finish, s_desc, s_project_no, s_status;
+    wxString s_wbsno, s_projec_name, s_step_desc, s_lift_type, s_lift_type_no, s_lift_no,s_req_finish, s_desc, s_project_no, s_status, s_special_info;
 
 /*
     if(!gr_para.login_status)
@@ -2812,7 +2937,8 @@ int workflow_wf::Copy()
                   s_step_desc = tlc_task_list->GetItemText(child_item, 0);
                   s_lift_no = tlc_task_list->GetItemText(child_item, 3);
                   s_req_finish = tlc_task_list->GetItemText(child_item, 5);
-                  s_desc = tlc_task_list->GetItemText(child_item, 10);//nonstd_level already done.
+                  s_special_info =tlc_task_list->GetItemText(child_item, 10);
+                  s_desc = tlc_task_list->GetItemText(child_item, 11);//nonstd_level already done.
                   s_status = tlc_task_list->GetItemText(child_item, 7);
 
                   str = str + s_step_desc+wxT("\t")+s_project_no+wxT("\t")+s_wbsno+wxT("\t")+s_lift_type_no+wxT("\t")+s_lift_type+wxT("\t")+
@@ -2840,11 +2966,12 @@ int workflow_wf::Copy()
                   s_step_desc = tlc_task_list->GetItemText(sel_item, 0);
                   s_lift_no = tlc_task_list->GetItemText(sel_item, 3);
                   s_req_finish = tlc_task_list->GetItemText(sel_item, 5);
-                  s_desc = tlc_task_list->GetItemText(sel_item, 10);//nonstd_level already done.
+                  s_special_info = tlc_task_list->GetItemText(sel_item, 10);
+                  s_desc = tlc_task_list->GetItemText(sel_item, 11);//nonstd_level already done.
                   s_status = tlc_task_list->GetItemText(sel_item, 7);
 
                   str = str + s_step_desc+wxT("\t")+s_project_no+wxT("\t")+s_wbsno+wxT("\t")+s_lift_type_no+wxT("\t")+s_lift_type+wxT("\t")+
-                  s_projec_name+wxT("\t")+s_lift_no+wxT("\t")+s_req_finish+wxT("\t")+s_desc+wxT("\t")+s_status+END_OF_LINE;
+                  s_projec_name+wxT("\t")+s_lift_no+wxT("\t")+s_req_finish+wxT("\t")+s_special_info+wxT("\t")+s_desc+wxT("\t")+s_status+END_OF_LINE;
                   copied++;
         }
     }
@@ -2925,7 +3052,7 @@ void workflow_wf::OnMenuItem5Selected(wxCommandEvent& event)
     dlg.init_nstd_mat_instance_header();
     str_sql = wxT("SELECT index_mat_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
                           nonstd_catalog, nonstd_desc, nonstd_value, (select name from s_employee where employee_id = res_person) as res_person,\
-                          instance_nstd_desc, (select name from s_employee where employee_id = res_engineer) as res_engineer, status, link_list from v_nonstd_app_item_instance where  ") + str_clause + wxT(" order by index_id ASC;");
+                          instance_nstd_desc, instance_remarks, (select name from s_employee where employee_id = res_engineer) as res_engineer, status, link_list from v_nonstd_app_item_instance where  ") + str_clause + wxT(" order by index_id ASC;");
     dlg.Set_Query(str_sql);
     dlg.refresh_list(0);
 
@@ -3038,7 +3165,7 @@ void workflow_wf::OnMenuItem7Selected(wxCommandEvent& event)
     wxPostgreSQLresult* _res;
     wxString str_query;
 
-    str_query = wxT("SELECT  conf_batch_id, instance_id, action_id, name as operator_name, action_name, concat(elevator_id,'-',elevator_type) as elevator_type, concat(contract_id, ' ', project_name) as project_name,\
+    str_query = wxT("SELECT  conf_batch_id, instance_id, action_id, name as operator_name, action_name, concat(elevator_id,'-',elevator_type) as elevator_type, concat(contract_id, ' ', project_name) as project_name,special_info, \
                     lift_no , req_configure_finish as req_finish_date , is_return, req_delivery_date, (select doc_desc from s_doc where doc_id = step_desc_id) as doc_desc , workflow_id, status, is_urgent, return_time, project_catalog  FROM v_task_list1 WHERE \
                     is_active = true AND operator_id = '")+str_user+ wxT("'  AND  (workflow_id='WF0002' OR workflow_id='WF0006')  ");
 
@@ -3099,11 +3226,12 @@ void workflow_wf::OnMenuItem7Selected(wxCommandEvent& event)
         tlc_group_task_list->SetItemText(leaf_item, 7, BoolToY(_res->GetBool(wxT("is_return"))));
         tlc_group_task_list->SetItemText(leaf_item, 8, prj_status_to_str(_res->GetInt(wxT("status"))));
         tlc_group_task_list->SetItemText(leaf_item, 9, DateToStrFormat(_res->GetDate(wxT("req_delivery_date"))));
-        tlc_group_task_list->SetItemText(leaf_item, 10, _res->GetVal(wxT("doc_desc")));
-        tlc_group_task_list->SetItemText(leaf_item, 11, s_action_id );
-        tlc_group_task_list->SetItemText(leaf_item, 12, BoolToY(_res->GetBool(wxT("is_urgent"))));
-        tlc_group_task_list->SetItemText(leaf_item, 13, _res->GetVal(wxT("return_time")));
-        tlc_group_task_list->SetItemText(leaf_item, 14, _res->GetVal(wxT("project_catalog")));
+        tlc_group_task_list->SetItemText(leaf_item, 10, _res->GetVal(wxT("special_info")));
+        tlc_group_task_list->SetItemText(leaf_item, 11, _res->GetVal(wxT("doc_desc")));
+        tlc_group_task_list->SetItemText(leaf_item, 12, s_action_id );
+        tlc_group_task_list->SetItemText(leaf_item, 13, BoolToY(_res->GetBool(wxT("is_urgent"))));
+        tlc_group_task_list->SetItemText(leaf_item, 14, _res->GetVal(wxT("return_time")));
+        tlc_group_task_list->SetItemText(leaf_item, 15, _res->GetVal(wxT("project_catalog")));
 
         _res->MoveNext();
     }
@@ -3297,14 +3425,14 @@ void workflow_wf::OnMenuItem_WEIGHTSelected(wxCommandEvent& event)
             while(child_item.IsOk())
             {
                str_temp = tlc_task_list->GetItemText(child_item, 1);
-               s_action_id = tlc_task_list->GetItemText(child_item,12);
+               s_action_id = tlc_task_list->GetItemText(child_item,13);
                a_sel_wbs.Add(str_temp);
 
                child_item = tlc_task_list->GetNextSibling(child_item);
             }
         }else
         {
-               s_action_id = tlc_task_list->GetItemText(sel_item,12);
+               s_action_id = tlc_task_list->GetItemText(sel_item,13);
                str_temp = tlc_task_list->GetItemText(sel_item, 1);
                a_sel_wbs.Add(str_temp);
         }

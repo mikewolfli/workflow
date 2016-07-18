@@ -93,7 +93,12 @@ void nstd_mat_task_list::OnButton_OKClick(wxCommandEvent& event)
         }
 
         m_index_id = gd_task_list->GetCellValue(array_sel_line.Item(0), 0);
-        wxString str_units_list = gd_task_list->GetCellValue(array_sel_line.Item(0), 8);
+        wxString str_units_list;
+
+        if(m_use==0)
+            str_units_list = gd_task_list->GetCellValue(array_sel_line.Item(0), 12);
+        else
+            str_units_list = gd_task_list->GetCellValue(array_sel_line.Item(0), 8);
         if(!str_units_list.IsEmpty())
             m_units = wxStringTokenize(str_units_list ,wxT(";"), wxTOKEN_DEFAULT  );
         else m_units.Clear();
@@ -113,6 +118,8 @@ void nstd_mat_task_list::init_nstd_item_header()
     {
         gd_task_list->DeleteCols(i);
     }
+
+    m_use=1;
 
     if(gd_task_list->GetNumberCols()!=9)
     {
@@ -146,9 +153,13 @@ void nstd_mat_task_list::init_nstd_item_header()
         gd_task_list->SetColLabelValue(8,_("关联梯"));
         gd_task_list->SetColSize(8,0);
 
+        array_head.Clear();
+
         for(int i=0; i<9; i++)
         {
             str_tasks_header = str_tasks_header + gd_task_list->GetColLabelValue(i)+wxT(";");
+
+            array_head.Add(gd_task_list->GetColLabelValue(i));
         }
 
     }
@@ -157,6 +168,7 @@ void nstd_mat_task_list::init_nstd_item_header()
 
 void nstd_mat_task_list::init_nstd_mat_instance_header()
 {
+    m_use=0;
     if(gd_task_list->GetNumberCols()!=12)
     {
         gd_task_list->CreateGrid(0,12);
@@ -188,18 +200,25 @@ void nstd_mat_task_list::init_nstd_mat_instance_header()
         gd_task_list->SetColLabelValue(8,_("分任务描述"));
         gd_task_list->SetColSize(8,100);
 
-        gd_task_list->SetColLabelValue(9,_("分任务非标工程师"));
+        gd_task_list->SetColLabelValue(9,_("分任务反馈"));
         gd_task_list->SetColSize(9,100);
 
-        gd_task_list->SetColLabelValue(10,_("分任务状态"));
-        gd_task_list->SetColSize(10,80);
+        gd_task_list->SetColLabelValue(10,_("分任务非标工程师"));
+        gd_task_list->SetColSize(10,100);
 
-        gd_task_list->SetColLabelValue(11,_("关联梯"));
-        gd_task_list->SetColSize(11,0);
+        gd_task_list->SetColLabelValue(11,_("分任务状态"));
+        gd_task_list->SetColSize(11,80);
+
+        gd_task_list->SetColLabelValue(12,_("关联梯"));
+        gd_task_list->SetColSize(12,0);
+
+        array_head.Clear();
 
         for(int i=0; i<12; i++)
         {
             str_tasks_header = str_tasks_header + gd_task_list->GetColLabelValue(i)+wxT(";");
+
+            array_head.Add(gd_task_list->GetColLabelValue(i));
         }
 
     }
@@ -214,6 +233,8 @@ void nstd_mat_task_list::init_nstd_mat_header()
         gd_task_list->DeleteCols(i);
     }
     m_search_mode = true;
+
+    m_use=2;
 
     if(gd_task_list->GetNumberCols()!=9)
     {
@@ -317,8 +338,11 @@ void nstd_mat_task_list::OnMenuItem1Selected(wxCommandEvent& event)
 
     for(int i=0;i<i_count;i++)
     {
-        wxString str = gd_task_list->GetCellValue(array_sel_line.Item(i),8);
-
+        wxString str;
+        if(m_use==0)
+            str = gd_task_list->GetCellValue(array_sel_line.Item(i),12);
+        else
+            str = gd_task_list->GetCellValue(array_sel_line.Item(i),8);
         if(str.IsEmpty())
             continue;
 
@@ -353,51 +377,86 @@ void nstd_mat_task_list::OnButton_ExportClick(wxCommandEvent& event)
         wxMkDir(s_path);*/
 
     wxFileDialog     saveFileDialog(this, _("Save xls file"), "", "",
-                                       "xls files (*.xls)|*.xls", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    "xls files (*.xls)|*.xls", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
     if (saveFileDialog.ShowModal() == wxID_CANCEL)
         return;     // the user changed idea...
-
     wxString s_path = saveFileDialog.GetPath();
 
-     get_array_units();
+    int i_count;
 
-     if(m_units.IsEmpty())
-     {
-         return;
-     }
-
-  //   m_units.Sort(function_sort);
-   //  m_units.Sort(true);
-
-     wxArrayString array_sel;
-
-    nstd_app_item_units dlg;
-    wxString str_units;
-
-    dlg.init_checklistbox(m_units, m_units, false);
-
-    if(dlg.ShowModal() == wxID_OK)
+    if(m_use==2)
     {
-        str_units = dlg.m_units;
+        get_array_units();
 
+        if(m_units.IsEmpty())
+        {
+            return;
+        }
+
+        //   m_units.Sort(function_sort);
+        //  m_units.Sort(true);
+
+        wxArrayString array_sel;
+
+        nstd_app_item_units dlg;
+
+        wxString str_units;
+
+        dlg.init_checklistbox(m_units, m_units, false);
+
+        if(dlg.ShowModal() == wxID_OK)
+        {
+            str_units = dlg.m_units;
+
+        }
+        else
+            return;
+
+        array_sel = wxStringTokenize(str_units,wxT(";"), wxTOKEN_DEFAULT  );
+
+        i_count = array_sel.GetCount();
+
+        if(i_count ==0)
+            return;
+
+        //s_path = create_project_folder(array_sel.Item(0),s_path);
+
+        init_array_head();
+
+        for(int i=0; i<i_count; i++)
+        {
+            export_excel(array_sel.Item(i),s_path);
+        }
     }
     else
-        return;
-
-    array_sel = wxStringTokenize(str_units ,wxT(";"), wxTOKEN_DEFAULT  );
-
-    int i_count = array_sel.GetCount();
-
-    if(i_count ==0)
-        return;
-
-    //s_path = create_project_folder(array_sel.Item(0),s_path);
-
-    init_array_head();
-
-    for(int i=0;i<i_count;i++)
     {
-        export_excel(array_sel.Item(i),s_path);
+        workbook wb1;
+        worksheet* ws = wb1.sheet("Sheet1");
+
+        i_count = array_head.GetCount();
+
+        for(int i=0; i<i_count; i++)
+        {
+            ws->label(0,i,array_head.Item(i).ToStdWstring());
+        }
+
+        i_count = gd_task_list->GetNumberCols();
+
+        int i_rows=gd_task_list->GetNumberRows();
+
+        for(int i=0; i<i_rows; i++)
+            for (int j=0; j<i_count; j++)
+            {
+                ws->label(i+1, j, gd_task_list->GetCellValue(i,j).ToStdWstring());
+            }
+
+        std::string filename = s_path.ToStdString();
+        int error_msg = wb1.Dump(filename);
+
+        if(error_msg == NO_ERRORS)
+        {
+            wxLogMessage(_("输出完成!"));
+        }
     }
 
 }
@@ -468,7 +527,11 @@ void nstd_mat_task_list::get_array_units()
 
     for(int i=0;i<i_count;i++)
     {
-        str = gd_task_list->GetCellValue(i,8);
+        if(m_use==0)
+            str = gd_task_list->GetCellValue(i,12);
+        else
+            str = gd_task_list->GetCellValue(i,8);
+
 
         if(str.IsEmpty())
             continue;

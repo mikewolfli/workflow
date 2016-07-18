@@ -305,8 +305,8 @@ void ContractLabelDraw::draw_one_label(wxDC &dc , wxPoint &s_point, s_contract_l
 
         bmp = bmp_logo.GetSize();
 
-        dc.StretchBlit(s_point.x+x_scale*2, s_point.y+y_scale*1, x_scale*31, y_scale*9,
-                       &dcMem, 0, 0, bmp.GetWidth(), bmp.GetHeight(),wxCOPY, false);
+        dc.StretchBlit(s_point.x+x_scale*6.6, s_point.y+y_scale*0.5, x_scale*20, y_scale*15,
+                    &dcMem, 0, 0, bmp.GetWidth(), bmp.GetHeight(),wxCOPY, false);
 
         dcMem.SelectObject( wxNullBitmap );
     }
@@ -317,7 +317,7 @@ void ContractLabelDraw::draw_one_label(wxDC &dc , wxPoint &s_point, s_contract_l
     if(_label.s_project_catalog==wxT("Major Project"))
     {
          text_size = dc.GetTextExtent(_label.s_project_catalog);
-         dc.DrawText(_label.s_project_catalog, s_point.x+(x_scale*33-text_size.GetWidth())/2, s_point.y+y_scale*12);
+         dc.DrawText(_label.s_project_catalog, s_point.x+(x_scale*33-text_size.GetWidth())/2, s_point.y+y_scale*15);
 
     }
 

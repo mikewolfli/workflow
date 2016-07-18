@@ -63,7 +63,7 @@ class nstd_mat_apply: public wxPanel
         void refresh_top_gui();
         void refresh_low_gui();
         void add_batch();
-        void add_nstd_mat_id();
+        void add_nstd_mat_id(bool b_check=true);
         bool update_mat_instance(wxString s_index,wxString s_index_mat, wxString s_batch_id, wxString s_alias);
         bool doSave();
  //       void get_nstd_mat_app_id(wxString str_mat_index);
@@ -292,7 +292,9 @@ class nstd_mat_apply: public wxPanel
 		bool  m_search_mode;
 		int  m_use_status; //操作方式1 接受1级分配， 2 接受再分配 0 配置生成, 3 CS操作。
 		int m_status;
-		int m_receive_mode; //true - 整梯BOM任务，false -非整梯非标任务;
+		int m_receive_mode; //1- 整梯BOM任务，0-非整梯非标任务;
+		bool m_cs_mode;
+		bool m_design;
 		st_responsor m_engineer;
 		st_responsor m_res_person;
 		wxString m_index_id,m_batch_id,m_nstd_mat_app_id;

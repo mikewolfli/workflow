@@ -222,7 +222,7 @@ nstd_apply_panel::~nstd_apply_panel()
 void nstd_apply_panel::init_list_header()
 {
     //Unit List
-    gd_unit_list->CreateGrid(0,14);
+    gd_unit_list->CreateGrid(0,15);
     gd_unit_list->SetRowLabelSize(30);
     gd_unit_list->SetColLabelValue(0,_("Unit WBS NO."));
     gd_unit_list->SetColSize(0,100);
@@ -260,13 +260,16 @@ void nstd_apply_panel::init_list_header()
     gd_unit_list->SetColLabelValue(11,_("配置完成日期"));
     gd_unit_list->SetColSize(11,80);
 
-    gd_unit_list->SetColLabelValue(12,_("版本ID"));
-    gd_unit_list->SetColSize(12,80);
+     gd_unit_list->SetColLabelValue(12,_("特殊标识"));
+    gd_unit_list->SetColSize(12,100);
 
-    gd_unit_list->SetColLabelValue(13,_("备注"));
+    gd_unit_list->SetColLabelValue(13,_("版本ID"));
     gd_unit_list->SetColSize(13,80);
 
-    for(int i=0; i<14; i++)
+    gd_unit_list->SetColLabelValue(14,_("备注"));
+    gd_unit_list->SetColSize(14,80);
+
+    for(int i=0; i<15; i++)
     {
         str_unit_header = str_unit_header+gd_unit_list->GetColLabelValue(i)+wxT(";");
     }
@@ -492,7 +495,7 @@ void nstd_apply_panel::refresh_unit_list(wxArrayString &array_unit)
     wxPostgreSQLresult* _res;
 
     wxString str_query = wxT("SELECT wbs_no, elevator_id, elevator_type, project_name, lift_no, status, wf_status, \
-                is_urgent, project_catalog, nonstd_level, req_delivery_date, req_configure_finish, \
+                is_urgent, project_catalog, nonstd_level, req_delivery_date, req_configure_finish, special_info, \
                 version_id, (select doc_desc from s_doc where doc_id = unit_doc_id) as doc_desc FROM v_unit_info ") + str_clause +wxT(" ORDER BY wbs_no ASC; ");
 
     _res = wxGetApp().app_sql_select(str_query);

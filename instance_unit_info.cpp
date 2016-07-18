@@ -61,6 +61,7 @@ const long instance_unit_info::idMenu_ReqFin = wxNewId();
 const long instance_unit_info::idMenu_PrjCata = wxNewId();
 const long instance_unit_info::idMenu_Urgent = wxNewId();
 const long instance_unit_info::idMenu_NonStd = wxNewId();
+const long instance_unit_info::idMenu_special_Info = wxNewId();
 const long instance_unit_info::idMenu_Update = wxNewId();
 const long instance_unit_info::idMenu_unFreezed = wxNewId();
 const long instance_unit_info::idMenu_CANRESTART = wxNewId();
@@ -201,6 +202,8 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     MenuItem7 = new wxMenuItem((&menu_unit_info_renew), idMenu_NonStd, _("非标等级切换(&N)"), _("非标等级选择"), wxITEM_NORMAL);
     menu_unit_info_renew.Append(MenuItem7);
     MenuItem7->Enable(false);
+    mi_special_info = new wxMenuItem((&menu_unit_info_renew), idMenu_special_Info, _("增加特殊标识(&X)"), _("增加特殊标识"), wxITEM_NORMAL);
+    menu_unit_info_renew.Append(mi_special_info);
     MenuItem8 = new wxMenuItem((&menu_unit_info_renew), idMenu_Update, _("暂停项目(&Z)"), _("暂停项目"), wxITEM_NORMAL);
     menu_unit_info_renew.Append(MenuItem8);
     MenuItem8->Enable(false);
@@ -297,6 +300,7 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     Connect(idMenu_PrjCata,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem5Selected);
     Connect(idMenu_Urgent,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem6Selected);
     Connect(idMenu_NonStd,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem7Selected);
+    Connect(idMenu_special_Info,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_special_infoSelected);
     Connect(idMenu_Update,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem8Selected);
     Connect(idMenu_unFreezed,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem19Selected);
     Connect(idMenu_CANRESTART,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem20Selected);
@@ -348,7 +352,7 @@ instance_unit_info::~instance_unit_info()
 void instance_unit_info::init_list_header()
 {
     //Unit info.
-    gd_unit_info->CreateGrid(0, 17);
+    gd_unit_info->CreateGrid(0, 18);
     gd_unit_info->SetRowLabelSize(30);
     gd_unit_info->SetColLabelValue(0, _("项目号"));
     gd_unit_info->SetColSize(0, 80);
@@ -376,17 +380,19 @@ void instance_unit_info::init_list_header()
     gd_unit_info->SetColSize(11, 80);
     gd_unit_info->SetColLabelValue(12, _("配置完成日期"));
     gd_unit_info->SetColSize(12, 80);
-    gd_unit_info->SetColLabelValue(13, _("版本ID"));
-    gd_unit_info->SetColSize(13, 80);
-    gd_unit_info->SetColLabelValue(14, _("备注"));
+    gd_unit_info->SetColLabelValue(13, _("特殊标识"));
+    gd_unit_info->SetColSize(13, 100);
+    gd_unit_info->SetColLabelValue(14, _("版本ID"));
     gd_unit_info->SetColSize(14, 80);
-    gd_unit_info->SetColLabelValue(15, _("先行排产"));
-    gd_unit_info->SetColSize(15, 0);
-
-    gd_unit_info->SetColLabelValue(16, _("非标安装资料"));
+    gd_unit_info->SetColLabelValue(15, _("备注"));
+    gd_unit_info->SetColSize(15, 100);
+    gd_unit_info->SetColLabelValue(16, _("先行排产"));
     gd_unit_info->SetColSize(16, 0);
 
-    for (int i = 0; i < 17; i++)
+    gd_unit_info->SetColLabelValue(17, _("非标安装资料"));
+    gd_unit_info->SetColSize(17, 0);
+
+    for (int i = 0; i < 18; i++)
     {
         str_unit_header = str_unit_header + gd_unit_info->GetColLabelValue(i) + wxT(";");
     }
@@ -1125,7 +1131,7 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
     {
         str_instance = gd_unit_info->GetCellValue(array_sel_line.Item(i), 1);
         i_status = prj_str_to_status(gd_unit_info->GetCellValue(array_sel_line.Item(i), 6));
-        b_can_psn = StrToBool(gd_unit_info->GetCellValue(array_sel_line.Item(i), 15));
+        b_can_psn = StrToBool(gd_unit_info->GetCellValue(array_sel_line.Item(i), 16));
         s_project = gd_unit_info->GetCellValue(array_sel_line.Item(i),0).Trim();
         s_lift_no = gd_unit_info->GetCellValue(array_sel_line.Item(i),5).Trim();
         s_lift_type = gd_unit_info->GetCellValue(array_sel_line.Item(i),2).Trim();
@@ -1135,7 +1141,7 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
 
         if (b_log_pass)
         {
-            str_desc = gd_unit_info->GetCellValue(array_sel_line.Item(i), 14);
+            str_desc = gd_unit_info->GetCellValue(array_sel_line.Item(i), 15);
         }
         if (i_status== 1 ||i_status == 3 || i_status==0)
         {
@@ -1455,11 +1461,11 @@ void instance_unit_info::refresh_list(bool b_attach)
     wxPostgreSQLresult* _res;
     if(!b_attach)
         m_query = wxT("SELECT project_id, wbs_no, elevator_id, elevator_type, project_name, lift_no, status, wf_status, \
-                is_urgent, project_catalog, nonstd_level, req_delivery_date, req_configure_finish, \
+                is_urgent, project_catalog, nonstd_level, req_delivery_date, req_configure_finish, special_info, \
                 version_id,(select doc_desc from s_doc where doc_id = unit_doc_id) as doc_desc,can_psn, has_nonstd_inst_info FROM v_unit_info ") + whereClause + wxT(" ORDER BY wbs_no ASC; ");
     else
                 m_query = wxT("SELECT project_id, wbs_no, elevator_id, elevator_type, project_name, lift_no, status, wf_status, \
-                is_urgent, project_catalog, nonstd_level, req_delivery_date, req_configure_finish, \
+                is_urgent, project_catalog, nonstd_level, req_delivery_date, req_configure_finish, special_info, \
                 version_id,(select doc_desc from s_doc where doc_id = unit_doc_id) as doc_desc,can_psn, has_nonstd_inst_info FROM v_unit_info_attach1 ") + whereClause + wxT(" ORDER BY wbs_no ASC; ");
     _res = wxGetApp().app_sql_select(m_query);
     if (_res->Status() != PGRES_TUPLES_OK)
@@ -1515,9 +1521,9 @@ void instance_unit_info::refresh_list(bool b_attach)
     gd_unit_info->SetSelectionMode(wxGrid::wxGridSelectRows);
     gd_unit_info->Fit();
 //   gd_unit_info->EndBatch();
-    gd_unit_info->SetColSize(14, 300);
-    gd_unit_info->SetColSize(15,0);
+    gd_unit_info->SetColSize(15, 300);
     gd_unit_info->SetColSize(16,0);
+    gd_unit_info->SetColSize(17,0);
     Layout();
     _res->Clear();
     if (!b_refresh_project)
@@ -2240,6 +2246,7 @@ void instance_unit_info::Show_control()
         mi_search_contract->Enable(false);
         mi_unit_in_contract->Enable(true);
          mi_add_contract_id->Enable(false);
+         mi_special_info->Enable(false);
 
         button_sap_by_internal->Show(false);
         button_sap_by_wbs->Show(true);
@@ -2262,6 +2269,7 @@ void instance_unit_info::Show_control()
         Button_DEL_project->Show(true);
         button_sap_by_internal->Show(true);
         button_sap_by_wbs->Show(true);
+        mi_special_info-Enable(true);
 
         MenuItem3->Enable(true);
         MenuItem4->Enable(true);
@@ -2313,6 +2321,7 @@ void instance_unit_info::Show_control()
         mi_search_contract->Enable(true);
         mi_unit_in_contract->Enable(true);
         mi_add_contract_id->Enable(true);
+        mi_special_info->Enable(true);
 
         button_sap_by_internal->Show(false);
         button_sap_by_wbs->Show(true);
@@ -2341,6 +2350,7 @@ void instance_unit_info::Show_control()
         mi_search_contract->Enable(false);
         mi_unit_in_contract->Enable(false);
         mi_add_contract_id->Enable(false);
+        mi_special_info->Enable(false);
 
 
         MenuItem3->Enable(false);
@@ -2360,7 +2370,7 @@ void instance_unit_info::Show_control()
         mi_print_label->Enable(false);
     }
 
-    if(gr_para.login_user=="10260454"||gr_para.login_user=="10260435")
+    if(gr_para.login_user=="10260454"||gr_para.login_user=="10260435"||gr_para.login_user=="10350040")
     {
         mi_urgent->Enable(true);
     }else
@@ -2487,7 +2497,7 @@ void instance_unit_info::OnButton4Click(wxCommandEvent& event)
         check_same_lift_no(s_project,s_lift_no);
         if (b_log_pass)
         {
-            str_desc = gd_unit_info->GetCellValue(array_sel_line.Item(i), 14);
+            str_desc = gd_unit_info->GetCellValue(array_sel_line.Item(i), 15);
         }
         if (i_status != 5 && i_status !=6)
         {
@@ -4306,4 +4316,66 @@ void instance_unit_info::Onmi_proj_nameSelected(wxCommandEvent& event)
     b_refresh = true;
     refresh_list();
     b_refresh = false;
+}
+
+void instance_unit_info::Onmi_special_infoSelected(wxCommandEvent& event)
+{
+    wxArrayInt array_sel_line = gd_unit_info->GetSelectedRows();
+
+    if (!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,不能进行任何操作!"));
+        return;
+    }
+    if (array_sel_line.IsEmpty())
+    {
+        wxLogMessage(_("尚未选择项目，无法后续操作!"));
+        return;
+    }
+
+    int i_count = array_sel_line.GetCount();
+
+    wxString s_info=wxEmptyString;
+
+    bool b_msg=false;
+
+    for (int i=0;i<i_count;i++)
+    {
+        if(i>0&&s_info != gd_unit_info->GetCellValue(array_sel_line.Item(i), 13))
+        {
+            b_msg=true;
+            break;
+        }
+
+        if(i==0)
+            s_info = gd_unit_info->GetCellValue(array_sel_line.Item(i), 13);
+    }
+
+
+    if(b_msg&& wxMessageBox(_T("所选项目特殊标识不一致,是否强制修改为其他的内容?"),"特殊标识修改",wxOK|wxCANCEL)==wxCANCEL)
+    {
+         return;
+    }
+
+    wxTextEntryDialog tdlg(this, _("配置提示输入"), _("备注"), s_info, wxOK | wxCANCEL | wxTE_MULTILINE, wxDefaultPosition);
+
+	if (tdlg.ShowModal()== wxID_OK)
+	{
+		s_info= tdlg.GetValue();
+	}
+	else return;
+
+	wxString s_sql, s_wbs;
+
+    for(int i=0;i<i_count;i++)
+    {
+         s_wbs = gd_unit_info->GetCellValue(array_sel_line.Item(i), 1);
+         s_sql = wxT("UPDATE s_unit_info SET special_info='")+s_info+wxT("' WHERE wbs_no='")+s_wbs+wxT("';");
+         if(wxGetApp().app_sql_select(s_sql))
+         {
+             wxGetApp().change_log("s_unit_info",s_wbs, "special_info",gd_unit_info->GetCellValue(array_sel_line.Item(i), 13),s_info,"by hand");
+             gd_unit_info->SetCellValue(array_sel_line.Item(i), 13, s_info);
+         }
+    }
+
 }

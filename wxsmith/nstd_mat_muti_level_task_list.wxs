@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
 	<object class="wxDialog" name="nstd_mat_muti_level_task_list">
-		<size>800,400</size>
+		<centered>1</centered>
+		<size>1000,700</size>
 		<id_arg>0</id_arg>
+		<style>wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX</style>
 		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 			<orient>wxVERTICAL</orient>
 			<object class="sizeritem">
@@ -18,7 +20,7 @@
 					<label>红色:关联项目全部暂停;黄色:关联项目部分暂停;绿色:加急;天蓝色:非本人任务</label>
 					<size>466,33</size>
 				</object>
-				<flag>wxALL|wxALIGN_LEFT</flag>
+				<flag>wxALL</flag>
 				<option>1</option>
 			</object>
 			<object class="sizeritem">

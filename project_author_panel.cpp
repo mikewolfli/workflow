@@ -172,7 +172,7 @@ project_author_panel::project_author_panel(wxWindow* parent,wxWindowID id,const 
     str_freeze.Empty();
 
     wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
-                         instance_id as wbs_no, lift_no, elevator_id, elevator_type, project_catalog, action_id, action_name, req_configure_finish, \
+                         instance_id as wbs_no, lift_no, elevator_id, elevator_type, project_catalog, action_id, action_name, req_configure_finish, special_info, \
                          (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent, nonstd_level,conf_batch_id from v_task_list1 WHERE action_id = 'AT00000003' \
                          AND is_active = true AND operator_id = '")+gr_para.login_user+ wxT("' ");
 
@@ -241,6 +241,7 @@ void project_author_panel::BuildDataViewCtrl()
     tlc_proj_list->AddColumn(_("非标等级"),100,wxALIGN_LEFT,-1,true,false);//11-9
     tlc_proj_list->AddColumn(_("梯型ID"),0,wxALIGN_LEFT,-1,false,false);//12
     tlc_proj_list->AddColumn(_("任务批次"), 0, wxALIGN_LEFT, -1, false, false);//13
+    tlc_proj_list->AddColumn(_("特殊标识"), 100, wxALIGN_LEFT, -1, true, false); //14
 
     wxTreeItemId root = tlc_proj_list->AddRoot (_("配置项目"));
 }
@@ -291,7 +292,7 @@ void project_author_panel::refresh_list()
 
     wxString strSql = where_clause + str_freeze +  wxT(" ORDER BY req_configure_finish,instance_id,project_catalog, elevator_type ASC ;");
 
-    wxLogMessage(strSql);
+    //wxLogMessage(strSql);
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(strSql);
 
  //   wxSleep(10);
@@ -306,7 +307,7 @@ void project_author_panel::refresh_list()
     int i_status;
     bool is_urgent;
 
-    wxString l_index, s_project_name, s_wbs, s_lift_id, s_elevator_type, s_project_type, s_req_finish, s_res_person,s_action_id, s_action_name, s_lifttype_id, s_index;
+    wxString l_index, s_project_name, s_wbs, s_lift_id, s_elevator_type, s_project_type, s_req_finish, s_res_person,s_action_id, s_action_name, s_lifttype_id, s_index, s_special_info;
 
     wxTreeItemId prj_item,leaf_item;
     int i_type;
@@ -345,6 +346,7 @@ void project_author_panel::refresh_list()
         i_status = _res->GetInt(wxT("status"));
 
         s_lifttype_id = _res->GetVal(wxT("elevator_id"));
+        s_special_info= _res->GetVal(wxT("special_info"));
 /*
         if(i_status == 4)
              leaf_item = tlc_proj_list->AppendItem(prj_item,wxEmptyString,0,0);
@@ -368,6 +370,7 @@ void project_author_panel::refresh_list()
         tlc_proj_list->SetItemText(leaf_item, 11, nstd_level_to_str(_res->GetInt(wxT("nonstd_level"))));
         tlc_proj_list->SetItemText(leaf_item, 12, s_lifttype_id);
         tlc_proj_list->SetItemText(leaf_item, 13, s_index);
+        tlc_proj_list->SetItemText(leaf_item, 14, s_special_info);
 
         _res->MoveNext();
     }
@@ -461,10 +464,12 @@ bool project_author_panel::make_evaluate(wf_process * s_process, wxString s_batc
     wxTreeItemIdValue cookie;
     wxTreeItemId item = tlc_proj_list->GetFirstChild(root,cookie);
     wxString str_group, str_date, str_operator, str_type, str_project_catalog,str_status,str, str_action_name;
+    wxString s_special_info;
      wxArrayString a_lift_no;
 
     while(item.IsOk())
     {
+        s_special_info=wxEmptyString;
         wxTreeItemIdValue cookie_child;
         wxTreeItemId child_item = tlc_proj_list->GetFirstChild(item,cookie_child);
         str_group.Empty();
@@ -521,6 +526,17 @@ bool project_author_panel::make_evaluate(wf_process * s_process, wxString s_batc
                 i_count_urgent++;
             }else tlc_proj_list->SetItemBackgroundColour(child_item, *wxWHITE);
 
+            if(!s_special_info.Contains(tlc_proj_list->GetItemText(child_item, 14)))
+            {
+                if(s_special_info.IsEmpty())
+                {
+                    s_special_info = tlc_proj_list->GetItemText(child_item, 14);
+                }else
+                {
+                    s_special_info = s_special_info+wxT("+")+tlc_proj_list->GetItemText(child_item, 14);
+                }
+            }
+
             child_item = tlc_proj_list->GetNextSibling(child_item);
 
         }
@@ -561,6 +577,7 @@ bool project_author_panel::make_evaluate(wf_process * s_process, wxString s_batc
         tlc_proj_list->SetItemText(item, 6, str_action_name);
         tlc_proj_list->SetItemText(item, 7, str_date);
         tlc_proj_list->SetItemText(item, 9, str_status);
+        tlc_proj_list->SetItemText(item, 14, s_special_info);
         if(m_case!=0)
         {
            str_operator.Remove(0,1);
@@ -614,7 +631,7 @@ void project_author_panel::refresh_res_list(wxString s_group_cata)
 
     wxString strSql = wxT("SELECT concat(employee_id,'-',name) AS res_person, (select count(*) from l_proc_act \
                           where operator_id = employee_id AND is_active=true AND action_id = 'AT00000004') AS proj_qty, \
-                          group_name, group_id FROM v_group_member WHERE group_catalog = '")+s_group_cata+wxT("' AND plant = '")+gr_para.plant+wxT("' and status=true ORDER BY group_name ,res_person ASC;");
+                          group_name, group_id FROM v_group_member WHERE group_catalog like '%")+s_group_cata+wxT("%' AND plant = '")+gr_para.plant+wxT("' and status=true ORDER BY group_name ,res_person ASC;");
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(strSql);
 
     if(_res->Status()!= PGRES_TUPLES_OK)
@@ -1029,7 +1046,11 @@ void project_author_panel::pass_proc_new(wxString s_flag)
                 now_step = l_proc_act->get_cur_instance_action();
 
                 if(now_step.s_action.s_operator_id!=gr_para.login_user && now_step.is_active)
+                {
+
+                    child_item = tlc_proj_list->GetNextSibling(child_item);
                     continue;
+                }
 
                 if(l_proc_act->GetCurrentStep() == l_proc_act->GetTotalSteps()&&l_proc_act->GetTotalSteps()!= now_step.s_action.i_total_flow)
                 {
@@ -1098,6 +1119,12 @@ void project_author_panel::pass_proc_new(wxString s_flag)
             l_proc_act->MoveToActive();
             now_step = l_proc_act->get_cur_instance_action();
             next_step = l_proc_act->get_next_instance_action();
+            if(now_step.s_action.s_operator_id!=gr_para.login_user && now_step.is_active)
+            {
+
+                continue;
+            }
+
             if(next_step.s_action.i_flow_ser != now_step.s_action.i_flow_ser+1)
             {
                 next_step.s_action = t_new_template[now_step.s_action.i_flow_ser];
@@ -1212,10 +1239,17 @@ void project_author_panel::pass_proc()
                 now_step = l_proc_act->get_cur_instance_action();
 
                 if(now_step.s_action.s_operator_id!=gr_para.login_user && now_step.is_active)
+                {
+                    child_item = tlc_proj_list->GetNextSibling(child_item);
                     continue;
+                }
+
 
                 if(!now_step.is_active)
+               {
+                    child_item = tlc_proj_list->GetNextSibling(child_item);
                     continue;
+                }
 
                 if(l_proc_act->GetCurrentStep() == l_proc_act->GetTotalSteps()&&l_proc_act->GetTotalSteps()!= now_step.s_action.i_total_flow)
                 {
@@ -1284,6 +1318,18 @@ void project_author_panel::pass_proc()
             l_proc_act->MoveToActive();
             now_step = l_proc_act->get_cur_instance_action();
             next_step = l_proc_act->get_next_instance_action();
+
+            if(now_step.s_action.s_operator_id!=gr_para.login_user && now_step.is_active)
+            {
+                continue;
+            }
+
+
+            if(!now_step.is_active)
+            {
+                continue;
+            }
+
             if(next_step.s_action.i_flow_ser != now_step.s_action.i_flow_ser+1)
             {
                 next_step.s_action = t_template[now_step.s_action.i_flow_ser];
@@ -1314,7 +1360,7 @@ void project_author_panel::pass_proc()
 
 bool project_author_panel::check_other_way(wxString s_instance, wxString s_flag)
 {
-     wxString s_sql = wxT("select * from l_proc_act where instance_id='")+s_instance+wxT("' and workflow_id='WF0006' AND is_active=false and flow_ser<=4 and flag !='")+s_flag+wxT("';");
+     wxString s_sql = wxT("select * from l_proc_act where instance_id='")+s_instance+wxT("' and workflow_id='WF0006' AND is_active=true and flow_ser<=3 and flag !='")+s_flag+wxT("';");
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(s_sql);
 
     if(_res->Status()!= PGRES_TUPLES_OK)
@@ -1327,7 +1373,7 @@ bool project_author_panel::check_other_way(wxString s_instance, wxString s_flag)
 
     _res->Clear();
 
-    if(i_count >=3)
+    if(i_count <1)
         return true;
     else
         return false;
@@ -1517,7 +1563,7 @@ void project_author_panel::OnMenuItem3Selected(wxCommandEvent& event)
 
     m_case = 0;
     wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
-                         instance_id as wbs_no, lift_no,elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, \
+                         instance_id as wbs_no, lift_no,elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, special_info, \
                          (SELECT concat(operator_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000003' \
                          AND is_active = true AND operator_id = '")+gr_para.login_user+ wxT("' ");
     Set_Clause(strSql);
@@ -1546,12 +1592,12 @@ void project_author_panel::OnMenuItem4Selected(wxCommandEvent& event)
     if(m_leader&&(m_group=="G0006"||m_group=="G0007"||m_group=="G0008"))
     {
             strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
-                         instance_id as wbs_no, lift_no,elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, \
+                         instance_id as wbs_no, lift_no,elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, special_info, \
                          (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000004' \
                          AND is_active = true and group_id='")+m_group+wxT("' ");
     }else if(m_leader && (m_group == "G0014" || m_group=="G0004"))
             strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
-                         instance_id as wbs_no, lift_no, elevator_id,elevator_type, project_catalog,action_id, action_name, req_configure_finish, \
+                         instance_id as wbs_no, lift_no, elevator_id,elevator_type, project_catalog,action_id, action_name, req_configure_finish, special_info, \
                          (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000004' \
                          AND is_active = true ");
     else
@@ -1844,7 +1890,7 @@ void project_author_panel::Onlc_resItemActivated(wxListEvent& event)
     wxString s_operator = li_item.GetText().Left(8);
 
     m_case = 1;
-    wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
+    wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id, special_info, \
                          instance_id as wbs_no, lift_no, elevator_id,elevator_type, project_catalog,  action_id, action_name, req_configure_finish, \
                          (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent, nonstd_level from v_task_list1 WHERE action_id = 'AT00000004' \
                          AND is_active = true AND operator_id = '")+s_operator+wxT("' ");
@@ -2594,7 +2640,7 @@ void project_author_panel::Onmi_reviewSelected(wxCommandEvent& event)
 
 
     strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
-                         instance_id as wbs_no, lift_no, elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, \
+                         instance_id as wbs_no, lift_no, elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, special_info, \
                          (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000006' \
                          AND is_active = true and operator_id='")+gr_para.login_user+wxT("' ");// and workflow_id='WF0006' ");
 
