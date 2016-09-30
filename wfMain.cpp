@@ -445,7 +445,7 @@ void wfFrame::OnToggleNotebookPanel(wxWindowID i_id)
         if(i_index==wxNOT_FOUND)
         {
             panel_project_info = new project_info_panel(aui_notebook, wxID_ANY);
-            aui_notebook->AddPage(panel_project_info,_("项目信息"),true,b_bitmap->GetSubBitmap(wxRect(0,0,16,16)));
+            aui_notebook->AddPage(panel_project_info,_("合同信息"),true,b_bitmap->GetSubBitmap(wxRect(0,0,16,16)));
 
         }else
             aui_notebook->ChangeSelection(i_index);
@@ -488,7 +488,7 @@ void wfFrame::OnToggleNotebookPanel(wxWindowID i_id)
         {
             panel_unit_info = new instance_unit_info(aui_notebook, wxID_ANY);
  //           panel_unit_info->set_sap_conn(sap_rfc_conn);
-            aui_notebook->AddPage(panel_unit_info,_("合同信息"),true,b_bitmap->GetSubBitmap(wxRect(48,0,16,16)));
+            aui_notebook->AddPage(panel_unit_info,_("项目信息"),true,b_bitmap->GetSubBitmap(wxRect(48,0,16,16)));
         }
         else aui_notebook->ChangeSelection(i_index);
         break;
@@ -1438,12 +1438,12 @@ bool wfFrame::update_project_unit_info(wxString str, Str_Line* line_value, Str_L
         wxT("',modify_emp_id = '")+gr_para.login_user+wxT("' WHERE wbs_no ='")+str+wxT("';");
         str_sql.Replace(wxT("''"), wxT("NULL"));
 
-
     }
 
  //   wxMessageBox(str_sql);
     if(wxGetApp().app_sql_update(str_sql))
     {
+        update_nonstd_conf_date(str, StrToDateTime(s_req_configure_finish));
         wxLogMessage(str+_("Unit信息更新成功!"));
     }else
     {
@@ -1452,6 +1452,79 @@ bool wfFrame::update_project_unit_info(wxString str, Str_Line* line_value, Str_L
     }
 
     return true;
+
+}
+
+bool wfFrame::update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_temp)
+{
+    wxString str_sql = wxT("SELECT * FROM l_nonstd_app_header where link_list like '%")+s_wbs+wxT("%' and (status >= 0 and status < 10)  ;");
+
+
+    wxPostgreSQLresult * _res = wxGetApp().app_sql_select(str_sql);
+
+    if(_res->Status()!= PGRES_TUPLES_OK)
+    {
+        _res->Clear();
+        return false;
+    }
+
+
+    int i_count = _res->GetRowsNumber();
+
+    if(i_count == 0)
+    {
+        _res->Clear();
+        return false;
+    }
+
+    wxString s_app_id;
+
+    _res->MoveFirst();
+    wxArrayString array_update_conf;
+
+    for(int i=0;i<i_count;i++)
+    {
+        s_app_id = _res->GetVal(wxT("nonstd_id"));
+        if(array_update_conf.Index(s_app_id)!=wxNOT_FOUND)
+        {
+            _res->MoveNext();
+            continue;
+        }
+
+        array_update_conf.Add(s_app_id);
+
+        int i_status = _res->GetInt(wxT("status"));
+
+        if(i_status ==-1)
+        {
+            _res->MoveNext();
+            continue;
+        }
+
+        wxDateTime dt_now = _res->GetDateTime(wxT("drawing_req_date"));
+
+        if(dt_temp.IsEarlierThan(wxDateTime::Now()))
+        {
+            _res->MoveNext();
+            continue;
+        }
+
+        str_sql = wxT("UPDATE l_nonstd_app_header SET drawing_req_date='")+DateToAnsiStr(dt_temp)+wxT("', modify_date='")+DateToAnsiStr(wxDateTime::Now())+
+                wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where nonstd_id ='")+s_app_id+wxT("';");
+
+        if (wxGetApp().app_sql_update(str_sql))
+        {
+                wxLogMessage(_("非标：") + s_app_id + _("图纸要求日期变更为:") + DateToStrFormat(dt_temp) + _("成功!"));
+                wxGetApp().change_log(wxT("l_nonstd_app_header"), s_app_id, wxT("drawing_req_date"), DateToAnsiStr(dt_now), DateToAnsiStr(dt_temp), wxT("hand"));
+        }
+
+        _res->MoveNext();
+
+    }
+    array_update_conf.Clear();
+
+    _res->Clear();
+
 
 }
 

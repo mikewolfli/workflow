@@ -947,6 +947,8 @@ wxString ct_book_status_to_str( int i_ct)
          str =  _("删除");
          break;
        case 0:
+          str = _("合同创建");
+          break;
        case 1:
          str =  wxT("在架");
           break;
@@ -973,9 +975,8 @@ int ct_book_int_to_status(wxString s_status)
    if(s_status == _("删除"))
        return -1;
 
-    if(s_status == _("创建"))
+    if(s_status == _("合同创建"))
         return 0;
-
 
     if(s_status == _("在架"))
         return 1;

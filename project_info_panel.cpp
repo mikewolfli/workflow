@@ -1,6 +1,5 @@
 #include "project_info_panel.h"
 #include "wfApp.h"
-#include "utils/wf_operator.h"
 #include <wx/tokenzr.h>
 #include <wx/clipbrd.h>
 
@@ -10,6 +9,7 @@
 #include "return_log.h"
 #include "ins_proc_log.h"
 #include <wx/textdlg.h>
+#include "datepickerdlg.h"
 
 //(*InternalHeaders(project_info_panel)
 #include <wx/intl.h>
@@ -33,6 +33,8 @@ const long project_info_panel::idMenu_Urgent = wxNewId();
 const long project_info_panel::idMenu_Special = wxNewId();
 const long project_info_panel::idMenu_remarks = wxNewId();
 const long project_info_panel::idMenu_pos_contract = wxNewId();
+const long project_info_panel::idMenu_export_start = wxNewId();
+const long project_info_panel::idMenu_Review_date = wxNewId();
 //*)
 const long project_info_panel::ID_TREELISTCTRL_TASK_LIST = wxNewId();
 
@@ -104,6 +106,11 @@ project_info_panel::project_info_panel(wxWindow* parent,wxWindowID id,const wxPo
 	menu_review_info.AppendSeparator();
 	mi_pos_contract = new wxMenuItem((&menu_review_info), idMenu_pos_contract, _("快速定位(&P)\tCtrl+F"), _("快速定位"), wxITEM_NORMAL);
 	menu_review_info.Append(mi_pos_contract);
+	menu_review_info.AppendSeparator();
+	mi_start = new wxMenuItem((&menu_review_info), idMenu_export_start, _("按项目启动日期搜索(&Q)"), _("按项目启动日期搜索("), wxITEM_NORMAL);
+	menu_review_info.Append(mi_start);
+	mi_author = new wxMenuItem((&menu_review_info), idMenu_Review_date, _("按评审授权日期搜索(&A)"), _("按评审授权日期搜索"), wxITEM_NORMAL);
+	menu_review_info.Append(mi_author);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 
@@ -123,6 +130,8 @@ project_info_panel::project_info_panel(wxWindow* parent,wxWindowID id,const wxPo
 	Connect(idMenu_Special,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_info_panel::Onmi_specialSelected);
 	Connect(idMenu_remarks,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_info_panel::Onmi_remarksSelected);
 	Connect(idMenu_pos_contract,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_info_panel::Onmi_smart_posSelected);
+	Connect(idMenu_export_start,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_info_panel::Onmi_startSelected);
+	Connect(idMenu_Review_date,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_info_panel::Onmi_authorSelected);
 	//*)
 
 	BuildDataViewCtrl();
@@ -159,7 +168,7 @@ project_info_panel::project_info_panel(wxWindow* parent,wxWindowID id,const wxPo
             mi_cm_res->Enable(false);
         }
 
-        str = wxT(" res_cm = '")+gr_para.login_user+wxT("' and (unit_status =1 or unit_status= 3 )  and is_active=true and active_status>=1 and is_latest=true ");
+        str = wxT(" res_cm = '")+gr_para.login_user+wxT("' and (unit_status =1 or unit_status= 3 )  and is_active=true and active_status>=1 and is_latest=true and is_del=false and status>=0 ");
         set_clause(str);
 
         choice_action->SetSelection(0);
@@ -194,7 +203,7 @@ project_info_panel::project_info_panel(wxWindow* parent,wxWindowID id,const wxPo
             mi_special->Enable(false);
         }
 
-        str =  wxT("  (unit_status =1 or unit_status = 3 )  and is_active=true and active_status>=1 and is_latest=true ");
+        str =  wxT("  (unit_status =1 or unit_status = 3 )  and is_active=true and active_status>=1 and is_latest=true  and is_del=false and status>=0 ");
         set_clause(str);
         choice_status->SetSelection(2);
 
@@ -221,6 +230,7 @@ project_info_panel::project_info_panel(wxWindow* parent,wxWindowID id,const wxPo
         mi_cm_res->Enable(false);
     }
 
+    init_excel_head();
 
 }
 
@@ -1985,5 +1995,256 @@ bool project_info_panel::check_subitem_status(wxTreeItemId &i_item)
     }
 
     return false;
+
+}
+
+void project_info_panel::Onmi_startSelected(wxCommandEvent& event)
+{
+    if (!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,不能进行任何操作!"));
+        return;
+    }
+
+    wxArrayString array_date;
+
+    wxString str;
+
+    datepickerdlg dlg;
+
+    if(dlg.ShowModal()==wxID_CANCEL)
+    {
+        return;
+    }
+
+    bool b_from = dlg.b_from;
+    bool b_to = dlg.b_to;
+    wxDateTime dt_from, dt_to;
+
+    wxString s_time = wxT(" 23:00:00");
+
+    if(b_from )
+        dt_from = dlg.dt_from;
+
+    if(b_to)
+        dt_to = dlg.dt_to;
+
+    wxFileDialog     saveFileDialog(this, _("Save xls file"), "", "",
+                                       "xls files (*.xls)|*.xls", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+        return;     // the user changed idea..
+
+    wxString s_sql = wxT("select review_task_id,review_drawing_qty,contract_id, project_name, instance_id, elevator_id,(select elevator_type from s_elevator_type_define where elevator_type_id= elevator_id) as elevator_type,lift_no, \
+                         res_cm, action_id, (select name from s_employee where employee_id=res_cm) as res_cm_name, start_date, review_engineer , (select name from s_employee where employee_id=review_engineer) as review_engineer_name, \
+                         finish_date,is_active, (select issue_date from s_review_communication where review_task_id=v_task_list4.review_task_id and issue_status>=0 and issue_status<3) as issue_date from v_task_list4 where (action_id='AT00000002' or action_id='AT00000026') and is_latest=true and is_del=false and status>=0 ");
+
+    if(b_from && b_to)
+        s_sql = s_sql + wxT(" and start_date >='")+DateToStrFormat(dt_from)+s_time+wxT("' and start_date<='")+DateToStrFormat(dt_to)+s_time+wxT("' ");
+
+    if (b_from && !b_to)
+        s_sql = s_sql + wxT(" and start_date >='")+DateToStrFormat(dt_from)+s_time+wxT("' ");
+
+    if (!b_from && b_to)
+        s_sql = s_sql + wxT(" and start_date <='")+DateToStrFormat(dt_to)+s_time+wxT("' ");
+
+    s_sql = s_sql +wxT(" order by instance_id, action_id, start_date Asc;");
+
+    wxPostgreSQLresult* _res;
+
+    _res = wxGetApp().app_sql_select(s_sql);
+
+
+    wxString str_file = saveFileDialog.GetPath();
+
+    save_file(str_file, _res);
+}
+
+void project_info_panel::Onmi_authorSelected(wxCommandEvent& event)
+{
+    if (!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,不能进行任何操作!"));
+        return;
+    }
+
+    wxArrayString array_date;
+
+    wxString str;
+
+    datepickerdlg dlg;
+
+    if(dlg.ShowModal()==wxID_CANCEL)
+    {
+        return;
+    }
+
+    bool b_from = dlg.b_from;
+    bool b_to = dlg.b_to;
+    wxDateTime dt_from, dt_to;
+
+    wxString s_time = wxT(" 23:00:00");
+
+    if(b_from )
+        dt_from = dlg.dt_from;
+
+    if(b_to)
+        dt_to = dlg.dt_to;
+
+    wxFileDialog     saveFileDialog(this, _("Save xls file"), "", "",
+                                       "xls files (*.xls)|*.xls", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+        return;     // the user changed idea...
+
+
+    wxString s_sql = wxT("select review_task_id,review_drawing_qty,contract_id, project_name, instance_id, elevator_id,(select elevator_type from s_elevator_type_define where elevator_type_id= elevator_id) as elevator_type,lift_no, \
+                         res_cm, (select name from s_employee where employee_id=res_cm) as res_cm_name, start_date, review_engineer , (select name from s_employee where employee_id=review_engineer) as review_engineer_name, \
+                         finish_date,is_active, (select issue_date from s_review_communication where review_task_id=v_task_list4.review_task_id and issue_status>=0 and issue_status<3) as issue_date from v_task_list4 where (action_id='AT00000002' or action_id='AT00000026') and is_latest=true and is_del=false and status>=0 ");
+
+    if(b_from && b_to)
+        s_sql = s_sql + wxT(" and finish_date >='")+DateToStrFormat(dt_from)+s_time+wxT("' and finish_date<='")+DateToStrFormat(dt_to)+s_time+wxT("' ");
+
+    if (b_from && !b_to)
+        s_sql = s_sql + wxT(" and finish_date>='")+DateToStrFormat(dt_from)+s_time+wxT("' ");
+
+    if (!b_from && b_to)
+        s_sql = s_sql + wxT(" and finish_date<='")+DateToStrFormat(dt_to)+s_time+wxT("' ");
+
+    s_sql = s_sql +wxT(" order by instance_id, action_id, finish_date Asc;");
+
+    wxPostgreSQLresult* _res;
+
+    _res = wxGetApp().app_sql_select(s_sql);
+
+
+    wxString str_file = saveFileDialog.GetPath();
+
+    save_file(str_file, _res);
+
+    _res->Clear();
+
+}
+
+void project_info_panel::save_file(wxString s_path, wxPostgreSQLresult* _res)
+{
+    int i_count =  _res->GetRowsNumber();
+    int i_col = array_excel_head.GetCount();
+
+    if(i_count==0)
+    {
+        wxLogMessage("结果记录为0");
+        return;
+    }
+
+
+    wxString str;
+    workbook wb1;
+    worksheet* ws = wb1.sheet("Sheet1");
+
+    int i;
+
+    for (i=0;i<i_col;i++)
+    {
+         ws->label(0,i,array_excel_head.Item(i).ToStdWstring());
+    }
+
+    _res->MoveFirst();
+    wxString s_wbs_no;
+    bool b_active = false;
+     i=0;
+     wxDateTime d_finish;
+    for(int  j=0;j<i_count;j++)
+    {
+
+        if(s_wbs_no != _res->GetVal(wxT("instance_id")))
+        {
+            s_wbs_no = _res->GetVal(wxT("instance_id"));
+            str = _res->GetVal(wxT("review_task_id"));
+            ws->label(i+1, 0, str.ToStdString());
+            str = NumToStr(_res->GetInt(wxT("review_drawing_qty")));
+            ws->label(i+1, 1, str.ToStdString());
+            str = _res->GetVal(wxT("contract_id"));
+            ws->label(i+1, 2, str.ToStdString());
+            str = _res->GetVal(wxT("project_name"));
+            ws->label(i+1, 3, str.ToStdWstring());
+
+            ws->label(i+1, 4, s_wbs_no.ToStdString());
+            str = _res->GetVal(wxT("elevator_id"));
+            ws->label(i+1, 5, str.ToStdString());
+            str = _res->GetVal(wxT("elevator_type"));
+            ws->label(i+1, 6, str.ToStdString());
+            str = _res->GetVal(wxT("lift_no"));
+            ws->label(i+1, 7, str.ToStdWstring());
+            str = _res->GetVal(wxT("res_cm_name"));
+            ws->label(i+1, 8, str.ToStdWstring());
+            str =DateToAnsiStr(_res->GetDateTime(wxT("start_date")));
+            ws->label(i+1, 9, str.ToStdString());
+            str  = _res->GetVal(wxT("review_engineer_name"));
+            ws->label(i+1, 10, str.ToStdWstring());
+            d_finish = _res->GetDateTime(wxT("finish_date"));
+            str =DateToAnsiStr(d_finish);
+
+            if (d_finish <= _res->GetDateTime(wxT("issue_date")))
+            {
+                ws->label(i+1, 11, str.ToStdString());
+                str = DateToAnsiStr(_res->GetDateTime(wxT("issue_date")));
+                ws->label(i+1, 12, str.ToStdString());
+            }
+
+
+            b_active = _res->GetBool(wxT("is_active"));
+            i++;
+        }else if(!b_active)
+        {
+            if(!_res->GetBool(wxT("is_active"))&& d_finish<=_res->GetDateTime(wxT("finish_date")))
+            {
+                str = DateToAnsiStr(_res->GetDateTime(wxT("finish_date")));
+                ws->label(i+1, 13, str.ToStdString());
+            }
+        }
+
+        _res->MoveNext();
+    }
+
+    std::string filename = s_path.ToStdString();
+    int error_msg = wb1.Dump(filename);
+
+    if(error_msg == NO_ERRORS)
+    {
+           wxMessageBox(_("导出完成!"),_("提示"));
+    }
+}
+
+void project_info_panel::init_excel_head()
+{
+    wxString str;
+
+    str = "任务号";
+    array_excel_head.Add(str);
+    str ="图纸套数";
+    array_excel_head.Add(str);
+    str = "合同号";
+    array_excel_head.Add(str);
+    str = "项目名称";
+    array_excel_head.Add(str);
+    str = "WBS NO";
+    array_excel_head.Add(str);
+    str = "梯型编号";
+    array_excel_head.Add(str);
+    str = "梯型";
+    array_excel_head.Add(str);
+    str = "梯号";
+    array_excel_head.Add(str);
+    str = "商务负责人";
+    array_excel_head.Add(str);
+    str = "启动评审日期";
+    array_excel_head.Add(str);
+    str = "评审工程师";
+    array_excel_head.Add(str);
+    str="评审授权日期";
+    array_excel_head.Add(str);
+    str = "最新一次评审反馈时间";
+    array_excel_head.Add(str);
+    str = "评审完成日期";
+    array_excel_head.Add(str);
 
 }

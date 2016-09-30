@@ -3,6 +3,7 @@
 	<object class="wxDialog" name="nstd_mat_task_list">
 		<pos_arg>1</pos_arg>
 		<size_arg>1</size_arg>
+		<style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxMAXIMIZE_BOX</style>
 		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 			<orient>wxVERTICAL</orient>
 			<object class="sizeritem">
@@ -14,11 +15,11 @@
 							<handler function="Ongd_task_listCellRightClick" entry="EVT_CMD_GRID_CELL_RIGHT_CLICK" />
 							<handler function="Ongd_task_listCellRightClick" entry="EVT_CMD_GRID_LABEL_RIGHT_CLICK" />
 						</object>
-						<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALL|wxEXPAND</flag>
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<flag>wxALL|wxEXPAND</flag>
 				<option>8</option>
 			</object>
 			<object class="sizeritem">

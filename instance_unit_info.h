@@ -269,10 +269,12 @@ class instance_unit_info: public wxPanel
 		bool update_nstd_level(wxString s_wbs, int old_status, int new_status);
 		bool refresh_nstd_level(wxString s_wbs, bool b_sap_update=true);
 		wxString get_prj_res_person(wxString s_proj_id);
+		bool check_g4_group(wxString s_wbs);
 
 		int get_review_status(wxString s_wbs);
 
 		void Create_Folder(wxArrayString a_wbs);
+		bool update_contract_book_status(wxString s_wbs, int i_status);
 		wxString get_full_prj_info(wxString s_prj);
 
 		wxString m_query;

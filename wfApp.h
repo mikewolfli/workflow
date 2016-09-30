@@ -47,6 +47,7 @@ public:
     wxArrayString get_group();
     wxString get_only_group();
     bool is_design(wxString s_group);
+    bool is_eds(wxString s_group);
     wxArrayString get_member_in_group(wxString str_group, bool with_leader = false);
     wxArrayString get_member_in_group(wxArrayString str_group, bool with_leader =false);
     bool is_leader(wxString s_group);

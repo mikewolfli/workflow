@@ -639,7 +639,7 @@ void nstd_mat_apply::refresh_top_gui()
             tc_nstd_reason->Enable(true);
             if(m_use_status == 3 || m_use_status == 4)
                combo_nstd_item_catalog->Enable(false);
-            else
+            else if(m_group!="G0004")
                 combo_nstd_item_catalog->Enable(true);
         }
 
@@ -3354,22 +3354,21 @@ void nstd_mat_apply::OnButton_workflow_drawClick(wxCommandEvent& event)
 
 void nstd_mat_apply::OnButton_CONF_APPLYClick(wxCommandEvent& event)
 {
-    wxString _choice[2]=
+    wxString _choice[3]=
     {
         _("流程中的项目"),
         _("已经完成的项目"),
+        _("EDS项目申请")
     };
-    wxSingleChoiceDialog cdlg(this, _("选择负责的项目，已生成非标申请："),_("项目选择"),2, _choice);
+    wxSingleChoiceDialog cdlg(this, _("操作选择："),_("项次选择"),3, _choice);
 
-    bool b_active;
+    int  i_active;
 
-    combo_nstd_item_catalog->Enable(true);
+    //combo_nstd_item_catalog->Enable(true);
 
     if(cdlg.ShowModal() == wxID_OK)
     {
-        if(cdlg.GetSelection()== 0)
-          b_active = true;
-        else b_active = false;
+        i_active = cdlg.GetSelection();
     }else
         return;
 
@@ -3377,10 +3376,10 @@ void nstd_mat_apply::OnButton_CONF_APPLYClick(wxCommandEvent& event)
     m_units.Clear();
 
     bool b_create;
-    dlg_task.b_active = b_active;
+    dlg_task.i_active = i_active;
     wxString s_nstd_catalog;
 
-    if(!b_active)
+    if(i_active ==1)
     {
         wxTextEntryDialog tdlg(this,_("请输入WBS NO(支持模糊)"),_("WBS NO"),wxT(""),wxOK | wxCANCEL);
 
@@ -3391,7 +3390,23 @@ void nstd_mat_apply::OnButton_CONF_APPLYClick(wxCommandEvent& event)
             dlg_task.m_str_unit = tdlg.GetValue();
         }else
             return;
+    }else if(i_active==2)
+    {
+        wxString s_group = wxGetApp().get_only_group();
+        if(!wxGetApp().is_eds(s_group))
+        {
+            wxLogMessage("无此操作权限!");
+            return;
+        }
+
+        wxTextEntryDialog tdlg(this,_("请输入完整的项目WBS(例E/30021339，不区分大小写)"),_("项目WBS NO"),wxT(""),wxOK | wxCANCEL);
+        if(tdlg.ShowModal() == wxID_OK)
+        {
+            dlg_task.m_str_unit = tdlg.GetValue();
+        }else
+            return;
     }
+
 
     dlg_task.refresh_list();
 
@@ -3650,7 +3665,7 @@ void nstd_mat_apply::OnButton_EngineerClick(wxCommandEvent& event)
 
     str_group_list.Add(m_group);
 
-     wxArrayString  s_members = wxGetApp().get_member_in_group(str_group_list);
+     wxArrayString  s_members = wxGetApp().get_member_in_group(str_group_list );
 
     wxSingleChoiceDialog cdlg(this, _("请选择操作人员:"),_("操作选择"),s_members);
 

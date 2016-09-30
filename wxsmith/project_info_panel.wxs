@@ -150,6 +150,17 @@
 				<help>快速定位</help>
 				<handler function="Onmi_smart_posSelected" entry="EVT_MENU" />
 			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_export_start" variable="mi_start" member="yes">
+				<label>按项目启动日期搜索(&amp;Q)</label>
+				<help>按项目启动日期搜索(</help>
+				<handler function="Onmi_startSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Review_date" variable="mi_author" member="yes">
+				<label>按评审授权日期搜索(&amp;A)</label>
+				<help>按评审授权日期搜索</help>
+				<handler function="Onmi_authorSelected" entry="EVT_MENU" />
+			</object>
 		</object>
 	</object>
 </wxsmith>

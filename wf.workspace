@@ -2,7 +2,7 @@
 <CodeLite_Workspace Name="wf" Database="">
   <Project Name="wf" Path="wf.project" Active="Yes"/>
   <BuildMatrix>
-    <WorkspaceConfiguration Name="Debug" Selected="no">
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Environment/>
       <Project Name="wf" ConfigName="Debug"/>
     </WorkspaceConfiguration>

@@ -225,6 +225,7 @@ private:
 
     int get_index_of_cwt_blocks(wxString &str, wxArrayBlocks & arr_blocks);
     Value_Pool * get_same_value_pool(wxString str, int i_col, Value_Pool* p_result);
+    bool update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_temp);
 
     wxArrayBlocks get_cwt_blocks_info(int i_case_col,int i_result_col,wxArrayInt &array_range, Value_Pool* p_value, wxArraySupport &array_str);
 

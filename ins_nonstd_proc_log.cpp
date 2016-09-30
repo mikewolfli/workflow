@@ -21,7 +21,7 @@ ins_nonstd_proc_log::ins_nonstd_proc_log(wxWindow* parent,wxWindowID id,const wx
 	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer1;
 
-	Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
+	Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxMAXIMIZE_BOX|wxMINIMIZE_BOX, _T("id"));
 	SetClientSize(wxDefaultSize);
 	Move(wxDefaultPosition);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
@@ -176,7 +176,10 @@ void ins_nonstd_proc_log::Refresh_list_view(wxArrayString array_ins_list, wxArra
   //          str_pass.Empty();
 
         if(!b_active && str_pass == _res->GetVal(wxT("instance_id"))&& str_workflow_id == _res->GetVal(wxT("workflow_id")))
-            continue;
+         {
+              _res->MoveNext();
+             continue;
+         }
 
         wxString str = _res->GetVal(wxT("instance_id"));
         long tmp = lv_proc_log->InsertItem(j,str);
@@ -310,7 +313,10 @@ void ins_nonstd_proc_log::Refresh_list_view(wxArrayString array_ins_list, wxStri
   //          str_pass.Empty();
 
         if(!b_active && str_pass == _res->GetVal(wxT("instance_id"))&& str_workflow_id == _res->GetVal(wxT("workflow_id")))
+        {
+            _res->MoveNext();
             continue;
+        }
 
         wxString str = _res->GetVal(wxT("instance_id"));
         long tmp = lv_proc_log->InsertItem(j,str);

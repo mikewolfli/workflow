@@ -28,6 +28,31 @@ const long info_id_generator_panel::ID_CHECKBOX_PSM = wxNewId();
 const long info_id_generator_panel::ID_CHECKBOX_PM = wxNewId();
 const long info_id_generator_panel::ID_CHECKBOX_CO = wxNewId();
 const long info_id_generator_panel::ID_CHECKBOX_OTHERS = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_TCE_MPM = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_TCE_PM = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_TCE_DS = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_CS = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_FQ = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_PSM = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_PPU = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_LO = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_CO = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_SM = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_TM = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_EL = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_SQE = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_OTHER = wxNewId();
+const long info_id_generator_panel::ID_STATICTEXT4 = wxNewId();
+const long info_id_generator_panel::ID_TEXTCTRL_NCE_FROM = wxNewId();
+const long info_id_generator_panel::ID_STATICTEXT5 = wxNewId();
+const long info_id_generator_panel::ID_TEXTCTRL_NCE_SUBJECT = wxNewId();
+const long info_id_generator_panel::ID_BUTTON1 = wxNewId();
+const long info_id_generator_panel::ID_STATICTEXT6 = wxNewId();
+const long info_id_generator_panel::ID_TEXTCTRL_NCE_ECO = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX_NCE_PC = wxNewId();
+const long info_id_generator_panel::ID_DATEPICKERCTRL1 = wxNewId();
+const long info_id_generator_panel::ID_CHECKBOX1 = wxNewId();
+const long info_id_generator_panel::ID_STATICTEXT7 = wxNewId();
 const long info_id_generator_panel::ID_TEXTCTRL_REMARKS = wxNewId();
 //*)
 
@@ -40,15 +65,19 @@ info_id_generator_panel::info_id_generator_panel(wxWindow* parent,wxWindowID id,
 {
 	//(*Initialize(info_id_generator_panel)
 	wxStaticBoxSizer* StaticBoxSizer2;
+	wxGridBagSizer* GridBagSizer4;
 	wxStaticBoxSizer* stb_wb_obj;
 	wxGridBagSizer* GridBagSizer1;
 	wxGridBagSizer* GridBagSizer2;
+	wxBoxSizer* BoxSizer2;
 	wxGridSizer* GridSizer1;
 	wxStaticBoxSizer* sb_ll;
 	wxStaticBoxSizer* stb_wb;
 	wxBoxSizer* BoxSizer1;
+	wxGridBagSizer* GridBagSizer5;
 	wxGridBagSizer* GridBagSizer3;
 	wxStaticBoxSizer* sb_spec_gad;
+	wxStaticBoxSizer* stb_nce;
 
 	Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
@@ -116,6 +145,80 @@ info_id_generator_panel::info_id_generator_panel(wxWindow* parent,wxWindowID id,
 	GridBagSizer3->Add(stb_wb_obj, wxGBPosition(1, 0), wxGBSpan(2, 6), wxALL|wxEXPAND, 0);
 	stb_wb->Add(GridBagSizer3, 1, wxALL|wxEXPAND, 0);
 	BoxSizer1->Add(stb_wb, 2, wxALL|wxEXPAND, 0);
+	stb_nce = new wxStaticBoxSizer(wxVERTICAL, this, _("技术变更执行通知单取号"));
+	GridBagSizer4 = new wxGridBagSizer(0, 0);
+	cb_nce_mpm = new wxCheckBox(this, ID_CHECKBOX_TCE_MPM, _("MPM大项目"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_TCE_MPM"));
+	cb_nce_mpm->SetValue(false);
+	GridBagSizer4->Add(cb_nce_mpm, wxGBPosition(0, 0), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_pm = new wxCheckBox(this, ID_CHECKBOX_TCE_PM, _("PM项目管理"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_TCE_PM"));
+	cb_nce_pm->SetValue(false);
+	GridBagSizer4->Add(cb_nce_pm, wxGBPosition(0, 1), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_ds = new wxCheckBox(this, ID_CHECKBOX_TCE_DS, _("DS国内销售"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_TCE_DS"));
+	cb_nce_ds->SetValue(false);
+	GridBagSizer4->Add(cb_nce_ds, wxGBPosition(0, 2), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nec_cs = new wxCheckBox(this, ID_CHECKBOX_NCE_CS, _("CS售后服务"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_CS"));
+	cb_nec_cs->SetValue(false);
+	GridBagSizer4->Add(cb_nec_cs, wxGBPosition(0, 3), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_fq = new wxCheckBox(this, ID_CHECKBOX_NCE_FQ, _("FQ工厂质量"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_FQ"));
+	cb_nce_fq->SetValue(false);
+	GridBagSizer4->Add(cb_nce_fq, wxGBPosition(0, 4), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_psm = new wxCheckBox(this, ID_CHECKBOX_NCE_PSM, _("PSM战略采购"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_PSM"));
+	cb_nce_psm->SetValue(false);
+	GridBagSizer4->Add(cb_nce_psm, wxGBPosition(0, 5), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_ppu = new wxCheckBox(this, ID_CHECKBOX_NCE_PPU, _("PPU采购"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_PPU"));
+	cb_nce_ppu->SetValue(false);
+	GridBagSizer4->Add(cb_nce_ppu, wxGBPosition(0, 6), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_lo = new wxCheckBox(this, ID_CHECKBOX_NCE_LO, _("LO物流"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_LO"));
+	cb_nce_lo->SetValue(false);
+	GridBagSizer4->Add(cb_nce_lo, wxGBPosition(1, 0), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_co = new wxCheckBox(this, ID_CHECKBOX_NCE_CO, _("CO成本控制"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_CO"));
+	cb_nce_co->SetValue(false);
+	GridBagSizer4->Add(cb_nce_co, wxGBPosition(1, 1), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_sm = new wxCheckBox(this, ID_CHECKBOX_NCE_SM, _("SM钣金"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_SM"));
+	cb_nce_sm->SetValue(false);
+	GridBagSizer4->Add(cb_nce_sm, wxGBPosition(1, 2), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_tm = new wxCheckBox(this, ID_CHECKBOX_NCE_TM, _("TM曳引机"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_TM"));
+	cb_nce_tm->SetValue(false);
+	GridBagSizer4->Add(cb_nce_tm, wxGBPosition(1, 3), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_el = new wxCheckBox(this, ID_CHECKBOX_NCE_EL, _("EL电气"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_EL"));
+	cb_nce_el->SetValue(false);
+	GridBagSizer4->Add(cb_nce_el, wxGBPosition(1, 4), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_sqe = new wxCheckBox(this, ID_CHECKBOX_NCE_SQE, _("SQE供应商质量管理"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_SQE"));
+	cb_nce_sqe->SetValue(false);
+	GridBagSizer4->Add(cb_nce_sqe, wxGBPosition(1, 5), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_other = new wxCheckBox(this, ID_CHECKBOX_NCE_OTHER, _("Others"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_OTHER"));
+	cb_nce_other->SetValue(false);
+	GridBagSizer4->Add(cb_nce_other, wxGBPosition(1, 6), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	stb_nce->Add(GridBagSizer4, 2, wxALL|wxEXPAND, 0);
+	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+	st_from = new wxStaticText(this, ID_STATICTEXT4, _("From:"), wxDefaultPosition, wxSize(40,13), 0, _T("ID_STATICTEXT4"));
+	BoxSizer2->Add(st_from, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tce_nce_from = new wxTextCtrl(this, ID_TEXTCTRL_NCE_FROM, _("SJ CE松江工厂合同工程部"), wxDefaultPosition, wxSize(268,21), 0, wxDefaultValidator, _T("ID_TEXTCTRL_NCE_FROM"));
+	BoxSizer2->Add(tce_nce_from, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	stb_nce->Add(BoxSizer2, 1, wxALL|wxALIGN_LEFT, 0);
+	GridBagSizer5 = new wxGridBagSizer(0, 0);
+	st_nce_subject = new wxStaticText(this, ID_STATICTEXT5, _("主题"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
+	GridBagSizer5->Add(st_nce_subject, wxGBPosition(0, 0), wxDefaultSpan, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	tc_nce_subject = new wxTextCtrl(this, ID_TEXTCTRL_NCE_SUBJECT, wxEmptyString, wxDefaultPosition, wxSize(506,21), 0, wxDefaultValidator, _T("ID_TEXTCTRL_NCE_SUBJECT"));
+	GridBagSizer5->Add(tc_nce_subject, wxGBPosition(0, 1), wxGBSpan(1, 6), wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	Button_NCE_gen = new wxButton(this, ID_BUTTON1, _("生成编号"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
+	GridBagSizer5->Add(Button_NCE_gen, wxGBPosition(0, 7), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	st_nce_eco = new wxStaticText(this, ID_STATICTEXT6, _("相关ECO编号"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
+	GridBagSizer5->Add(st_nce_eco, wxGBPosition(1, 0), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tc_nce_eco = new wxTextCtrl(this, ID_TEXTCTRL_NCE_ECO, wxEmptyString, wxDefaultPosition, wxSize(127,21), 0, wxDefaultValidator, _T("ID_TEXTCTRL_NCE_ECO"));
+	GridBagSizer5->Add(tc_nce_eco, wxGBPosition(1, 1), wxGBSpan(1, 2), wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_pc = new wxCheckBox(this, ID_CHECKBOX_NCE_PC, _("需要更改PC(Yes or No)"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX_NCE_PC"));
+	cb_nce_pc->SetValue(false);
+	GridBagSizer5->Add(cb_nce_pc, wxGBPosition(1, 3), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	dp_nce_valid = new wxDatePickerCtrl(this, ID_DATEPICKERCTRL1, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxDP_DEFAULT|wxDP_DROPDOWN|wxDP_SHOWCENTURY, wxDefaultValidator, _T("ID_DATEPICKERCTRL1"));
+	GridBagSizer5->Add(dp_nce_valid, wxGBPosition(1, 5), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	cb_nce_urgent = new wxCheckBox(this, ID_CHECKBOX1, _("紧急执行"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_CHECKBOX1"));
+	cb_nce_urgent->SetValue(false);
+	GridBagSizer5->Add(cb_nce_urgent, wxGBPosition(1, 6), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	st_nce_valid = new wxStaticText(this, ID_STATICTEXT7, _("生效日期"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
+	GridBagSizer5->Add(st_nce_valid, wxGBPosition(1, 4), wxDefaultSpan, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	stb_nce->Add(GridBagSizer5, 2, wxALL|wxEXPAND, 0);
+	BoxSizer1->Add(stb_nce, 3, wxALL|wxEXPAND, 0);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("备注"));
 	tc_remarks = new wxTextCtrl(this, ID_TEXTCTRL_REMARKS, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE, wxDefaultValidator, _T("ID_TEXTCTRL_REMARKS"));
 	StaticBoxSizer2->Add(tc_remarks, 1, wxALL|wxEXPAND, 0);
@@ -128,6 +231,7 @@ info_id_generator_panel::info_id_generator_panel(wxWindow* parent,wxWindowID id,
 	Connect(ID_BUTTON_SG_GEN,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&info_id_generator_panel::OnButton_sg_genClick);
 	Connect(ID_BUTTON_SG_INFO,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&info_id_generator_panel::OnButton_sg_infoClick);
 	Connect(ID_BUTTON_WB,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&info_id_generator_panel::OnButton_wbClick);
+	Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&info_id_generator_panel::OnButton_NCE_genClick);
 	//*)
 
     wxArrayString array_group = wxGetApp().get_group();
@@ -139,6 +243,7 @@ info_id_generator_panel::info_id_generator_panel(wxWindow* parent,wxWindowID id,
         tc_sg_proj->Show(true);
         Button_sg_gen->Show(true);
         Button_sg_info->Show(true);
+
     }else
     {
         sb_spec_gad->Show(false);
@@ -202,6 +307,72 @@ info_id_generator_panel::info_id_generator_panel(wxWindow* parent,wxWindowID id,
         cb_pm->Show(false);
         cb_co->Show(false);
         cb_others->Show(false);
+    }
+
+    if(array_group.Index(wxT("G0006"))!=wxNOT_FOUND||array_group.Index(wxT("G0007"))!=wxNOT_FOUND||array_group.Index(wxT("G0008"))!=wxNOT_FOUND||array_group.Index(wxT("G0018"))!=wxNOT_FOUND)
+    {
+        stb_nce->Show(true);
+        cb_nce_co->Show(true);
+		tc_nce_eco->Show(true);
+		cb_nce_tm->Show(true);
+		cb_nce_lo->Show(true);
+		st_nce_valid->Show(true);
+		Button_NCE_gen->Show(true);
+		st_nce_subject->Show(true);
+		cb_nce_sm->Show(true);
+		cb_nce_pc->Show(true);
+		tce_nce_from->Show(true);
+
+		cb_nce_fq->Show(true);
+		cb_nce_ppu->Show(true);
+
+		cb_nce_ds->Show(true);
+		cb_nce_sqe->Show(true);
+		cb_nce_mpm->Show(true);
+		cb_nce_el->Show(true);
+		dp_nce_valid->Show(true);
+
+		cb_nec_cs->Show(true);
+		cb_nce_other->Show(true);
+		st_nce_eco->Show(true);
+		tc_nce_subject->Show(true);
+
+		cb_nce_urgent->Show(true);
+		cb_nce_pm->Show(true);
+		cb_nce_psm->Show(true);
+		st_from->Show(true);
+    }else
+    {
+        stb_nce->Show(false);
+        cb_nce_co->Show(false);
+		tc_nce_eco->Show(false);
+		cb_nce_tm->Show(false);
+		cb_nce_lo->Show(false);
+		st_nce_valid->Show(false);
+		Button_NCE_gen->Show(false);
+		st_nce_subject->Show(false);
+		cb_nce_sm->Show(false);
+		cb_nce_pc->Show(false);
+		tce_nce_from->Show(false);
+
+		cb_nce_fq->Show(false);
+		cb_nce_ppu->Show(false);
+
+		cb_nce_ds->Show(false);
+		cb_nce_sqe->Show(false);
+		cb_nce_mpm->Show(false);
+		cb_nce_el->Show(false);
+		dp_nce_valid->Show(false);
+
+		cb_nec_cs->Show(false);
+		cb_nce_other->Show(false);
+		st_nce_eco->Show(false);
+		tc_nce_subject->Show(false);
+
+		cb_nce_urgent->Show(false);
+		cb_nce_pm->Show(false);
+		cb_nce_psm->Show(false);
+		st_from->Show(false);
     }
 
 
@@ -457,4 +628,155 @@ void info_id_generator_panel::OnButton_wbClick(wxCommandEvent& event)
         cb_co->SetValue(false);
         cb_others->SetValue(false);
     }
+}
+
+void info_id_generator_panel::clear_tcen_ctrl()
+{
+    cb_nce_other->SetValue(false);
+    cb_nce_pm->SetValue(false);;
+    cb_nce_ds->SetValue(false);
+    cb_nec_cs->SetValue(false);
+    cb_nce_fq->SetValue(false);
+    cb_nce_psm->SetValue(false);
+    cb_nce_ppu->SetValue(false);
+    cb_nce_lo->SetValue(false);
+    cb_nce_co->SetValue(false);
+    cb_nce_sm->SetValue(false);
+    cb_nce_tm->SetValue(false);
+   cb_nce_el->SetValue(false);
+     cb_nce_sqe->SetValue(false);
+    cb_nce_other->SetValue(false);
+     cb_nce_pc->SetValue(false);
+    cb_nce_urgent->SetValue(false);
+   tc_nce_eco->Clear();
+   tc_nce_subject->Clear();
+    tc_remarks->Clear();
+    dp_nce_valid->SetValue(wxDateTime::Today());
+}
+
+void info_id_generator_panel::OnButton_NCE_genClick(wxCommandEvent& event)
+{
+    if (!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,不能进行任何操作!"));
+        return;
+    }
+    bool b_mpm=cb_nce_other->IsChecked();
+    bool b_pm = cb_nce_pm->IsChecked();
+    bool b_ds = cb_nce_ds->IsChecked();
+    bool b_cs = cb_nec_cs->IsChecked();
+    bool b_fq= cb_nce_fq->IsChecked();
+    bool b_psm = cb_nce_psm->IsChecked();
+    bool b_ppu = cb_nce_ppu->IsChecked();
+    bool b_lo = cb_nce_lo->IsChecked();
+    bool b_co = cb_nce_co->IsChecked();
+    bool b_sm = cb_nce_sm->IsChecked();
+    bool b_tm = cb_nce_tm->IsChecked();
+    bool b_el = cb_nce_el->IsChecked();
+    bool b_sqe = cb_nce_sqe->IsChecked();
+    bool b_others = cb_nce_other->IsChecked();
+    bool b_tcen_pc = cb_nce_pc->IsChecked();
+    bool b_urgent = cb_nce_urgent->IsChecked();
+    wxString s_from = tce_nce_from->GetValue();
+    wxString s_eco = tc_nce_eco->GetValue();
+    wxString s_subject = tc_nce_subject->GetValue();
+    wxDateTime d_valid = dp_nce_valid->GetValue();
+    wxString s_remarks = tc_remarks->GetValue();
+
+    if(d_valid<wxDateTime::Today())
+    {
+        wxMessageBox(_("生效日期必须大于等于当天!"),_("提示!"));
+        dp_nce_valid->SetValue(wxDateTime::Today());
+        return;
+    }
+
+    if(cb_nce_other->IsChecked()&&s_remarks.IsEmpty())
+    {
+        wxMessageBox(_("请在备注中补充完整Others的具体信息"),_("提示!"));
+        return;
+    }
+
+    if(s_subject.IsEmpty())
+    {
+        wxMessageBox(_("请务必填写主题。"),_("提示!"));
+        tc_nce_subject->SetFocus();
+        return;
+    }
+
+    if(wxMessageBox(_("确认生成技术变更执行通知单号?"),_("确认"),wxYES_NO)!=wxYES)
+    {
+        return;
+    }
+
+    wxString s_tcen_id = get_tcen_id();
+
+    if(s_tcen_id.IsEmpty())
+    {
+        wxMessageBox(_("生成失败，请重新提交!"),_("提示"));
+        return;
+    }
+
+    wxString s_sql = wxT("INSERT INTO l_tce_notice(tcen_id, subject, from_sr, eco_no, is_modify_pc, valid_date, is_urgent, is_mpm, is_pm,\
+		is_ds, is_cs, is_fq, is_psm, is_lo, is_co, is_sm, is_tm, is_el, is_sqe, is_ppu, is_others, remarks, apply_person,\
+		apply_date,is_active, is_published) \
+       VALUES ('")+s_tcen_id+wxT("','")+s_subject+wxT("','")+s_from+wxT("','")+s_eco+wxT("',")+BoolToStr(b_tcen_pc)+wxT(",'")+DateToStrFormat(d_valid )+wxT("',")+BoolToStr(b_urgent)+wxT(",")+BoolToStr(b_mpm)+
+             wxT(",")+BoolToStr(b_pm)+wxT(",")+BoolToStr(b_ds)+wxT(",")+BoolToStr(b_cs)+wxT(",")+BoolToStr(b_fq)+wxT(",")+BoolToStr(b_psm)+wxT(",")+BoolToStr(b_lo)+wxT(",")+BoolToStr(b_co)+
+             wxT(",")+BoolToStr(b_sm)+wxT(",")+BoolToStr(b_tm)+wxT(",")+BoolToStr(b_el)+wxT(",")+BoolToStr(b_sqe)+wxT(",")+BoolToStr(b_ppu)+wxT(",")+BoolToStr(b_others)+wxT(",'")+s_remarks+wxT("','")+
+             gr_para.login_user+wxT("','")+DateToAnsiStr(wxDateTime::Now())+wxT("',true, false);");
+
+
+    wxLogMessage(s_sql);
+    s_sql.Replace(wxT("''"),wxT("NULL"));
+
+    if(wxGetApp().app_sql_update(s_sql))
+    {
+        wxMessageBox(_("技术变更执行通知单号")+s_tcen_id);
+
+        wxLogMessage(_("技术变更执行通知单号:")+s_tcen_id);
+
+        wxLogMessage(_("请到取号预览界面查看本人已经生成的技术变更执行通知单号列表"));
+        clear_tcen_ctrl();
+    }
+
+}
+
+wxString info_id_generator_panel::get_tcen_id()
+{
+    wxDateTime today = wxDateTime::Today();
+
+    wxString s_pre =DateToYearMonth(today);
+
+    wxString s_sql = wxT("select id_now from s_tcen_id_record where tcen_pre='")+s_pre+wxT("';");
+
+    wxPostgreSQLresult * _res = wxGetApp().app_sql_select(s_sql);
+
+    if(_res->Status()!= PGRES_TUPLES_OK)
+    {
+        _res->Clear();
+        return wxEmptyString;
+    }
+
+    int i_count =  _res->GetRowsNumber();
+    int i_tcne_id =0;
+
+    if(i_count ==0)
+    {
+       i_tcne_id= 1;
+
+       s_sql = wxT("INSERT INTO s_tcen_id_record( tcen_pre, id_now) VALUES ('")+s_pre+wxT("',")+NumToStr(i_tcne_id)+wxT(");");
+    }else
+    {
+        i_tcne_id = _res->GetInt(wxT("id_now"))+1;
+
+        s_sql = wxT("UPDATE s_tcen_id_record SET id_now=")+NumToStr(i_tcne_id)+wxT(" where tcen_pre='")+s_pre+wxT("';");
+    }
+
+    _res->Clear();
+
+    if(wxGetApp().app_sql_update(s_sql))
+    {
+        return "TCEN-ECO(tkES)-"+s_pre+zero_begin(i_tcne_id, 3);
+    }
+
+    return wxEmptyString;
 }

@@ -237,7 +237,7 @@ void project_author_panel::BuildDataViewCtrl()
     tlc_proj_list->AddColumn(_("配置完成日期"),100,wxALIGN_LEFT, -1,true,false);//7-5
     tlc_proj_list->AddColumn(_("负责人"),100,wxALIGN_LEFT, -1,true,false);//8-6
     tlc_proj_list->AddColumn(_("项目状态"),70,wxALIGN_LEFT,-1,true,false);//9-7
-    tlc_proj_list->AddColumn(_("是否紧急"),0,wxALIGN_LEFT,-1,false,false);//10-8
+    tlc_proj_list->AddColumn(_("是否紧急"),70,wxALIGN_LEFT,-1,true,false);//10-8
     tlc_proj_list->AddColumn(_("非标等级"),100,wxALIGN_LEFT,-1,true,false);//11-9
     tlc_proj_list->AddColumn(_("梯型ID"),0,wxALIGN_LEFT,-1,false,false);//12
     tlc_proj_list->AddColumn(_("任务批次"), 0, wxALIGN_LEFT, -1, false, false);//13
@@ -366,7 +366,7 @@ void project_author_panel::refresh_list()
         tlc_proj_list->SetItemText(leaf_item, 7, s_req_finish);
         tlc_proj_list->SetItemText(leaf_item, 8, s_res_person);
         tlc_proj_list->SetItemText(leaf_item, 9, prj_status_to_str(i_status));
-        tlc_proj_list->SetItemText(leaf_item, 10, BoolToStr(is_urgent));
+        tlc_proj_list->SetItemText(leaf_item, 10, BoolToY(is_urgent));
         tlc_proj_list->SetItemText(leaf_item, 11, nstd_level_to_str(_res->GetInt(wxT("nonstd_level"))));
         tlc_proj_list->SetItemText(leaf_item, 12, s_lifttype_id);
         tlc_proj_list->SetItemText(leaf_item, 13, s_index);
@@ -507,11 +507,7 @@ bool project_author_panel::make_evaluate(wf_process * s_process, wxString s_batc
             str_action_name = tlc_proj_list->GetItemText(child_item, 6);
 
 
-            if(prj_str_to_status(tlc_proj_list->GetItemText(child_item,9))==4)
-            {
-                tlc_proj_list->SetItemBackgroundColour(child_item, *wxRED);
-                i_count_freeze++;
-            }else if(str_project_catalog == _("Lean Project"))
+            if(str_project_catalog == _("Lean Project"))
             {
                 tlc_proj_list->SetItemBackgroundColour(child_item,  *wxYELLOW);
                 i_count_lean++;
@@ -520,11 +516,19 @@ bool project_author_panel::make_evaluate(wf_process * s_process, wxString s_batc
                 tlc_proj_list->SetItemBackgroundColour(child_item,  *wxCYAN);
                 i_count_pre++;
             }
-            else if(tlc_proj_list->GetItemText(child_item,10)==wxT("true"))
+            else  tlc_proj_list->SetItemBackgroundColour(child_item, *wxWHITE);
+
+            if(tlc_proj_list->GetItemText(child_item,10)==wxT("Y"))
             {
                 tlc_proj_list->SetItemBackgroundColour(child_item, *wxGREEN);
                 i_count_urgent++;
-            }else tlc_proj_list->SetItemBackgroundColour(child_item, *wxWHITE);
+            }
+
+            if(prj_str_to_status(tlc_proj_list->GetItemText(child_item,9))==4)
+            {
+                tlc_proj_list->SetItemBackgroundColour(child_item, *wxRED);
+                i_count_freeze++;
+            }
 
             if(!s_special_info.Contains(tlc_proj_list->GetItemText(child_item, 14)))
             {
@@ -543,8 +547,6 @@ bool project_author_panel::make_evaluate(wf_process * s_process, wxString s_batc
 
         str_group = Combine_lift_no(a_lift_no);
 
-
-
         tlc_proj_list->SetItemText(item, 11, str_nonstd_level);
         str_nonstd_level.Clear();
 
@@ -553,7 +555,7 @@ bool project_author_panel::make_evaluate(wf_process * s_process, wxString s_batc
             tlc_proj_list->SetItemBackgroundColour(item, *wxRED);
         else if(i_count_freeze !=0)
             tlc_proj_list->SetItemImage(item,0, 0);
-        else if(i_count_lean == i_count )
+        if(i_count_lean == i_count )
                tlc_proj_list->SetItemBackgroundColour(item, *wxYELLOW);
         else if(i_count_lean !=0)
               tlc_proj_list->SetItemImage(item,0,4);
@@ -562,7 +564,9 @@ bool project_author_panel::make_evaluate(wf_process * s_process, wxString s_batc
         else if(i_count_lean !=0)
               tlc_proj_list->SetItemImage(item,0,3);
         else if(i_count_urgent == i_count)
+        {
             tlc_proj_list->SetItemBackgroundColour(item, *wxGREEN);
+        }
         else if(i_count_urgent !=0)
             tlc_proj_list->SetItemImage(item,0,2);
         else
@@ -570,6 +574,9 @@ bool project_author_panel::make_evaluate(wf_process * s_process, wxString s_batc
             tlc_proj_list->SetItemBackgroundColour(item, *wxWHITE);
             tlc_proj_list->SetItemImage(item,0,-1);
         }
+
+        if(i_count_urgent>0)
+            tlc_proj_list->SetItemText(item, 10, "Y");
 
         tlc_proj_list->SetItemText(item, 2, str_group);
         tlc_proj_list->SetItemText(item, 3, str_type+wxT("*")+NumToStr(i_count)+_("台"));
@@ -631,7 +638,7 @@ void project_author_panel::refresh_res_list(wxString s_group_cata)
 
     wxString strSql = wxT("SELECT concat(employee_id,'-',name) AS res_person, (select count(*) from l_proc_act \
                           where operator_id = employee_id AND is_active=true AND action_id = 'AT00000004') AS proj_qty, \
-                          group_name, group_id FROM v_group_member WHERE group_catalog like '%")+s_group_cata+wxT("%' AND plant = '")+gr_para.plant+wxT("' and status=true ORDER BY group_name ,res_person ASC;");
+                          group_name, group_id FROM v_group_member WHERE group_catalog = '")+s_group_cata+wxT("' AND plant = '")+gr_para.plant+wxT("' and status=true ORDER BY group_name ,res_person ASC;");
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(strSql);
 
     if(_res->Status()!= PGRES_TUPLES_OK)

@@ -218,7 +218,7 @@ void workflow_wf::BuildTreeListCtrl()
     tlc_task_list->AddColumn(_("备注"), 100, wxALIGN_LEFT, -1,true,false );//10-11
     tlc_task_list->AddColumn(_("工作流ID"), 0, wxALIGN_LEFT, -1,false,false );//11-12
     tlc_task_list->AddColumn(_("工作步ID"), 0, wxALIGN_LEFT, -1,false,false );//12-13
-    tlc_task_list->AddColumn(_("紧急项目"), 0, wxALIGN_LEFT, -1,false,false );//13-14
+    tlc_task_list->AddColumn(_("紧急项目"), 70, wxALIGN_LEFT, -1,true,false );//13-14
     tlc_task_list->AddColumn(_("退回次数"), 0, wxALIGN_LEFT, -1,false,false );//14-15
     tlc_task_list->AddColumn(_("项目类型"), 0, wxALIGN_LEFT, -1,false,false );//15-16
     tlc_task_list->AddColumn(_("工作步顺序号"), 0, wxALIGN_LEFT, -1,false,false );//16-17
@@ -246,7 +246,7 @@ void workflow_wf::BuildTreeListCtrl()
     tlc_group_task_list->AddColumn(_("特殊标识"), 100, wxALIGN_LEFT, -1, true, false);//16-11
     tlc_group_task_list->AddColumn(_("备注"), 100, wxALIGN_LEFT, -1,true,false );//11-12
     tlc_group_task_list->AddColumn(_("工作步ID"), 0, wxALIGN_LEFT, -1,false,false );//12-13
-    tlc_group_task_list->AddColumn(_("紧急项目"), 0, wxALIGN_LEFT, -1,false,false );//13-14
+    tlc_group_task_list->AddColumn(_("紧急项目"), 70, wxALIGN_LEFT, -1,true,false );//13-14
     tlc_group_task_list->AddColumn(_("退回次数"), 0, wxALIGN_LEFT, -1,false,false );//14-15
     tlc_group_task_list->AddColumn(_("项目类型"), 0, wxALIGN_LEFT, -1,false,false );//15-16
 
@@ -877,14 +877,14 @@ void workflow_wf::OnButton2Click(wxCommandEvent& event)
             while(child_item.IsOk())
             {
                str_temp = tlc_task_list->GetItemText(child_item, 1);
-               s_action_id = tlc_task_list->GetItemText(child_item,12);
+               s_action_id = tlc_task_list->GetItemText(child_item,13);
                a_sel_wbs.Add(str_temp);
 
                child_item = tlc_task_list->GetNextSibling(child_item);
             }
         }else
         {
-               s_action_id = tlc_task_list->GetItemText(sel_item,12);
+               s_action_id = tlc_task_list->GetItemText(sel_item,13);
                str_temp = tlc_task_list->GetItemText(sel_item, 1);
                a_sel_wbs.Add(str_temp);
         }
@@ -2178,11 +2178,7 @@ void workflow_wf::refresh_task_level()
             int i_pos = str_type.Find("-");
             str_type = str_type.Right(str_type.Length()-i_pos-1);
 
-            if(prj_str_to_status(tlc_task_list->GetItemText(child_item,7))== 4)
-            {
-                tlc_task_list->SetItemBackgroundColour(child_item, *wxRED);
-                i_count_freeze++;
-            }else if(i_project_catalog == 6)
+            if(i_project_catalog == 6)
             {
                 tlc_task_list->SetItemBackgroundColour(child_item,  *wxYELLOW);
                 i_count_lean++;
@@ -2191,11 +2187,19 @@ void workflow_wf::refresh_task_level()
                 tlc_task_list->SetItemBackgroundColour(child_item,  *wxCYAN);
                 i_count_pre++;
             }
-            else if(tlc_task_list->GetItemText(child_item,14)==wxT("Y"))//nonstd_level already done.
+            else  tlc_task_list->SetItemBackgroundColour(child_item, *wxWHITE);
+
+            if(tlc_task_list->GetItemText(child_item,14)==wxT("Y"))//nonstd_level already done.
             {
                 tlc_task_list->SetItemBackgroundColour(child_item, *wxGREEN);
                 i_count_urgent++;
-            }else tlc_task_list->SetItemBackgroundColour(child_item, *wxWHITE);
+            }
+
+            if(prj_str_to_status(tlc_task_list->GetItemText(child_item,7))== 4)
+            {
+                tlc_task_list->SetItemBackgroundColour(child_item, *wxRED);
+                i_count_freeze++;
+            }
 
             if(!s_special_info.Contains(tlc_task_list->GetItemText(child_item, 10)))
             {
@@ -2233,7 +2237,9 @@ void workflow_wf::refresh_task_level()
         else if(i_count_lean !=0)
               tlc_task_list->SetItemImage(item,0,3);
         else if(i_count_urgent == i_count)
+        {
             tlc_task_list->SetItemBackgroundColour(item, *wxGREEN);
+             }
         else if(i_count_urgent !=0)
             tlc_task_list->SetItemImage(item,0,2);
         else
@@ -2241,6 +2247,9 @@ void workflow_wf::refresh_task_level()
             tlc_task_list->SetItemBackgroundColour(item, *wxWHITE);
             tlc_task_list->SetItemImage(item,0,-1);
         }
+
+        if(i_count_urgent>0)
+            tlc_task_list->SetItemText(item, 14, "Y");
 
         str_group = Combine_lift_no(a_group);
 
@@ -2311,11 +2320,7 @@ void workflow_wf::refresh_group_level(bool b_sure)
             str_type = str_type.Right(str_type.Length()-i_pos-1);
 
 
-            if(prj_str_to_status(tlc_group_task_list->GetItemText(child_item,8))== 4)
-            {
-                tlc_group_task_list->SetItemBackgroundColour(child_item, *wxRED);
-                i_count_freeze++;
-            }else if(i_project_catalog == 6)
+            if(i_project_catalog == 6)
             {
                 tlc_group_task_list->SetItemBackgroundColour(child_item,  *wxYELLOW);
                 i_count_lean++;
@@ -2324,11 +2329,20 @@ void workflow_wf::refresh_group_level(bool b_sure)
                 tlc_group_task_list->SetItemBackgroundColour(child_item,  *wxCYAN);
                 i_count_pre++;
             }
-            else if(tlc_group_task_list->GetItemText(child_item,14)==wxT("Y"))//nonstd_level already done.
+            else  tlc_group_task_list->SetItemBackgroundColour(child_item, *wxWHITE);
+
+            if(tlc_group_task_list->GetItemText(child_item,14)==wxT("Y"))//nonstd_level already done.
             {
                 tlc_group_task_list->SetItemBackgroundColour(child_item, *wxGREEN);
                 i_count_urgent++;
-            }else tlc_group_task_list->SetItemBackgroundColour(child_item, *wxWHITE);
+            }
+
+            if(prj_str_to_status(tlc_group_task_list->GetItemText(child_item,8))== 4)
+            {
+                tlc_group_task_list->SetItemBackgroundColour(child_item, *wxRED);
+                i_count_freeze++;
+            }
+
 
             if(!s_special_info.Contains(tlc_group_task_list->GetItemText(child_item, 11)))
             {
@@ -2362,7 +2376,10 @@ void workflow_wf::refresh_group_level(bool b_sure)
         else if(i_count_lean !=0)
               tlc_group_task_list->SetItemImage(item,0,3);
         else if(i_count_urgent == i_count)
+        {
             tlc_group_task_list->SetItemBackgroundColour(item, *wxGREEN);
+        }
+
         else if(i_count_urgent !=0)
             tlc_group_task_list->SetItemImage(item,0,2);
         else
@@ -2370,6 +2387,9 @@ void workflow_wf::refresh_group_level(bool b_sure)
             tlc_group_task_list->SetItemBackgroundColour(item, *wxWHITE);
             tlc_group_task_list->SetItemImage(item,0,-1);
         }
+
+        if(i_count_urgent>0)
+            tlc_group_task_list->SetItemText(item, 14, "Y");
 
         str_group = Combine_lift_no(a_group);
 

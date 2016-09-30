@@ -27,7 +27,7 @@ cf_task_list::cf_task_list(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	Move(wxDefaultPosition);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
-	BoxSizer1->Add(BoxSizer2, 5, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+	BoxSizer1->Add(BoxSizer2, 5, wxALL|wxEXPAND, 0);
 	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
 	Button1 = new wxButton(this, ID_BUTTON1, _("确定"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
 	BoxSizer3->Add(Button1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);

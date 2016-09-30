@@ -258,7 +258,7 @@ void contract_label_print::refresh_doc_list()
                 s_sql = s_sql + wxT(" contract_doc_id='")+array_label.Item(i)+wxT("' or");
         }
 
-        s_sql = s_sql +wxT(" and status>=0 and status<3 order by project_id, item_no asc;");
+        s_sql = s_sql +wxT(" and status>=0 order by project_id, item_no asc;");
 
         wxPostgreSQLresult * _res = wxGetApp().app_sql_select(s_sql);
 
@@ -423,7 +423,7 @@ void contract_label_print::OnButton_ADDClick(wxCommandEvent& event)
         break;
     }
 
-    s_sql = s_sql+wxT(" and status>=0 and status<3 order by project_id, item_no asc;");
+    s_sql = s_sql+wxT(" and status>=0 order by project_id, item_no asc;");
 
     wf_listview_dlg lv_dlg(0);
     lv_dlg.init_list_header();

@@ -70,7 +70,7 @@ class nstd_mat_task_list: public wxDialog
         wxArrayInt array_format;
         wxString get_out_path();
         wxString create_project_folder(wxString s_wbs_no, wxString s_loc);
-        void export_excel(wxString s_wbs_no, wxString str_path);
+        void export_excel(wxString s_wbs_no, workbook* wb1);
         // only for out to excel
 
         wxString str_tasks_header;

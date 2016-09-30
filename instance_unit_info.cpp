@@ -1089,6 +1089,33 @@ wxString instance_unit_info::create_review_struct(wxString s_project,wxString s_
       return s_task_id;
 }
 
+bool instance_unit_info::check_g4_group(wxString s_wbs)
+{
+     wxString s_sql = wxT(" select elevator_type, load from v_unit_info_parameter where wbs_no = '")+s_wbs+wxT("';");
+
+    wxPostgreSQLresult * res=wxGetApp().app_sql_select(s_sql);
+    if(res->Status()!= PGRES_TUPLES_OK)
+    {
+        res->Clear();
+        return false;
+    }
+
+    int i_count = res->GetRowsNumber();
+    if(i_count==0)
+    {
+        res->Clear();
+        return false;
+    }
+
+    if(res->GetInt(wxT("load"))<=1000 && res->GetVal(wxT("elevator_type"))=="RF1")
+    {
+        res->Clear();
+        return true;
+    }
+
+    return false;
+}
+
 void instance_unit_info::OnButton3Click(wxCommandEvent& event)
 {
     wxArrayInt array_sel_line = gd_unit_info->GetSelectedRows();
@@ -1211,7 +1238,7 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
             {
 
                 wf_configure = new wf_operator(str_instance, wf_str_configure, t_template);
-                if (i_catalog!=6)
+                if (i_catalog!=6&&!check_g4_group(str_instance))
                     wf_configure->start_proc(str_desc, false, b_log_pass);
                 else
                 {
@@ -1219,6 +1246,8 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
                     wxString s_group = wxT("G0004");
                     wf_configure->start_proc(s_operator, s_group);
                 }
+
+                update_contract_book_status(str_instance, 1);
                 wf_configure->update_instance(1);
                 if (wf_configure)
                     delete wf_configure;
@@ -1305,6 +1334,45 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
     b_refresh = false;
 
 
+}
+
+bool instance_unit_info::update_contract_book_status(wxString s_wbs, int i_status)
+{
+    wxString s_sql = wxT("select * from s_contract_book_header where contract_doc_id in (select contract_doc_id from s_contract_book_include where wbs_no='")+s_wbs+wxT("');");
+
+    wxPostgreSQLresult * _res = wxGetApp().app_sql_select(s_sql);
+
+    if(_res->Status()!= PGRES_TUPLES_OK)
+    {
+        _res->Clear();
+        return false;
+    }
+
+    int i_count = _res->GetRowsNumber();
+
+    if(i_count == 0)
+    {
+        _res->Clear();
+        return false;
+    }
+
+     _res->MoveFirst();
+
+    int i_old_status = _res->GetInt(wxT("status"));
+    wxString s_doc = _res->GetVal(wxT("contract_doc_id"));
+
+    if (i_old_status==i_status)
+    {
+        _res->Clear();
+        return false;
+    }
+
+    _res->Clear();
+
+    s_sql = wxT("UPDATE s_contract_book_header SET status =")+NumToStr(i_status)+wxT(" , modify_date='")+DateToAnsiStr(wxDateTime::Now())+
+                wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where contract_doc_id='")+s_doc+wxT("';");
+
+   return  wxGetApp().app_sql_update(s_sql);
 }
 
 void instance_unit_info::Create_Folder(wxArrayString a_wbs)
@@ -1871,7 +1939,7 @@ void instance_unit_info::OnMenuItem4Selected(wxCommandEvent& event)
 
 bool instance_unit_info::update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_temp)
 {
-    wxString str_sql = wxT("SELECT * FROM l_nonstd_app_header where link_list like '%")+s_wbs+wxT("%' and (status = 0 or status =1) ;");
+    wxString str_sql = wxT("SELECT * FROM l_nonstd_app_header where link_list like '%")+s_wbs+wxT("%' and (status >= 0 and status < 10)  ;");
 
 
     wxPostgreSQLresult * _res = wxGetApp().app_sql_select(str_sql);

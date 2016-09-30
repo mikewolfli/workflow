@@ -156,6 +156,7 @@ wxString BoolToStr(bool value);         // english; used for config values
 wxString DateToAnsiStr(const wxDateTime &datetime);
 wxString DateToStrFormat(const wxDateTime &datetime);
 wxString DateToStrShort(const wxDateTime &datetime);
+wxString DateToYearMonth(const wxDateTime &datetime);
 
 bool StrToBool(const wxString &value);  // english
 long StrToLong(const wxString &value);

@@ -3,6 +3,7 @@
 	<object class="wxDialog" name="ins_nonstd_proc_log">
 		<pos_arg>1</pos_arg>
 		<size_arg>1</size_arg>
+		<style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxMAXIMIZE_BOX|wxMINIMIZE_BOX</style>
 		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 			<orient>wxVERTICAL</orient>
 			<object class="sizeritem">
@@ -10,7 +11,7 @@
 					<size>663,175</size>
 					<style>wxLC_REPORT|wxLC_HRULES|wxLC_VRULES</style>
 				</object>
-				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<flag>wxALL|wxEXPAND</flag>
 				<option>6</option>
 			</object>
 			<object class="sizeritem">
@@ -20,7 +21,7 @@
 							<label>退出</label>
 							<handler function="OnButton1Click" entry="EVT_BUTTON" />
 						</object>
-						<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALL|wxEXPAND</flag>
 						<option>1</option>
 					</object>
 				</object>

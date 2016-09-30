@@ -34,6 +34,7 @@ class nstd_app_unit_list: public wxDialog
 		wxDateTime m_req_finish;
 		wxDateTime check_min_date(wxString &str1, wxString str2);
 
+		int i_active;
 		bool b_active;
 		wxString m_str_unit;
 

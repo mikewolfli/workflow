@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
 	<object class="wxDialog" name="nstd_task_author">
+		<size>849,281</size>
 		<pos_arg>1</pos_arg>
 		<size_arg>1</size_arg>
+		<style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxMAXIMIZE_BOX</style>
 		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 			<orient>wxVERTICAL</orient>
 			<object class="sizeritem">
@@ -10,14 +12,14 @@
 					<label>任务信息</label>
 					<object class="sizeritem">
 						<object class="wxListCtrl" name="ID_LISTCTRL_TASKINFO" variable="lc_taskinfo" member="yes">
-							<size>841,144</size>
+							<size>841,247</size>
 							<style>wxLC_REPORT</style>
 						</object>
-						<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALL|wxEXPAND</flag>
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<flag>wxALL|wxEXPAND</flag>
 				<option>5</option>
 			</object>
 			<object class="sizeritem">

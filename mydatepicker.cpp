@@ -31,9 +31,9 @@ mydatepicker::mydatepicker(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	Button1 = new wxButton(this, ID_BUTTON1, _("确定"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
 	Button1->SetDefault();
-	BoxSizer2->Add(Button1, 1, wxALL|wxALIGN_CENTER_VERTICAL, 0);
+	BoxSizer2->Add(Button1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	Button2 = new wxButton(this, ID_BUTTON2, _("取消"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
-	BoxSizer2->Add(Button2, 1, wxALL|wxALIGN_CENTER_VERTICAL, 0);
+	BoxSizer2->Add(Button2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	BoxSizer1->Add(BoxSizer2, 1, wxALL|wxEXPAND, 0);
 	SetSizer(BoxSizer1);
 	SetSizer(BoxSizer1);

@@ -277,13 +277,24 @@ void contractbook_br_dlg::refresh_list(wxString s_case, int i_mode)
           str=ct_book_status_to_str(i_status);
           lv_br->SetItem(i, 5, str);
 
+          if(i_status==2)
+                str= res->GetVal(wxT("s_user"));
+          else
+                str.Empty();
 
-          str= res->GetVal(wxT("s_user"));
-          if(str.IsEmpty())
+          if(str.IsEmpty()&&i_status==0)
+            str="合同创建";
+          else if(i_status==1&&str.IsEmpty())
             str="资料室";
+          else if(i_status==3)
+          {
+             str="档案袋";
+          }
           lv_br->SetItem(i, 6, str);
 
-          str = res->GetVal(wxT("s_user_name"));
+          if (i_status==2)
+          {
+           str = res->GetVal(wxT("s_user_name"));
           lv_br->SetItem(i, 7, str);
 
           str = res->GetVal(wxT("b_user"));
@@ -306,6 +317,7 @@ void contractbook_br_dlg::refresh_list(wxString s_case, int i_mode)
 
           str = res->GetVal(wxT("remarks"));
           lv_br->SetItem(i, 14, str);
+          }
 
           res->MoveNext();
     }

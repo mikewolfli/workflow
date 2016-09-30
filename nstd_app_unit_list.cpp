@@ -50,6 +50,7 @@ nstd_app_unit_list::nstd_app_unit_list(wxWindow* parent,wxWindowID id,const wxPo
 	//*)
 
 //	b_active = true;
+    i_active =0;
     BuildDataViewCtrl();
     StaticBoxSizer1->Add(tlc_proj_list, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0 );
     Layout();
@@ -250,20 +251,30 @@ void nstd_app_unit_list::refresh_list()
     tlc_proj_list->DeleteChildren (root);
 
     wxString strSql;
+    if (b_active && i_active==0)
+       i_active=1;
+    else if(!b_active && i_active==0)
+        i_active=0;
 
-    if(b_active)
+    if(i_active==1)
      {
           strSql = wxT("SELECT conf_batch_id, concat(contract_id,' ', project_name) as project_name, project_id,\
                          instance_id as wbs_no, lift_no, elevator_type, project_catalog, req_configure_finish, \
                          status, is_urgent from v_task_list1 WHERE action_id = 'AT00000004' \
                          AND is_active = true AND operator_id = '")+gr_para.login_user+ wxT("' AND (status ='1' OR status = '3' ) ORDER BY req_configure_finish, conf_batch_id, instance_id ASC ; ");
-    }else
+    }else if(i_active==0)
     {
        strSql = wxT("SELECT conf_batch_id, concat(contract_id,' ', project_name) as project_name, project_id,\
                          instance_id as wbs_no, lift_no, elevator_type, project_catalog, req_configure_finish, \
                          status, is_urgent from v_task_list1 WHERE action_id = 'AT00000004' \
                          AND is_active = false AND operator_id = '")+gr_para.login_user+ wxT("' AND status !='4' AND  status != '-1' AND instance_id like'%")+m_str_unit.Upper()+wxT("%' ORDER BY req_configure_finish, conf_batch_id, instance_id ASC ; ");
 
+    }else if(i_active==2)
+    {
+       strSql = wxT("SELECT conf_batch_id, concat(contract_id,' ', project_name) as project_name, project_id,\
+                         instance_id as wbs_no, lift_no, elevator_type, project_catalog, req_configure_finish, \
+                         status, is_urgent from v_task_list1 WHERE action_id = 'AT00000003' \
+                          AND status !='4' AND  status != '-1' AND instance_id like'%")+m_str_unit.Upper()+wxT("%' ORDER BY req_configure_finish, conf_batch_id, instance_id ASC ; ");
     }
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(strSql);
     if(_res->Status()!= PGRES_TUPLES_OK)

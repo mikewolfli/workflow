@@ -10,6 +10,12 @@
 //*)
 #include "ctrl/treelistctrl.h"
 #include <wx/imaglist.h>
+#include "utils/wf_operator.h"
+#include "xlslib.h"
+
+using namespace xlslib_core;
+#define RECORDCOUNT                65536
+
 
 class project_info_panel: public wxPanel
 {
@@ -37,8 +43,10 @@ class project_info_panel: public wxPanel
 		wxMenuItem* MenuItem3;
 		wxButton* Button3;
 		wxButton* Button_Feedback;
+		wxMenuItem* mi_author;
 		wxMenuItem* mi_common;
 		wxMenuItem* mi_pos_contract;
+		wxMenuItem* mi_start;
 		//*)
 		wxcode::wxTreeListCtrl* tlc_task_list;
 		wxTreeItemId m_pos_id;
@@ -81,6 +89,8 @@ class project_info_panel: public wxPanel
 		static const long idMenu_Special;
 		static const long idMenu_remarks;
 		static const long idMenu_pos_contract;
+		static const long idMenu_export_start;
+		static const long idMenu_Review_date;
 		//*)
 		static const long ID_TREELISTCTRL_TASK_LIST ;
 
@@ -105,6 +115,8 @@ class project_info_panel: public wxPanel
 		void Onmi_processSelected(wxCommandEvent& event);
 		//		void Onmi_pos_wbsSelected(wxCommandEvent& event);
 		void Onmi_cm_resSelected(wxCommandEvent& event);
+		void Onmi_startSelected(wxCommandEvent& event);
+		void Onmi_authorSelected(wxCommandEvent& event);
 		//*)
 
 		void OnChar(wxTreeEvent& event);
@@ -125,6 +137,9 @@ class project_info_panel: public wxPanel
         int get_restart_times(wxString s_wbs);
         wxString update_issue_context(int i_status, wxString str);
         bool check_subitem_status(wxTreeItemId &i_item);
+        wxArrayString array_excel_head;
+        void init_excel_head();
+        void save_file(wxString s_path, wxPostgreSQLresult* _res);
 
        int Copy();
 

@@ -172,6 +172,14 @@ wxString DateToStrFormat(const wxDateTime &datetime)
 	return datetime.Format("%Y-%m-%d");
 }
 
+wxString DateToYearMonth(const wxDateTime &datetime)
+{
+	if (!datetime.IsValid())
+		return wxEmptyString;
+
+	return datetime.Format("%Y%m");
+}
+
 wxString DateToStr(const wxDateTime &datetime)
 {
 	if (!datetime.IsValid())

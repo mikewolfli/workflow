@@ -24,21 +24,21 @@ nstd_task_author::nstd_task_author(wxWindow* parent,wxWindowID id,const wxPoint&
 	wxBoxSizer* BoxSizer1;
 	wxStaticBoxSizer* StaticBoxSizer1;
 
-	Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
-	SetClientSize(wxDefaultSize);
+	Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxMAXIMIZE_BOX, _T("id"));
+	SetClientSize(wxSize(849,281));
 	Move(wxDefaultPosition);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("任务信息"));
-	lc_taskinfo = new wxListCtrl(this, ID_LISTCTRL_TASKINFO, wxDefaultPosition, wxSize(841,144), wxLC_REPORT, wxDefaultValidator, _T("ID_LISTCTRL_TASKINFO"));
-	StaticBoxSizer1->Add(lc_taskinfo, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
-	BoxSizer1->Add(StaticBoxSizer1, 5, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
+	lc_taskinfo = new wxListCtrl(this, ID_LISTCTRL_TASKINFO, wxDefaultPosition, wxSize(841,247), wxLC_REPORT, wxDefaultValidator, _T("ID_LISTCTRL_TASKINFO"));
+	StaticBoxSizer1->Add(lc_taskinfo, 1, wxALL|wxEXPAND, 0);
+	BoxSizer1->Add(StaticBoxSizer1, 5, wxALL|wxEXPAND, 0);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	Button1 = new wxButton(this, ID_BUTTON1, _("确定"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
 	BoxSizer2->Add(Button1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
-	BoxSizer1->SetSizeHints(this);
+	SetSizer(BoxSizer1);
+	Layout();
 
 	Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&nstd_task_author::OnButton1Click);
 	//*)
@@ -90,10 +90,15 @@ void nstd_task_author::init_header()
     itemCol.SetWidth(80);
     lc_taskinfo->InsertColumn(6, itemCol);
 
+    itemCol.SetText(_("是否紧急"));
+    itemCol.SetImage(-1);
+    itemCol.SetWidth(80);
+    lc_taskinfo->InsertColumn(7, itemCol);
+
     itemCol.SetText(_("特殊标识"));
     itemCol.SetImage(-1);
     itemCol.SetWidth(100);
-    lc_taskinfo->InsertColumn(7, itemCol);
+    lc_taskinfo->InsertColumn(8, itemCol);
 }
 
 void nstd_task_author::OnButton1Click(wxCommandEvent& event)
@@ -106,7 +111,7 @@ void nstd_task_author::refresh_list()
     if(m_units.IsEmpty())
         return;
 
-    wxString str_sql = wxT("select wbs_no, concat(contract_id,' ', project_name) as project_name, lift_no, elevator_type, load, speed, status, special_info FROM v_unit_info_parameter where ");
+    wxString str_sql = wxT("select wbs_no, concat(contract_id,' ', project_name) as project_name,is_urgent, lift_no, elevator_type, load, speed, status, special_info FROM v_unit_info_parameter where ");
 
     int i_count = m_units.GetCount();
 
@@ -128,6 +133,7 @@ void nstd_task_author::refresh_list()
     }
 
     int irow = _res->GetRowsNumber();
+    bool b_urgent=false;
 
     for(int i=0; i<irow; i++)
     {
@@ -158,8 +164,20 @@ void nstd_task_author::refresh_list()
         if (i_status==4)
             lc_taskinfo->SetItemBackgroundColour(tmp, *wxRED);
 
-        str = _res->GetVal(wxT("special_info"));
+        b_urgent = _res->GetBool(wxT("is_urgent"));
+        if(b_urgent)
+        {
+            str="Y";
+            lc_taskinfo->SetItemBackgroundColour(tmp, *wxGREEN);
+        }else
+        {
+            str = "";
+        }
+
         lc_taskinfo->SetItem(tmp, 7, str);
+
+        str = _res->GetVal(wxT("special_info"));
+        lc_taskinfo->SetItem(tmp, 8, str);
 
 
         _res->MoveNext();

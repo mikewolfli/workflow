@@ -31,7 +31,7 @@ nstd_mat_task_list::nstd_mat_task_list(wxWindow* parent,wxWindowID id,const wxPo
 	wxBoxSizer* BoxSizer1;
 	wxStaticBoxSizer* StaticBoxSizer1;
 
-	Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
+	Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxMAXIMIZE_BOX, _T("id"));
 	SetClientSize(wxDefaultSize);
 	Move(wxDefaultPosition);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
@@ -383,6 +383,9 @@ void nstd_mat_task_list::OnButton_ExportClick(wxCommandEvent& event)
     wxString s_path = saveFileDialog.GetPath();
 
     int i_count;
+    int error_msg;
+    std::string filename;
+    workbook* wb1 = NULL;
 
     if(m_use==2)
     {
@@ -422,16 +425,26 @@ void nstd_mat_task_list::OnButton_ExportClick(wxCommandEvent& event)
         //s_path = create_project_folder(array_sel.Item(0),s_path);
 
         init_array_head();
+        wb1 = new workbook;
+
 
         for(int i=0; i<i_count; i++)
         {
-            export_excel(array_sel.Item(i),s_path);
+            export_excel(array_sel.Item(i),wb1);
+        }
+
+        filename = s_path.ToStdString();
+        error_msg = wb1->Dump(filename);
+
+        if(error_msg == NO_ERRORS)
+        {
+            wxLogMessage(_("物料输出完成!"));
         }
     }
     else
     {
-        workbook wb1;
-        worksheet* ws = wb1.sheet("Sheet1");
+        wb1 = new workbook;
+        worksheet* ws = wb1->sheet("Sheet1");
 
         i_count = array_head.GetCount();
 
@@ -450,8 +463,8 @@ void nstd_mat_task_list::OnButton_ExportClick(wxCommandEvent& event)
                 ws->label(i+1, j, gd_task_list->GetCellValue(i,j).ToStdWstring());
             }
 
-        std::string filename = s_path.ToStdString();
-        int error_msg = wb1.Dump(filename);
+        filename = s_path.ToStdString();
+        error_msg = wb1->Dump(filename);
 
         if(error_msg == NO_ERRORS)
         {
@@ -461,7 +474,7 @@ void nstd_mat_task_list::OnButton_ExportClick(wxCommandEvent& event)
 
 }
 
-void nstd_mat_task_list::export_excel(wxString s_wbs_no, wxString str_path)
+void nstd_mat_task_list::export_excel(wxString s_wbs_no,workbook* wb1)
 {
     wxString str_sql = wxT("SELECT * FROM  v_nonstd_configure_mat_list where link_list like'%")+s_wbs_no+wxT("%' and status != '-1'");
 
@@ -474,8 +487,10 @@ void nstd_mat_task_list::export_excel(wxString s_wbs_no, wxString str_path)
         return;
     }
 
-    workbook wb1;
-    worksheet* ws = wb1.sheet("Sheet1");
+    wxString sheet_name = s_wbs_no;
+    sheet_name.Replace(wxT("/"),wxT(""));
+    sheet_name.Replace(wxT("."),wxT("_"));
+    worksheet* ws = wb1->sheet(sheet_name.ToStdString());
 
     int i;
     int i_count = _res->GetRowsNumber();
@@ -492,6 +507,7 @@ void nstd_mat_task_list::export_excel(wxString s_wbs_no, wxString str_path)
        label_result(i+2,ws,_res);
        _res->MoveNext();
     }
+    _res->Clear();
 /*
     wxString s_file = s_wbs_no;
 
@@ -500,14 +516,6 @@ void nstd_mat_task_list::export_excel(wxString s_wbs_no, wxString str_path)
     s_file.Replace(wxT("."),wxT("_"));
 
     s_file = str_path + wxT("\\")+s_file+wxT(".xls");*/
-
-    std::string filename = str_path.ToStdString();
-    int error_msg = wb1.Dump(filename);
-
-    if(error_msg == NO_ERRORS)
-    {
-            wxLogMessage(s_wbs_no+_("物料输出完成!"));
-    }
 
 }
 

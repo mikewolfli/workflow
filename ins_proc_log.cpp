@@ -23,7 +23,7 @@ ins_proc_log::ins_proc_log(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer1;
 
-	Create(parent, id, _("项目流转状态"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX, _T("id"));
+	Create(parent, id, _("项目流转状态"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxMAXIMIZE_BOX|wxMINIMIZE_BOX, _T("id"));
 	SetClientSize(wxSize(800,400));
 	Move(wxDefaultPosition);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
@@ -461,7 +461,11 @@ void ins_proc_log::Refresh_list_view(wxArrayString & array_wbs_list, wxString _f
             str_pass = _res->GetVal(wxT("instance_id"));
 
         if(!b_active && str_pass == _res->GetVal(wxT("instance_id")))
-            continue;
+        {
+             _res->MoveNext();
+             continue;
+        }
+
 
         wxString str = _res->GetVal(wxT("instance_id"));
         long tmp = lv_listview->InsertItem(j,str);
@@ -564,7 +568,11 @@ void ins_proc_log::Refresh_review_list(wxArrayString & array_wbs_list)
             str_pass = _res->GetVal(wxT("instance_id"));
 
         if(!b_active && str_pass == _res->GetVal(wxT("instance_id")))
+        {
+            _res->MoveNext();
             continue;
+        }
+
 
         wxString str = _res->GetVal(wxT("instance_id"));
         long tmp = lv_proc_log->InsertItem(j,str);

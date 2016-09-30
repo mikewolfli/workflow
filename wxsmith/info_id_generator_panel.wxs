@@ -243,6 +243,283 @@
 				<option>2</option>
 			</object>
 			<object class="sizeritem">
+				<object class="wxStaticBoxSizer" variable="stb_nce" member="no">
+					<label>技术变更执行通知单取号</label>
+					<orient>wxVERTICAL</orient>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer4" member="no">
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_TCE_MPM" variable="cb_nce_mpm" member="yes">
+									<label>MPM大项目</label>
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_TCE_PM" variable="cb_nce_pm" member="yes">
+									<label>PM项目管理</label>
+								</object>
+								<col>1</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_TCE_DS" variable="cb_nce_ds" member="yes">
+									<label>DS国内销售</label>
+								</object>
+								<col>2</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_CS" variable="cb_nec_cs" member="yes">
+									<label>CS售后服务</label>
+								</object>
+								<col>3</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_FQ" variable="cb_nce_fq" member="yes">
+									<label>FQ工厂质量</label>
+								</object>
+								<col>4</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_PSM" variable="cb_nce_psm" member="yes">
+									<label>PSM战略采购</label>
+								</object>
+								<col>5</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_PPU" variable="cb_nce_ppu" member="yes">
+									<label>PPU采购</label>
+								</object>
+								<col>6</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_LO" variable="cb_nce_lo" member="yes">
+									<label>LO物流</label>
+								</object>
+								<col>0</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_CO" variable="cb_nce_co" member="yes">
+									<label>CO成本控制</label>
+								</object>
+								<col>1</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_SM" variable="cb_nce_sm" member="yes">
+									<label>SM钣金</label>
+								</object>
+								<col>2</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_TM" variable="cb_nce_tm" member="yes">
+									<label>TM曳引机</label>
+								</object>
+								<col>3</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_EL" variable="cb_nce_el" member="yes">
+									<label>EL电气</label>
+								</object>
+								<col>4</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_SQE" variable="cb_nce_sqe" member="yes">
+									<label>SQE供应商质量管理</label>
+								</object>
+								<col>5</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_OTHER" variable="cb_nce_other" member="yes">
+									<label>Others</label>
+								</object>
+								<col>6</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>2</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT4" variable="st_from" member="yes">
+									<label>From:</label>
+									<size>40,13</size>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_NCE_FROM" variable="tce_nce_from" member="yes">
+									<value>SJ CE松江工厂合同工程部</value>
+									<size>268,21</size>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_LEFT</flag>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxGridBagSizer" variable="GridBagSizer5" member="no">
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT5" variable="st_nce_subject" member="yes">
+									<label>主题</label>
+								</object>
+								<col>0</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_NCE_SUBJECT" variable="tc_nce_subject" member="yes">
+									<size>506,21</size>
+								</object>
+								<colspan>6</colspan>
+								<col>1</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON1" variable="Button_NCE_gen" member="yes">
+									<label>生成编号</label>
+									<handler function="OnButton_NCE_genClick" entry="EVT_BUTTON" />
+								</object>
+								<col>7</col>
+								<row>0</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT6" variable="st_nce_eco" member="yes">
+									<label>相关ECO编号</label>
+								</object>
+								<col>0</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxTextCtrl" name="ID_TEXTCTRL_NCE_ECO" variable="tc_nce_eco" member="yes">
+									<size>127,21</size>
+								</object>
+								<colspan>2</colspan>
+								<col>1</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_NCE_PC" variable="cb_nce_pc" member="yes">
+									<label>需要更改PC(Yes or No)</label>
+								</object>
+								<col>3</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxDatePickerCtrl" name="ID_DATEPICKERCTRL1" variable="dp_nce_valid" member="yes">
+									<style>wxDP_DEFAULT|wxDP_DROPDOWN|wxDP_SHOWCENTURY</style>
+								</object>
+								<col>5</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX1" variable="cb_nce_urgent" member="yes">
+									<label>紧急执行</label>
+								</object>
+								<col>6</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT7" variable="st_nce_valid" member="yes">
+									<label>生效日期</label>
+								</object>
+								<col>4</col>
+								<row>1</row>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>2</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<option>3</option>
+			</object>
+			<object class="sizeritem">
 				<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
 					<label>备注</label>
 					<object class="sizeritem">
