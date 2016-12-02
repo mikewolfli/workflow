@@ -45,6 +45,7 @@ const long instance_unit_info::ID_BUTTON1 = wxNewId();
 const long instance_unit_info::ID_GRID_UNIT_INFO = wxNewId();
 const long instance_unit_info::idMenu_SelAll = wxNewId();
 const long instance_unit_info::idMenu_UnSel = wxNewId();
+const long instance_unit_info::idMenu_MC2_H = wxNewId();
 const long instance_unit_info::idMenu_export_xls = wxNewId();
 const long instance_unit_info::idMenu_print_label = wxNewId();
 const long instance_unit_info::idMenu_ReviewFlow = wxNewId();
@@ -85,6 +86,7 @@ const long instance_unit_info::idMenu_Prj = wxNewId();
 const long instance_unit_info::idMenu_Wbs = wxNewId();
 const long instance_unit_info::idMenu_Project_name = wxNewId();
 const long instance_unit_info::idMenu_delivery_date = wxNewId();
+const long instance_unit_info::idMenu_delv_mc2_h = wxNewId();
 const long instance_unit_info::idMenu_Filt_basic_info = wxNewId();
 const long instance_unit_info::idMenu_syc_din_units = wxNewId();
 //*)
@@ -160,6 +162,8 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     MenuItem2 = new wxMenuItem((&menu_unit_info_renew), idMenu_UnSel, _("取消选择(&C)\tC"), _("取消选择"), wxITEM_NORMAL);
     menu_unit_info_renew.Append(MenuItem2);
     menu_unit_info_renew.AppendSeparator();
+    mi_mc2_h = new wxMenuItem((&menu_unit_info_renew), idMenu_MC2_H, _("导出MC2-H项目(同一项目1台）"), _("导出MC2-H项目"), wxITEM_NORMAL);
+    menu_unit_info_renew.Append(mi_mc2_h);
     mi_Excel_export = new wxMenuItem((&menu_unit_info_renew), idMenu_export_xls, _("导出EXCEL(&X)\tX"), _("导出EXCEL"), wxITEM_NORMAL);
     menu_unit_info_renew.Append(mi_Excel_export);
     mi_print_label = new wxMenuItem((&menu_unit_info_renew), idMenu_print_label, _("打印标签(&L)\tL"), _("打印标签"), wxITEM_NORMAL);
@@ -256,6 +260,8 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     menu_project_filter.Append(mi_proj_name);
     mi_delivery_date = new wxMenuItem((&menu_project_filter), idMenu_delivery_date, _("按发运日期筛选(&T)"), _("按发运日期筛选"), wxITEM_NORMAL);
     menu_project_filter.Append(mi_delivery_date);
+    mi_delv_mc2_h = new wxMenuItem((&menu_project_filter), idMenu_delv_mc2_h, _("按发运日期筛选MC2-H项目"), _("按发运日期筛选MC2-H项目"), wxITEM_NORMAL);
+    menu_project_filter.Append(mi_delv_mc2_h);
     MenuItem_Basic_Info = new wxMenuItem((&menu_project_filter), idMenu_Filt_basic_info, _("需同步基本信息的项目(&B)"), _("列出所有需同步基本信息的项目"), wxITEM_NORMAL);
     menu_project_filter.Append(MenuItem_Basic_Info);
     mi_syc_din = new wxMenuItem((&menu_project_filter), idMenu_syc_din_units, _("需同步DIN系统的项目(&Y)"), _("需同步DIN系统的项目"), wxITEM_NORMAL);
@@ -284,6 +290,7 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     Connect(ID_GRID_UNIT_INFO,wxEVT_GRID_LABEL_RIGHT_CLICK,(wxObjectEventFunction)&instance_unit_info::Ongd_unit_infoCellRightClick);
     Connect(idMenu_SelAll,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem1Selected);
     Connect(idMenu_UnSel,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem2Selected);
+    Connect(idMenu_MC2_H,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_mc2_hSelected);
     Connect(idMenu_export_xls,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_Excel_exportSelected);
     Connect(idMenu_print_label,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_print_labelSelected);
     Connect(idMenu_ReviewFlow,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem_ReviewSelected);
@@ -324,6 +331,7 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     Connect(idMenu_Wbs,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem14Selected);
     Connect(idMenu_Project_name,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_proj_nameSelected);
     Connect(idMenu_delivery_date,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_delivery_dateSelected);
+    Connect(idMenu_delv_mc2_h,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_delv_mc2_hSelected);
     Connect(idMenu_Filt_basic_info,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem_Basic_InfoSelected);
     Connect(idMenu_syc_din_units,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_syc_dinSelected);
     //*)
@@ -723,13 +731,12 @@ void instance_unit_info::OnButton2Click(wxCommandEvent& event)
     v_wf_action * t_template = get_template_action(wf_str_review);
     wf_operator * wf_review = 0;
 
-
-
     int i_status;
     wxString s_wf_status;
     wxArrayString array_task_units;
+    wxString s_project_id=wxEmptyString;
 
-    bool b_notice=true;
+    bool b_notice=false;
 
     for (int i = 0; i < i_count; i++)
     {
@@ -861,7 +868,33 @@ void instance_unit_info::OnButton2Click(wxCommandEvent& event)
                 else i_status =1;
             }
 
-            s_wf_status=_("评审授权");
+            wxString s_branch_id;
+            if(s_project_id!=str_wbs_no.Left(10))
+            {
+                s_project_id = str_wbs_no.Left(10);
+                s_branch_id = wxGetApp().get_branch_id(s_project_id);
+            }
+
+            wxString s_operator;
+            if(!s_branch_id.IsEmpty())
+            {
+               s_operator= wxGetApp().get_operator_from_branch( s_branch_id, "G0002");
+               if(!s_operator.IsEmpty())
+               {
+                   if(wf_review->Pass_proc(s_operator, "G0002", wxEmptyString, false))
+                   {
+                       s_wf_status=_("项目评审");
+                   }
+               }else
+               {
+                   s_wf_status=_("评审授权");
+               }
+
+            }else
+            {
+                s_wf_status=_("评审授权");
+
+            }
 //配置工作流与评审工作流状态分离修改 20150710            if(wf_review->update_instance(i_status,s_wf_status))
             if(update_review_units_status(str_task_id, str_wbs_no,i_status,i_old_status,s_wf_status, i_restart_times))   //配置工作流与评审工作流状态分离修改 20150710
             {
@@ -873,6 +906,7 @@ void instance_unit_info::OnButton2Click(wxCommandEvent& event)
                 mils_used = wxGetLocalTimeMillis() - start_mils;
                 wxLogMessage(_("项目:")+array_task_units.Item(i)+_("创建评审任务成功,耗时:")+NumToStr(mils_used)+wxT("ms!"));
             }
+
 
             delete wf_review;
         }
@@ -892,6 +926,8 @@ void instance_unit_info::OnButton2Click(wxCommandEvent& event)
 
     if(b_notice)
       wxMessageBox(_("请到合同评审-合同信息界面刷新任务!"),_("提示"), wxOK);
+    else
+        return;
 
     b_refresh = true;
     refresh_list();
@@ -2570,6 +2606,12 @@ void instance_unit_info::OnButton4Click(wxCommandEvent& event)
         if (i_status != 5 && i_status !=6)
         {
             wxLogMessage(str_instance + _("-配置未完成过，无法启动重排产流程!"));
+            continue;
+        }
+
+        if (i_status  == 8)
+        {
+            wxLogMessage(str_instance + _("-已经发运，无法启动重排产!"));
             continue;
         }
 
@@ -4446,4 +4488,150 @@ void instance_unit_info::Onmi_special_infoSelected(wxCommandEvent& event)
          }
     }
 
+}
+
+void instance_unit_info::Onmi_mc2_hSelected(wxCommandEvent& event)
+{
+
+    if (!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,不能进行任何操作!"));
+        return;
+    }
+
+     int i_count =gd_unit_info->GetNumberRows();
+
+    if(i_count==0)
+    {
+        wxLogMessage(_("表格内无任何内容，无法输出!"));
+        return;
+    }
+
+    wxFileDialog     saveFileDialog(this, _("Save xls file"), "", "",
+                                       "xls files (*.xls)|*.xls", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+        return;     // the user changed idea...
+
+    wxString s_file = saveFileDialog.GetPath();
+
+    int i_col = gd_unit_info->GetNumberCols();
+
+    int i_width=0;
+
+
+    wxString str;
+    workbook wb1;
+    worksheet* ws = wb1.sheet("Sheet1");
+    int i,j;
+
+    wxArrayInt array_col;
+
+    int i_show_col=0;
+
+    for(i=0;i<i_col;i++)
+    {
+        i_width = gd_unit_info->GetColSize(i);
+        if(i_width>0)
+        {
+            array_col.Add(i);
+            str = gd_unit_info->GetColLabelValue(i);
+            ws->label(0,i_show_col,str.ToStdWstring());
+            i_show_col++;
+        }
+
+    }
+
+    wxString s_special,s_project;
+    s_project= wxEmptyString;
+    int i_mc2_h=0;
+
+    for(i=0;i<i_count;i++)
+    {
+        s_special = gd_unit_info->GetCellValue(i,13 );
+        if(!s_special.Upper().Contains("MC2-H"))
+            continue;
+
+        if(s_project == gd_unit_info->GetCellValue(i, 0))
+            continue;
+
+        s_project=gd_unit_info->GetCellValue(i, 0);
+        i_mc2_h++;
+
+        for(j=0;j<i_show_col;j++)
+        {
+            str = gd_unit_info->GetCellValue(i,array_col.Item(j));
+
+            ws->label(i_mc2_h,j,str.ToStdWstring());
+        }
+    }
+
+    if(i_mc2_h==0)
+        return;
+
+    std::string filename = s_file.ToStdString();
+    int error_msg = wb1.Dump(filename);
+
+    if(error_msg == NO_ERRORS)
+    {
+           wxMessageBox(_("导出")+NumToStr(i_mc2_h)+_("台完成！"),_("提示"));
+    }
+
+}
+
+void instance_unit_info::Onmi_delv_mc2_hSelected(wxCommandEvent& event)
+{
+      if (!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,不能进行任何操作!"));
+        return;
+    }
+
+       datepickerdlg dlg;
+
+    if(dlg.ShowModal()==wxID_CANCEL)
+    {
+        return;
+    }
+
+    bool b_from = dlg.b_from;
+    bool b_to = dlg.b_to;
+
+    wxString str_from,str_to, s_sql;
+
+
+    if(b_from&&b_to)
+    {
+        str_from = DateToStrFormat(dlg.dt_from);
+
+        str_to = DateToStrFormat(dlg.dt_to);
+
+        s_sql = s_sql + wxT(" where req_delivery_date>='")+str_from+wxT(" 00:00:00' and req_delivery_date<='")+str_to+wxT(" 23:59:59' and status>=0 ");
+    }
+
+    if(b_to && !b_from)
+    {
+        str_to = DateToStrFormat(dlg.dt_to);
+        s_sql = s_sql + wxT(" where req_delivery_date<='")+str_to+wxT(" 23:59:59' and status>=0 ");
+
+    }
+
+    if(!b_to &&b_from)
+    {
+        str_from = DateToStrFormat(dlg.dt_from);
+        s_sql = s_sql + wxT(" where req_delivery_date>='")+str_from+wxT(" 00:00:00' and status>=0 ");
+    }
+
+
+    if(!b_to &&!b_from)
+    {
+        str_from = str_to = DateToStrFormat(wxDateTime::Today());
+        s_sql = s_sql + wxT(" where req_delivery_date>='")+str_from+wxT(" 00:00:00' and req_delivery_date<='")+str_to+wxT(" 23:59:59' and status>=0 ");
+
+    }
+
+    s_sql = s_sql + wxT(" and special_info ilike '%MC2-H%%' ");
+    Set_Where_clause(s_sql);
+    b_refresh = true;
+    refresh_list();
+    b_refresh = false;
 }

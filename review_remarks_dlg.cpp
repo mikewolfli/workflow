@@ -77,6 +77,7 @@ review_remarks_dlg::review_remarks_dlg(wxWindow* parent,wxWindowID id,const wxPo
 	//*)
 
 	choice_urgent_level->SetSelection(0);
+	Button3->Enable(false);
 }
 
 review_remarks_dlg::~review_remarks_dlg()
@@ -85,8 +86,35 @@ review_remarks_dlg::~review_remarks_dlg()
 	//*)
 }
 
+wxString review_remarks_dlg::get_own_name()
+{
+    wxString str_sql = wxT("select concat(employee_id,'-',name) as res_emp_person from s_employee where employee_id='")+gr_para.login_user+wxT("';");
+    wxPostgreSQLresult * _res = wxGetApp().app_sql_select(str_sql);
+
+    if(_res->Status()!= PGRES_TUPLES_OK)
+    {
+        _res->Clear();
+        return wxEmptyString;
+    }
+
+    int i_count = _res->GetRowsNumber();
+
+    wxString str;
+
+    if(i_count > 0)
+        str=_res->GetVal(wxT("res_emp_person"));
+
+    _res->Clear();
+
+    return str;
+}
+
 void review_remarks_dlg::refresh_control(int i_qty, wxString s_res_cm, wxString s_remarks)
 {
+    if(s_res_cm.IsEmpty())
+        //s_res_cm=get_own_name();
+        s_res_cm = gr_para.login_user+"-"+gr_para.login_user_name;
+
     tc_drawing_qty->SetValue(NumToStr(i_qty));
     tc_remarks->SetValue(s_remarks);
     tc_res_cm->SetValue(s_res_cm);
@@ -140,7 +168,7 @@ void review_remarks_dlg::Ontc_drawing_qtyText(wxCommandEvent& event)
 void review_remarks_dlg::OnButton3Click(wxCommandEvent& event)
 {
 
-    wxArrayString  s_members = wxGetApp().get_member_in_group(wxT("G0001"), true);
+    wxArrayString  s_members = wxGetApp().get_member_in_group(wxT("G0017"), true);
 
     wxSingleChoiceDialog cdlg(this, _("请选择商务负责人:"),_("操作选择"),s_members);
 

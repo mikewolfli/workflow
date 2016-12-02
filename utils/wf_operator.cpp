@@ -740,7 +740,7 @@ bool wf_operator::Pass_proc(wxString str_operator, wxString str_group, wxString 
         l_instance.is_active = false;
         l_instance.t_finish = wxDateTime::Now();
 
-        wf_proc_act->set_instance(l_instance);
+        //wf_proc_act->set_instance(l_instance);
         update_process_status(l_instance, true);
 
 //       if(l_instance.s_action.s_workflow_id == wf_str_review)
@@ -766,7 +766,7 @@ bool wf_operator::Pass_proc(wxString str_operator, wxString str_group, wxString 
         l_instance.is_active = false;
         l_instance.t_finish = wxDateTime::Now();
 
-        wf_proc_act->set_instance(l_instance);
+        //wf_proc_act->set_instance(l_instance);
 
         update_process_status(l_instance, true);
     }
@@ -814,7 +814,7 @@ bool wf_operator::Pass_proc(wxString str_operator, wxString str_group, wxString 
     }
     else l_instance.step_desc= wxEmptyString;
 
-    wf_proc_act->set_instance(l_instance);
+    //wf_proc_act->set_instance(l_instance);
 
     return update_process_status(l_instance, !b_new);
 }
@@ -831,7 +831,7 @@ bool wf_operator::Pass_proc_s(wxString str_operator, wxString str_group, wxStrin
         l_instance.t_finish = wxDateTime::Now();
         l_instance.s_action.s_operator_id= gr_para.login_user;//非本人完成
 
-        wf_proc_act->set_instance(l_instance);
+        //wf_proc_act->set_instance(l_instance);
         update_process_status(l_instance, true);
 
 //        if(l_instance.s_action.s_workflow_id == wf_str_review)
@@ -858,7 +858,7 @@ bool wf_operator::Pass_proc_s(wxString str_operator, wxString str_group, wxStrin
         l_instance.t_finish = wxDateTime::Now();
         l_instance.s_action.s_operator_id= gr_para.login_user;//非本人完成
 
-        wf_proc_act->set_instance(l_instance);
+        //wf_proc_act->set_instance(l_instance);
 
         update_process_status(l_instance, true);
     }
@@ -906,7 +906,7 @@ bool wf_operator::Pass_proc_s(wxString str_operator, wxString str_group, wxStrin
     }
     else l_instance.step_desc= wxEmptyString;
 
-    wf_proc_act->set_instance(l_instance);
+    //wf_proc_act->set_instance(l_instance);
 
     return update_process_status(l_instance, !b_new);
 }
@@ -922,7 +922,7 @@ bool wf_operator::Pass_proc_g(wxString str_operator, wxString str_group, wxStrin
         l_instance.s_action.s_operator_id = str_operator;
         l_instance.s_action.s_action_type  = wxT("P");
 
-        wf_proc_act->set_instance(l_instance);
+        //wf_proc_act->set_instance(l_instance);
         return update_process_status(l_instance, true);
     }
 
@@ -931,7 +931,7 @@ bool wf_operator::Pass_proc_g(wxString str_operator, wxString str_group, wxStrin
         l_instance.is_active = false;
         l_instance.t_finish = wxDateTime::Now();
 
-        wf_proc_act->set_instance(l_instance);
+        //wf_proc_act->set_instance(l_instance);
         update_process_status(l_instance, true);
 
         if(l_instance.s_action.s_workflow_id == wf_str_review)
@@ -991,7 +991,7 @@ bool wf_operator::Pass_proc_g(wxString str_operator, wxString str_group, wxStrin
     }
     else l_instance.step_desc= wxEmptyString;
 
-    wf_proc_act->set_instance(l_instance);
+    //wf_proc_act->set_instance(l_instance);
     return update_process_status(l_instance, !b_new);
 
 }
@@ -1514,6 +1514,8 @@ void wf_operator::start_proc(wxString str_desc, bool start_sec, bool b_log_pass)
                     l_instance.s_action.s_group_id = str_group;
 
                 }*/
+
+
         update_process_status(l_instance, false);
     }
 }
@@ -1536,6 +1538,8 @@ bool wf_operator::delete_process() // when process is just created, status is no
 bool wf_operator::update_process_status(v_wf_instance l_instance, bool b_update)
 {
     wxString str_query;
+
+    wf_proc_act->set_instance(l_instance);
 
     if(b_update)
     {

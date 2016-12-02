@@ -33,6 +33,7 @@ class instance_unit_info: public wxPanel
 		wxListCtrl* lc_project;
 		wxMenuItem* mi_cb_lender;
 		wxMenuItem* MenuItem8;
+		wxMenuItem* mi_delv_mc2_h;
 		wxButton* Button_Restore_project;
 		wxMenuItem* MenuItem26;
 		wxMenuItem* MenuItem7;
@@ -83,6 +84,7 @@ class instance_unit_info: public wxPanel
 		wxMenuItem* mi_contract_br_search;
 		wxMenuItem* MenuItem16;
 		wxMenuItem* mi_Excel_export;
+		wxMenuItem* mi_mc2_h;
 		wxMenuItem* MenuItem9;
 		wxButton* button_cancel_restart;
 		wxMenuItem* MenuItem18;
@@ -153,6 +155,7 @@ class instance_unit_info: public wxPanel
 		static const long ID_GRID_UNIT_INFO;
 		static const long idMenu_SelAll;
 		static const long idMenu_UnSel;
+		static const long idMenu_MC2_H;
 		static const long idMenu_export_xls;
 		static const long idMenu_print_label;
 		static const long idMenu_ReviewFlow;
@@ -193,6 +196,7 @@ class instance_unit_info: public wxPanel
 		static const long idMenu_Wbs;
 		static const long idMenu_Project_name;
 		static const long idMenu_delivery_date;
+		static const long idMenu_delv_mc2_h;
 		static const long idMenu_Filt_basic_info;
 		static const long idMenu_syc_din_units;
 		//*)
@@ -263,6 +267,8 @@ class instance_unit_info: public wxPanel
 		void Onmi_contract_br_searchSelected(wxCommandEvent& event);
 		void Onmi_proj_nameSelected(wxCommandEvent& event);
 		void Onmi_special_infoSelected(wxCommandEvent& event);
+		void Onmi_mc2_hSelected(wxCommandEvent& event);
+		void Onmi_delv_mc2_hSelected(wxCommandEvent& event);
 		//*)
 
 		int get_same_project_count(wxString s_project, const wxArrayString s_unit_list);

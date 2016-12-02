@@ -66,6 +66,8 @@ public:
     wxString get_name(wxString s_id);
 
     wxDateTime get_prj_auth_date(wxString s_wbs);
+    wxString get_operator_from_branch(wxString s_branch_id, wxString s_group_id);
+    wxString get_branch_id(wxString s_project_id);
 
 
     // Critical Section for multi-thread background

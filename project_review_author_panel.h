@@ -38,6 +38,7 @@ class project_review_author_panel: public wxPanel
 		wxButton* Button_Author;
 		wxButton* Button_REFRESH;
 		wxMenuItem* mi_no_check;
+		wxMenuItem* mi_change_eng;
 		wxMenuItem* mi_show_author;
 		wxMenuItem* mi_group_process;
 		wxMenuItem* mi_pos;
@@ -98,6 +99,7 @@ class project_review_author_panel: public wxPanel
 		static const long idMenu_group_restart_his;
 		static const long idMenu_group_com_log;
 		static const long idMenu_group_pos;
+		static const long id_change_member;
 		//*)
 		static const long ID_TREELISTCTRL_TASK_LIST ;
 		static const long ID_TREELISTCTRL_GROUP_TASK_LIST ;
@@ -133,11 +135,13 @@ class project_review_author_panel: public wxPanel
 		void Onmi_group_processSelected(wxCommandEvent& event);
 		void Onmi_group_review_historySelected(wxCommandEvent& event);
 		void Onmi_group_posSelected(wxCommandEvent& event);
+		void Onmi_change_engSelected(wxCommandEvent& event);
 		//*)
 
 		void OnTaskListRightClick(wxTreeEvent& event);
 		void OnGroupTaskListRightClick(wxTreeEvent& event);
 		void OnChar(wxTreeEvent& event);
+		void change_task_operator();
 
         wxcode::wxTreeListCtrl* tlc_task_list;
 		wxcode::wxTreeListCtrl* tlc_group_task_list;
@@ -163,8 +167,6 @@ class project_review_author_panel: public wxPanel
 
 		bool update_require_review_finish(wxString s_task_id, wxString s_date);
 
-		wxString get_operator_from_branch(wxString s_branch_id, wxString s_group_id);
-
 		bool update_review_engineer(wxString s_engineer, wxString s_task_id);
 
 		bool update_drawing_qty(wxString s_task_id, wxString s_drawing_qty);
@@ -177,6 +179,7 @@ class project_review_author_panel: public wxPanel
 		wxArrayString m_steps;
 
 		wxString update_issue_context(int i_status, wxString str);
+		bool update_task_operator(wxString s_instance, wxString s_workflow, wxString s_action_id, wxString s_operator);
 
 
 		wxString cl_clause, cl_group_clause;

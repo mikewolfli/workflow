@@ -49,7 +49,7 @@ nstd_app_unit_list::nstd_app_unit_list(wxWindow* parent,wxWindowID id,const wxPo
 	Connect(wxID_ANY,wxEVT_INIT_DIALOG,(wxObjectEventFunction)&nstd_app_unit_list::OnInit);
 	//*)
 
-//	b_active = true;
+	b_active = true;
     i_active =0;
     BuildDataViewCtrl();
     StaticBoxSizer1->Add(tlc_proj_list, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0 );

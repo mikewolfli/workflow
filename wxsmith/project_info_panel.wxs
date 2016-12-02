@@ -161,6 +161,11 @@
 				<help>按评审授权日期搜索</help>
 				<handler function="Onmi_authorSelected" entry="EVT_MENU" />
 			</object>
+			<object class="wxMenuItem" name="idMenu_Review_all" variable="mi_review_all" member="yes">
+				<label>所有评审项目记录</label>
+				<help>所有评审项目记录</help>
+				<handler function="Onmi_review_allSelected" entry="EVT_MENU" />
+			</object>
 		</object>
 	</object>
 </wxsmith>

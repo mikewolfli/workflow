@@ -1478,33 +1478,6 @@ bool po_confirm_panel::close_review_task(const wxString s_task_id)
     return wxGetApp().app_sql_update(str_sql);
 }
 
-
-wxString po_confirm_panel::get_operator_from_branch(wxString s_branch_id, wxString s_group_id)
-{
-    wxString str_sql = "select employee_id from s_cm_branch_rel where branch_id ='"+s_branch_id+wxT("' and \
-                        group_id = '")+s_group_id+wxT("';");
-
-    wxPostgreSQLresult * _res =  wxGetApp().app_sql_select(str_sql);
-
-	if (_res->Status()!= PGRES_TUPLES_OK)
-	{
-		_res->Clear();
-		return wxEmptyString;
-	}
-
-    int i_count = _res->GetRowsNumber();
-
-    wxString str=wxEmptyString;
-
-    if(i_count>0)
-    {
-        _res->MoveFirst();
-        str = _res->GetVal(wxT("employee_id"));
-
-    }
-
-    return str;
-}
 /*
 bool po_confirm_panel::update_review_status(const wxArrayString & array_units, int i_status, wxString s_wf_status)
 {

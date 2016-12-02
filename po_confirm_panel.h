@@ -124,8 +124,6 @@ class po_confirm_panel: public wxPanel
 		wxArrayString get_spec_auth_online_po_list(wxString s_workflow_id, wxString s_action_id);
 		bool b_spec;
 
-        wxString get_operator_from_branch(wxString s_branch_id, wxString s_group_id);
-
         int get_unit_status(wxString s_wbs);
 
 		wxArrayString get_steps_info(wxString &s_instance_id, wxString &s_workflow_id, wxString &s_now);

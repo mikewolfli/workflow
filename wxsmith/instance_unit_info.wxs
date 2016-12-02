@@ -195,6 +195,11 @@
 				<handler function="OnMenuItem2Selected" entry="EVT_MENU" />
 			</object>
 			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_MC2_H" variable="mi_mc2_h" member="yes">
+				<label>导出MC2-H项目(同一项目1台）</label>
+				<help>导出MC2-H项目</help>
+				<handler function="Onmi_mc2_hSelected" entry="EVT_MENU" />
+			</object>
 			<object class="wxMenuItem" name="idMenu_export_xls" variable="mi_Excel_export" member="yes">
 				<label>导出EXCEL(&amp;X)</label>
 				<accel>X</accel>
@@ -414,6 +419,11 @@
 				<label>按发运日期筛选(&amp;T)</label>
 				<help>按发运日期筛选</help>
 				<handler function="Onmi_delivery_dateSelected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_delv_mc2_h" variable="mi_delv_mc2_h" member="yes">
+				<label>按发运日期筛选MC2-H项目</label>
+				<help>按发运日期筛选MC2-H项目</help>
+				<handler function="Onmi_delv_mc2_hSelected" entry="EVT_MENU" />
 			</object>
 			<object class="wxMenuItem" name="idMenu_Filt_basic_info" variable="MenuItem_Basic_Info" member="yes">
 				<label>需同步基本信息的项目(&amp;B)</label>

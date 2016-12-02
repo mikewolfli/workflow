@@ -126,6 +126,24 @@
 			<Add library="libcrypto.a" />
 			<Add library="libssh2.a" />
 			<Add library="libz.a" />
+			<Add library="uuid" />
+			<Add library="ole32" />
+			<Add library="wsock32" />
+			<Add library="oleaut32" />
+			<Add library="comctl32" />
+			<Add library="advapi32" />
+			<Add library="glu32" />
+			<Add library="winspool" />
+			<Add library="winmm" />
+			<Add library="odbc32" />
+			<Add library="ctl3d32" />
+			<Add library="version" />
+			<Add library="shlwapi" />
+			<Add library="kernel32" />
+			<Add library="user32" />
+			<Add library="gdi32" />
+			<Add library="rpcrt4" />
+			<Add library="comdlg32" />
 			<Add directory="postgresql/gcc" />
 			<Add directory="wxJson/lib" />
 		</Linker>

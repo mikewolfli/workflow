@@ -13,6 +13,7 @@
 */
 RFC_RC errorHandling(RFC_RC rc, SAP_UC description[], RFC_ERROR_INFO* errorInfo, RFC_CONNECTION_HANDLE connection);
 
+//These are for characters convert.
 SAP_UC * stringTosapuc(wxString &str);
 wxString sapucTostring(SAP_UC * s_uc, int length=-1);
 
@@ -24,6 +25,7 @@ wxString sapmatconvert(wxString s_sap);
 wxString sapdateconvert(wxString s_sap);
 wxString sapnumconvert(wxString s_sap);
 wxString sapdatetimeconvert(wxString s_sap);
+//These are for characters convert.
 
 class Str_Line
 {

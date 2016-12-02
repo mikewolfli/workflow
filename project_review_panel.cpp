@@ -129,6 +129,7 @@ void project_review_panel::BuildDataViewCtrl()
     tlc_task_list->AddColumn(_("交流状态"),200,wxALIGN_LEFT,-1,true,false);//16
     tlc_task_list->AddColumn(_("flow_ser"),0, wxALIGN_LEFT, -1, false, false); //17
     tlc_task_list->AddColumn(_("紧急程度id"),0, wxALIGN_LEFT, -1, false, false); //18
+    tlc_task_list->AddColumn(_("非标等级"),100, wxALIGN_LEFT, -1, true, false);//19
 
     tlc_task_list->AddRoot (_("评审任务"));
 }
@@ -157,7 +158,7 @@ void project_review_panel::refresh_list()
     wxTreeItemId root = tlc_task_list->GetRootItem();
     tlc_task_list->DeleteChildren (root);
 
-    wxString str_sql = wxT("SELECT review_task_id,contract_id,project_name,project_id,require_review_date,res_cm,\
+    wxString str_sql = wxT("SELECT review_task_id,contract_id,project_name,project_id,require_review_date,res_cm,nonstd_level,\
                            (select name from s_employee where employee_id = res_cm) as res_cm_person,branch_id,urgent_level, start_date,date_trunc('day',start_date) as p_start_date,\
                            (select branch_name_cn from s_branch_info where branch_id = v_task_list4.branch_id) as branch_name, status, wf_status, action_id, wbs_no,lift_no,\
                            elevator_type,project_catalog,flow_ser, review_remarks, review_drawing_qty,unit_status, unit_wf_status,\
@@ -179,7 +180,7 @@ void project_review_panel::refresh_list()
     wxString s_review_task_id, str;
     wxTreeItemId branch_item,leaf_item;
     wxArrayString array_str;
-    int i_urgent_level;
+    int i_urgent_level, i_nstd_level;
     for(int i=0; i<i_count; i++)
     {
 
@@ -276,6 +277,9 @@ void project_review_panel::refresh_list()
         i_urgent_level = _res->GetInt(wxT("urgent_level"));
         tlc_task_list->SetItemText(leaf_item, 18, NumToStr(i_urgent_level));
 
+        i_nstd_level = _res->GetInt(wxT("nonstd_level"));
+        tlc_task_list->SetItemText(leaf_item, 19, nstd_level_to_str(i_nstd_level));
+
         str = urgent_level_to_str(i_urgent_level);
         tlc_task_list->SetItemText(leaf_item, 4, str);
 
@@ -321,11 +325,13 @@ void project_review_panel::refresh_level()
     wxString s_status, s_wf_status, str, s_urgent_level, s_start_date, s_start_date2;
     wxArrayString a_lift_no;
     wxString s_lift_no;
+    wxString s_nstd_level;
 
     while(item.IsOk())
     {
         i_urgent_level=1;
         i_start_date=0;
+        s_nstd_level = wxEmptyString;
         int i_count_leaf = tlc_task_list->GetChildrenCount(item);
 
 
@@ -396,6 +402,16 @@ void project_review_panel::refresh_level()
             }
 
             i_start_date++;
+
+            str = tlc_task_list->GetItemText(child_item, 19);
+            if(s_nstd_level.IsEmpty())
+            {
+                s_nstd_level = str;
+            }else if(!s_nstd_level.Contains(str))
+            {
+                s_nstd_level = s_nstd_level+"+"+str;
+            }
+
             child_item = tlc_task_list->GetNextSibling(child_item);
         }
 
@@ -412,6 +428,7 @@ void project_review_panel::refresh_level()
         tlc_task_list->SetItemText(item, 5, s_start_date);
         tlc_task_list->SetItemText(item, 10,s_status);
         tlc_task_list->SetItemText(item, 11, s_wf_status);
+        tlc_task_list->SetItemText(item, 19, s_nstd_level);
 
         s_urgent_level.Empty();
         s_start_date.Empty();
@@ -660,7 +677,7 @@ void project_review_panel::OnButton_FinishClick(wxCommandEvent& event)
 
             s_group2 = wxT("G0016");
 
-            s_operator2 = get_operator_from_branch(s_branch_id, s_group2);
+            s_operator2 = wxGetApp().get_operator_from_branch(s_branch_id, s_group2);
 
             while(child_item.IsOk())
             {
@@ -738,7 +755,7 @@ void project_review_panel::OnButton_FinishClick(wxCommandEvent& event)
 
             s_group2 = wxT("G0016");
 
-            s_operator2 = get_operator_from_branch(s_branch_id, s_group2);
+            s_operator2 = wxGetApp().get_operator_from_branch(s_branch_id, s_group2);
 
 
             s_wbs = tlc_task_list->GetItemText(sel_item,0);
@@ -799,33 +816,6 @@ void project_review_panel::OnButton_FinishClick(wxCommandEvent& event)
 
 	refresh_level();
 
-}
-
-wxString project_review_panel::get_operator_from_branch(wxString s_branch_id, wxString s_group_id)
-{
-    wxString str_sql = "select employee_id from s_cm_branch_rel where branch_id ='"+s_branch_id+wxT("' and \
-                        group_id = '")+s_group_id+wxT("';");
-
-    wxPostgreSQLresult * _res =  wxGetApp().app_sql_select(str_sql);
-
-	if (_res->Status()!= PGRES_TUPLES_OK)
-	{
-		_res->Clear();
-		return wxEmptyString;
-	}
-
-    int i_count = _res->GetRowsNumber();
-
-    wxString str=wxEmptyString;
-
-    if(i_count>0)
-    {
-        _res->MoveFirst();
-        str = _res->GetVal(wxT("employee_id"));
-
-    }
-
-    return str;
 }
 
 /*

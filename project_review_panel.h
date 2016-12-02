@@ -79,8 +79,6 @@ class project_review_panel: public wxPanel
 		void BuildDataViewCtrl();
 		void refresh_level();
         void set_treelist_item_color(wxTreeItemId i_id, int i_temp);
-        wxString get_operator_from_branch(wxString s_branch_id, wxString s_group_id);
-
 		wxArrayString get_steps_info(wxString &s_instance_id, wxString &s_workflow_id, wxString &s_now);
 		wxArrayString m_steps;
 		wxString update_issue_context(int i_status, wxString str);

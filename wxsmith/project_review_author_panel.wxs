@@ -238,6 +238,12 @@
 				<help>快速定位</help>
 				<handler function="Onmi_group_posSelected" entry="EVT_MENU" />
 			</object>
+			<object class="separator" />
+			<object class="wxMenuItem" name="id_change_member" variable="mi_change_eng" member="yes">
+				<label>项目变更评审工程师(&amp;C)</label>
+				<help>项目变更评审工程师</help>
+				<handler function="Onmi_change_engSelected" entry="EVT_MENU" />
+			</object>
 		</object>
 	</object>
 </wxsmith>

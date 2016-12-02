@@ -33,6 +33,7 @@ class review_remarks_dlg: public wxDialog
 		//*)
 
 		void refresh_control(int i_qty, wxString s_res_cm, wxString s_remarks=wxEmptyString);
+		wxString get_own_name();
 		wxString m_remarks;
 		wxString m_qty;
 		wxString m_res_cm;

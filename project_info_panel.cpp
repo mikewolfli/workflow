@@ -35,6 +35,7 @@ const long project_info_panel::idMenu_remarks = wxNewId();
 const long project_info_panel::idMenu_pos_contract = wxNewId();
 const long project_info_panel::idMenu_export_start = wxNewId();
 const long project_info_panel::idMenu_Review_date = wxNewId();
+const long project_info_panel::idMenu_Review_all = wxNewId();
 //*)
 const long project_info_panel::ID_TREELISTCTRL_TASK_LIST = wxNewId();
 
@@ -111,6 +112,8 @@ project_info_panel::project_info_panel(wxWindow* parent,wxWindowID id,const wxPo
 	menu_review_info.Append(mi_start);
 	mi_author = new wxMenuItem((&menu_review_info), idMenu_Review_date, _("按评审授权日期搜索(&A)"), _("按评审授权日期搜索"), wxITEM_NORMAL);
 	menu_review_info.Append(mi_author);
+	mi_review_all = new wxMenuItem((&menu_review_info), idMenu_Review_all, _("所有评审项目记录"), _("所有评审项目记录"), wxITEM_NORMAL);
+	menu_review_info.Append(mi_review_all);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 
@@ -132,6 +135,7 @@ project_info_panel::project_info_panel(wxWindow* parent,wxWindowID id,const wxPo
 	Connect(idMenu_pos_contract,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_info_panel::Onmi_smart_posSelected);
 	Connect(idMenu_export_start,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_info_panel::Onmi_startSelected);
 	Connect(idMenu_Review_date,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_info_panel::Onmi_authorSelected);
+	Connect(idMenu_Review_all,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_info_panel::Onmi_review_allSelected);
 	//*)
 
 	BuildDataViewCtrl();
@@ -148,7 +152,7 @@ project_info_panel::project_info_panel(wxWindow* parent,wxWindowID id,const wxPo
 
     m_report = 0;
 
-    if(array_group.Index(wxT("G0001"))!=wxNOT_FOUND)
+    if(array_group.Index(wxT("G0001"))!=wxNOT_FOUND  )
     {
         Button1->Show(true);
         Button4->Show(true);
@@ -183,7 +187,7 @@ project_info_panel::project_info_panel(wxWindow* parent,wxWindowID id,const wxPo
 
 
     }else if(array_group.Index(wxT("G0017"))!=wxNOT_FOUND)
-    {
+    {/*
         Button1->Show(false);
         Button4->Show(false);
         Button_Feedback->Show(false);
@@ -211,6 +215,37 @@ project_info_panel::project_info_panel(wxWindow* parent,wxWindowID id,const wxPo
 
         set_clause1(wxEmptyString);
         m_report=2;
+
+        refresh_list();*/
+
+       Button1->Show(true);
+        Button4->Show(true);
+        Button_Feedback->Show(true);
+        choice_status->Show(true);
+
+        is_leader = wxGetApp().is_leader(wxT("G0001"));
+        if(is_leader)
+        {
+            mi_urgent->Enable(true);
+            mi_special->Enable(false);
+            mi_cm_res->Enable(true);
+        }else
+        {
+            mi_urgent->Enable(false);
+            mi_special->Enable(false);
+            mi_cm_res->Enable(false);
+        }
+
+        str = wxT(" res_cm = '")+gr_para.login_user+wxT("' and (unit_status =1 or unit_status= 3 )  and is_active=true and active_status>=1 and is_latest=true and is_del=false and status>=0 ");
+        set_clause(str);
+
+        choice_action->SetSelection(0);
+
+        set_clause1(wxEmptyString);
+
+        mi_remarks->Enable(true);
+
+        m_report=1;
 
         refresh_list();
 
@@ -244,6 +279,41 @@ void project_info_panel::OnTreeListCtrlRightClick(wxTreeEvent& event)
 {
   //    PopupMenu(&menu_review_info, event.GetPoint());
       PopupMenu(&menu_review_info, ScreenToClient(wxGetMousePosition()));
+}
+
+void project_info_panel::BuildDataViewCtrl()
+{
+   InitImageList();
+   tlc_task_list = new wxcode::wxTreeListCtrl(this, ID_TREELISTCTRL_TASK_LIST ,
+                                  wxDefaultPosition, wxDefaultSize,
+                                  wxTR_DEFAULT_STYLE| wxTR_COLUMN_LINES|wxTR_HIDE_ROOT|wxTR_ROW_LINES|wxTR_MULTIPLE | wxTR_FULL_ROW_HIGHLIGHT);
+
+    tlc_task_list->SetImageList(m_imageList);
+
+    tlc_task_list->AddColumn(_("项目信息"),200,wxALIGN_LEFT,-1,true,false);//0
+    tlc_task_list->AddColumn(_("任务ID"),0,wxALIGN_LEFT,-1,false,false);//1
+    tlc_task_list->AddColumn(_("台数"),50,wxALIGN_LEFT, -1,true,false );//2
+    tlc_task_list->AddColumn(_("要求完成日期"),100,wxALIGN_LEFT, -1,true,false);//3
+    tlc_task_list->AddColumn(_("紧急程度"), 60, wxALIGN_LEFT, -1, true, false);//4
+
+    tlc_task_list->AddColumn(_("非标等级"), 60, wxALIGN_LEFT, -1, true, false);//5
+
+    tlc_task_list->AddColumn(_("合同负责ID"),0,wxALIGN_LEFT, -1,false,false );//6-5
+    tlc_task_list->AddColumn(_("合同负责"),100,wxALIGN_LEFT, -1,true,false );//7-6
+    tlc_task_list->AddColumn(_("评审负责ID"),0,wxALIGN_LEFT, -1,false,false );//8-7
+    tlc_task_list->AddColumn(_("评审负责"),100,wxALIGN_LEFT, -1,true,false );//9-8
+    tlc_task_list->AddColumn(_("分公司id"),0,wxALIGN_LEFT, -1,false,false);//10-9
+    tlc_task_list->AddColumn(_("分公司"),100,wxALIGN_LEFT, -1,true,false);//11-10
+    tlc_task_list->AddColumn(_("status"),50,wxALIGN_LEFT,-1,true,false);//12-11
+    tlc_task_list->AddColumn(_("任务状态"),70,wxALIGN_LEFT,-1,true,false);//13-12
+    tlc_task_list->AddColumn(_("action_id"),0 ,wxALIGN_LEFT,-1,false,false);//14-13
+    tlc_task_list->AddColumn(_("图纸套数"),60,wxALIGN_LEFT,-1,true,false); //15-14
+    tlc_task_list->AddColumn(_("备注"),100,wxALIGN_LEFT,-1,true,false); //16-15
+    tlc_task_list->AddColumn(_("交流status"),0,wxALIGN_LEFT,-1,false,false);//17-16
+    tlc_task_list->AddColumn(_("交流状态"),200,wxALIGN_LEFT,-1,true,false);//18-17
+    tlc_task_list->AddColumn(_("紧急程度ID"),0, wxALIGN_LEFT, -1, false, false);//19-18
+
+    wxTreeItemId root = tlc_task_list->AddRoot (_("评审任务"));
 }
 
 void project_info_panel::OnButton_FeedbackClick(wxCommandEvent& event)
@@ -287,8 +357,8 @@ void project_info_panel::OnButton_FeedbackClick(wxCommandEvent& event)
         wxTreeItemId sel_item = *iter;
         if(tlc_task_list->GetItemParent(sel_item)==root)
         {
-            str_status =  tlc_task_list->GetItemText(sel_item, 16);
-            str_context =  tlc_task_list->GetItemText(sel_item, 17);
+            str_status =  tlc_task_list->GetItemText(sel_item, 17);//16
+            str_context =  tlc_task_list->GetItemText(sel_item, 18);//17
             str_task_id = tlc_task_list->GetItemText(sel_item, 1);
 
             if(str_status.IsEmpty()|| str_status == wxT("0"))
@@ -315,10 +385,10 @@ void project_info_panel::OnButton_FeedbackClick(wxCommandEvent& event)
                 {
                     if(update_communication(str_task_id, str_status, dlg.m_return))
                     {
-                        tlc_task_list->SetItemText(sel_item, 16, str_status);
+                        tlc_task_list->SetItemText(sel_item, 17, str_status);//16
                         str_context= dlg.m_return;
                         str_context = update_issue_context(wxAtoi(str_status),str_context);
-                        tlc_task_list->SetItemText(sel_item, 17, str_context);
+                        tlc_task_list->SetItemText(sel_item, 18, str_context);//17
                     }
 
                 }
@@ -375,7 +445,7 @@ void project_info_panel::OnButton1Click(wxCommandEvent& event)
 
     if(!gr_para.login_status)
     {
-        wxLogMessage(_("尚未登陆,无法做任何操作!"));
+        wxLogMessage( _("尚未登陆,无法做任何操作!"));
         return;
     }
 
@@ -425,6 +495,7 @@ void project_info_panel::OnButton1Click(wxCommandEvent& event)
     t_template = get_template_action(wf_str_review);
 
     wxArrayString array_task_units;
+    wxString s_branch_id;
     for( iter = items.begin(); iter<items.end(); iter++)
     {
         wxTreeItemId sel_item = *iter;
@@ -439,8 +510,8 @@ void project_info_panel::OnButton1Click(wxCommandEvent& event)
             {
                 wxString s_wbs = tlc_task_list->GetItemText(child_item, 0);
 
-                s_action_id = tlc_task_list->GetItemText(child_item, 13);
-                i_status = prj_str_to_status(tlc_task_list->GetItemText(child_item, 11));
+                s_action_id = tlc_task_list->GetItemText(child_item, 14);//13
+                i_status = prj_str_to_status(tlc_task_list->GetItemText(child_item, 12));//11
                 if(i_status != 1 && i_status !=3)
                 {
                     wxLogMessage(_("Unit:")+s_wbs+_("评审任务处于非活动状态，跳过！"));
@@ -463,7 +534,19 @@ void project_info_panel::OnButton1Click(wxCommandEvent& event)
                 l_proc_act->MoveToActive();
                 wf_active->Pass_proc(wxEmptyString, wxEmptyString, wxEmptyString, false);
 
-                 s_wf_status=_("评审授权");
+                s_branch_id = tlc_task_list->GetItemText(child_item, 10);
+                wxString s_operator = wxGetApp().get_operator_from_branch(s_branch_id, "G0002");
+                if(!s_operator.IsEmpty())
+                {
+                   if(wf_active->Pass_proc(s_operator, "G0002", wxEmptyString, false))
+                   {
+                       s_wf_status=_("项目评审");
+                   }
+                }else
+                {
+                   s_wf_status=_("评审授权");
+                }
+
  //               if(wf_active->update_instance(i_status, s_wf_status))
                 if(update_review_units_status(s_task_id, s_wbs, i_status, s_wf_status))
                 {
@@ -530,7 +613,7 @@ void project_info_panel::refresh_list()
     wxTreeItemId root = tlc_task_list->GetRootItem();
     tlc_task_list->DeleteChildren (root);
 
-    wxString str_sql = wxT("SELECT review_task_id,contract_id,urgent_level, project_name,project_id,require_review_date,res_cm,\
+    wxString str_sql = wxT("SELECT review_task_id,contract_id,urgent_level, project_name,project_id,require_review_date,res_cm,nonstd_level,\
                            (select name from s_employee where employee_id = res_cm) as res_cm_person,review_engineer, \
                            (select name from s_employee where employee_id = review_engineer) as review_engineer_name, branch_id,\
                            (select branch_name_cn from s_branch_info where branch_id = v_task_list4.branch_id) as branch_name, status, wf_status, action_id, wbs_no,lift_no,\
@@ -555,6 +638,7 @@ void project_info_panel::refresh_list()
     wxArrayString array_str;
     int i_review_status;
     int i_urgent_level;
+    int i_nstd_level;
 
     for(int i=0; i<i_count; i++)
     {
@@ -571,30 +655,31 @@ void project_info_panel::refresh_list()
             str = DateToStrFormat(_res->GetDateTime(wxT("require_review_date")));
             tlc_task_list->SetItemText(branch_item, 3, str);
 
+
             str = _res->GetVal(wxT("res_cm"));
-            tlc_task_list->SetItemText(branch_item,5, str);
+            tlc_task_list->SetItemText(branch_item,6, str);//5
 
             str = _res->GetVal(wxT("res_cm_person"));
-            tlc_task_list->SetItemText(branch_item,6, str);
+            tlc_task_list->SetItemText(branch_item,7, str);//6
 
             str = _res->GetVal(wxT("review_engineer"));
-            tlc_task_list->SetItemText(branch_item,7, str);
+            tlc_task_list->SetItemText(branch_item,8, str);//7
 
             str = _res->GetVal(wxT("review_engineer_name"));
-            tlc_task_list->SetItemText(branch_item,8, str);
+            tlc_task_list->SetItemText(branch_item,9, str);//8
 
             str = _res->GetVal(wxT("branch_id"));
-            tlc_task_list->SetItemText(branch_item,9, str);
+            tlc_task_list->SetItemText(branch_item,10, str);//9
 
             str = _res->GetVal(wxT("branch_name"));
-            tlc_task_list->SetItemText(branch_item,10, str);
+            tlc_task_list->SetItemText(branch_item,11, str);//10
 
 
             str = _res->GetVal(wxT("review_drawing_qty"));
-            tlc_task_list->SetItemText(branch_item,14, str);
+            tlc_task_list->SetItemText(branch_item,15, str);//14
 
             str = _res->GetVal(wxT("review_remarks"));
-            tlc_task_list->SetItemText(branch_item,15, str);
+            tlc_task_list->SetItemText(branch_item,16, str);//15
 
             str = _res->GetVal(wxT("com_context"));
             i_review_status = 0;
@@ -619,8 +704,8 @@ void project_info_panel::refresh_list()
 
                   array_str.Clear();
             }
-            tlc_task_list->SetItemText(branch_item,16, NumToStr(i_review_status));
-            tlc_task_list->SetItemText(branch_item,17, str);
+            tlc_task_list->SetItemText(branch_item,17, NumToStr(i_review_status));//16
+            tlc_task_list->SetItemText(branch_item,18, str);//17
         }
 
         str = _res->GetVal(wxT("wbs_no"));
@@ -639,19 +724,26 @@ void project_info_panel::refresh_list()
         str = urgent_level_to_str(i_urgent_level);
         tlc_task_list->SetItemText(leaf_item, 4, str);
 
-        tlc_task_list->SetItemText(leaf_item, 18, NumToStr(i_urgent_level));
+        i_nstd_level = _res->GetInt(wxT("nonstd_level"));
+        str = nstd_level_to_str(i_nstd_level);
+        tlc_task_list->SetItemText(leaf_item, 5, str);
+
+        tlc_task_list->SetItemText(leaf_item, 19, NumToStr(i_urgent_level));//18
 
         str = prj_catalog_to_str(_res->GetInt(wxT("project_catalog")));
-        tlc_task_list->SetItemText(leaf_item,6, str);
+        tlc_task_list->SetItemText(leaf_item,7, str);//6
+
+        str = _res->GetVal(wxT("branch_id"));
+        tlc_task_list->SetItemText(leaf_item,10, str);//9
 
         str = prj_status_to_str(_res->GetInt(wxT("unit_status")));
-        tlc_task_list->SetItemText(leaf_item,11, str);
+        tlc_task_list->SetItemText(leaf_item,12, str);//11
 
         str = _res->GetVal(wxT("unit_wf_status"));
-        tlc_task_list->SetItemText(leaf_item,12, str);
+        tlc_task_list->SetItemText(leaf_item,13, str);//12
 
         str = _res->GetVal(wxT("action_id"));
-        tlc_task_list->SetItemText(leaf_item,13, str);
+        tlc_task_list->SetItemText(leaf_item,14, str);//13
 
         _res->MoveNext();
     }
@@ -693,6 +785,7 @@ void project_info_panel::refresh_level()
 
     wxArrayString a_lift_no;
     wxString s_lift_no;
+    wxString s_nstd_level;
 
     while(item.IsOk())
     {
@@ -704,7 +797,7 @@ void project_info_panel::refresh_level()
         i_action=0;
 
 
-        int i_review_status = StrToInt(tlc_task_list->GetItemText(item, 16));
+        int i_review_status = StrToInt(tlc_task_list->GetItemText(item, 17));//16
         if(i_review_status==1)
         {
             tlc_task_list->SetItemImage(item, 5);
@@ -714,12 +807,14 @@ void project_info_panel::refresh_level()
         }else
             tlc_task_list->SetItemImage(item, -1);
 
+        s_nstd_level = wxEmptyString;
+
         while(child_item.IsOk())
         {
-            wxString s_action_id = tlc_task_list->GetItemText(child_item,13);
-            str = tlc_task_list->GetItemText(child_item, 11);
+            wxString s_action_id = tlc_task_list->GetItemText(child_item,14);//13
+            str = tlc_task_list->GetItemText(child_item, 12);//11
 
-            itemp = StrToInt(tlc_task_list->GetItemText(child_item, 18));
+            itemp = StrToInt(tlc_task_list->GetItemText(child_item, 19));//18
 
             s_lift_no = tlc_task_list->GetItemText(child_item, 2);
             a_lift_no.Add(s_lift_no);
@@ -737,7 +832,8 @@ void project_info_panel::refresh_level()
                     s_status = s_status+wxT("+")+str;
             }
 
-            str = tlc_task_list->GetItemText(child_item, 12);
+            str = tlc_task_list->GetItemText(child_item, 13);//12
+
 
             if(!s_wf_status.Contains(str))
             {
@@ -764,6 +860,15 @@ void project_info_panel::refresh_level()
                 i_action++;
             }
 
+            str = tlc_task_list->GetItemText(child_item, 5);
+            if(s_nstd_level.IsEmpty())
+            {
+                s_nstd_level = str;
+            }else if(!s_nstd_level.Contains(str))
+            {
+                s_nstd_level = s_nstd_level+"+"+str;
+            }
+
             child_item = tlc_task_list->GetNextSibling(child_item);
 
         }
@@ -780,13 +885,14 @@ void project_info_panel::refresh_level()
 
         s_lift_no = Combine_lift_no(a_lift_no);
 
+        tlc_task_list->SetItemText(item, 5, s_nstd_level);
         tlc_task_list->SetItemText(item, 2, NumToStr(i_count_leaf)+_("台[")+s_lift_no+_("]"));
 
         a_lift_no.Clear();
 
 
-        tlc_task_list->SetItemText(item, 11, s_status);
-        tlc_task_list->SetItemText(item, 12, s_wf_status);
+        tlc_task_list->SetItemText(item, 12, s_status);//11
+        tlc_task_list->SetItemText(item, 13, s_wf_status);//12
         tlc_task_list->SetItemText(item, 4, s_urgent_level);
 
         s_status.Empty();
@@ -798,37 +904,6 @@ void project_info_panel::refresh_level()
     }
 }
 
-void project_info_panel::BuildDataViewCtrl()
-{
-   InitImageList();
-   tlc_task_list = new wxcode::wxTreeListCtrl(this, ID_TREELISTCTRL_TASK_LIST ,
-                                  wxDefaultPosition, wxDefaultSize,
-                                  wxTR_DEFAULT_STYLE| wxTR_COLUMN_LINES|wxTR_HIDE_ROOT|wxTR_ROW_LINES|wxTR_MULTIPLE | wxTR_FULL_ROW_HIGHLIGHT);
-
-    tlc_task_list->SetImageList(m_imageList);
-
-    tlc_task_list->AddColumn(_("项目信息"),200,wxALIGN_LEFT,-1,true,false);//0
-    tlc_task_list->AddColumn(_("任务ID"),0,wxALIGN_LEFT,-1,false,false);//1
-    tlc_task_list->AddColumn(_("台数"),50,wxALIGN_LEFT, -1,true,false );//2
-    tlc_task_list->AddColumn(_("要求完成日期"),100,wxALIGN_LEFT, -1,true,false);//3
-    tlc_task_list->AddColumn(_("紧急程度"), 60, wxALIGN_LEFT, -1, true, false);//4
-    tlc_task_list->AddColumn(_("合同负责ID"),0,wxALIGN_LEFT, -1,false,false );//5
-    tlc_task_list->AddColumn(_("合同负责"),100,wxALIGN_LEFT, -1,true,false );//6
-    tlc_task_list->AddColumn(_("评审负责ID"),0,wxALIGN_LEFT, -1,false,false );//7
-    tlc_task_list->AddColumn(_("评审负责"),100,wxALIGN_LEFT, -1,true,false );//8
-    tlc_task_list->AddColumn(_("分公司id"),0,wxALIGN_LEFT, -1,false,false);//9
-    tlc_task_list->AddColumn(_("分公司"),100,wxALIGN_LEFT, -1,true,false);//10
-    tlc_task_list->AddColumn(_("status"),50,wxALIGN_LEFT,-1,true,false);//11
-    tlc_task_list->AddColumn(_("任务状态"),70,wxALIGN_LEFT,-1,true,false);//12
-    tlc_task_list->AddColumn(_("action_id"),0 ,wxALIGN_LEFT,-1,false,false);//13
-    tlc_task_list->AddColumn(_("图纸套数"),60,wxALIGN_LEFT,-1,true,false); //14
-    tlc_task_list->AddColumn(_("备注"),100,wxALIGN_LEFT,-1,true,false); //15
-    tlc_task_list->AddColumn(_("交流status"),0,wxALIGN_LEFT,-1,false,false);//16
-    tlc_task_list->AddColumn(_("交流状态"),200,wxALIGN_LEFT,-1,true,false);//17
-    tlc_task_list->AddColumn(_("紧急程度ID"),0, wxALIGN_LEFT, -1, false, false);//18
-
-    wxTreeItemId root = tlc_task_list->AddRoot (_("评审任务"));
-}
 
 void project_info_panel::OnButton3Click(wxCommandEvent& event)
 {
@@ -916,6 +991,7 @@ void project_info_panel::Onchoice_statusSelect(wxCommandEvent& event)
     refresh_list();
 }
 
+
 void project_info_panel::OnButton4Click(wxCommandEvent& event)
 {
     if(!gr_para.login_status)
@@ -974,7 +1050,7 @@ void project_info_panel::OnButton4Click(wxCommandEvent& event)
             while(child_item.IsOk())
             {
                   str = tlc_task_list->GetItemText(child_item,0);
-                  s_action_id = tlc_task_list->GetItemText(child_item, 13);
+                  s_action_id = tlc_task_list->GetItemText(child_item, 14);//13
                   if(s_action_id == wxT("AT00000001") )
                   {
                       wxLogMessage(str+_("项目立项状态，无法进行此操作，请点击立项状态项目启动!"));
@@ -998,7 +1074,7 @@ void project_info_panel::OnButton4Click(wxCommandEvent& event)
         {
             str = tlc_task_list->GetItemText(sel_item,0);
 
-            s_action_id = tlc_task_list->GetItemText(sel_item, 13);
+            s_action_id = tlc_task_list->GetItemText(sel_item, 14);//13
             if(s_action_id == wxT("AT00000001") )
             {
                 wxLogMessage(str+_("项目立项状态，无法进行此操作，请点击立项状态项目启动!"));
@@ -1032,6 +1108,8 @@ void project_info_panel::OnButton4Click(wxCommandEvent& event)
 
     v_wf_action * t_template = get_template_action(wf_str_review);
     wf_operator * wf_review = 0;
+    wxString s_branch_id;
+
     for(int i=0;i<i_count;i++)
     {
         start_mils = wxGetLocalTimeMillis();
@@ -1090,7 +1168,35 @@ void project_info_panel::OnButton4Click(wxCommandEvent& event)
 
         wf_review->restart_instance(wxT("AT00000002"),i_restart_times-1);
 
-        s_wf_status = _("评审授权");
+        if(!b_same_prj)
+        {
+            s_branch_id = wxGetApp().get_branch_id(s_project);
+        }
+
+        wxString s_operator;
+        if(!s_branch_id.IsEmpty())
+        {
+            s_operator= wxGetApp().get_operator_from_branch( s_branch_id, "G0002");
+            if(!s_operator.IsEmpty())
+            {
+                if(wf_review->Pass_proc(s_operator, "G0002", wxEmptyString, false))
+                {
+                    s_wf_status=_("项目评审");
+                }
+            }
+            else
+            {
+                s_wf_status=_("评审授权");
+            }
+
+        }
+        else
+        {
+            s_wf_status=_("评审授权");
+
+        }
+
+        //s_wf_status = _("评审授权");
 
    //     if(wf_review->update_instance(3,s_wf_status))
         if(update_review_units_status(s_task_id, s_wbs,3,s_wf_status, i_restart_times))
@@ -1442,13 +1548,13 @@ void project_info_panel::Onmi_commonSelected(wxCommandEvent& event)
 
                 s_wbs = tlc_task_list->GetItemText(child_item, 0);
                 s_task_id = tlc_task_list->GetItemText(child_item, 1);
-                i_urgent_level= StrToInt(tlc_task_list->GetItemText(child_item, 18));
-                s_action_id = tlc_task_list->GetItemText(child_item, 13);
+                i_urgent_level= StrToInt(tlc_task_list->GetItemText(child_item, 19));//18
+                s_action_id = tlc_task_list->GetItemText(child_item, 14);//13
                 if(update_urgent_level(s_task_id, s_wbs, i_urgent_level, 1,s_action_id)==1)
                 {
 
                     tlc_task_list->SetItemText(child_item, 4,_("普通"));
-                    tlc_task_list->SetItemText(child_item, 18, wxT("1"));
+                    tlc_task_list->SetItemText(child_item, 19, wxT("1"));//18
                 }
 
                 child_item = tlc_task_list->GetNextSibling(child_item);
@@ -1460,11 +1566,11 @@ void project_info_panel::Onmi_commonSelected(wxCommandEvent& event)
 
             s_wbs = tlc_task_list->GetItemText(sel_item, 0);
             s_task_id = tlc_task_list->GetItemText(sel_item, 1);
-            i_urgent_level= StrToInt(tlc_task_list->GetItemText(sel_item, 18));
+            i_urgent_level= StrToInt(tlc_task_list->GetItemText(sel_item, 19));//18
 
-            s_action_id = tlc_task_list->GetItemText(sel_item, 13);
+            s_action_id = tlc_task_list->GetItemText(sel_item, 14);//13
             if(update_urgent_level(s_task_id, s_wbs, i_urgent_level, 1, s_action_id)==1)
-                tlc_task_list->SetItemText(sel_item, 18, wxT("1"));
+                tlc_task_list->SetItemText(sel_item, 19, wxT("1"));//18
         }
 
     }
@@ -1505,13 +1611,13 @@ void project_info_panel::Onmi_urgentSelected(wxCommandEvent& event)
 
                 s_wbs = tlc_task_list->GetItemText(child_item, 0);
                 s_task_id = tlc_task_list->GetItemText(child_item, 1);
-                i_urgent_level= StrToInt(tlc_task_list->GetItemText(child_item, 18));
-                s_action_id = tlc_task_list->GetItemText(child_item, 13);
+                i_urgent_level= StrToInt(tlc_task_list->GetItemText(child_item, 19));//18
+                s_action_id = tlc_task_list->GetItemText(child_item, 14);//13
                 if(update_urgent_level(s_task_id, s_wbs, i_urgent_level, 2, s_action_id)==1)
                 {
 
                     tlc_task_list->SetItemText(child_item, 4,_("紧急"));
-                    tlc_task_list->SetItemText(child_item, 18, wxT("2"));
+                    tlc_task_list->SetItemText(child_item, 19, wxT("2"));//18
                 }
 
                 child_item = tlc_task_list->GetNextSibling(child_item);
@@ -1523,10 +1629,10 @@ void project_info_panel::Onmi_urgentSelected(wxCommandEvent& event)
 
             s_wbs = tlc_task_list->GetItemText(sel_item, 0);
             s_task_id = tlc_task_list->GetItemText(sel_item, 1);
-            i_urgent_level= StrToInt(tlc_task_list->GetItemText(sel_item, 18));
-            s_action_id = tlc_task_list->GetItemText(sel_item, 13);
+            i_urgent_level= StrToInt(tlc_task_list->GetItemText(sel_item, 19));//18
+            s_action_id = tlc_task_list->GetItemText(sel_item, 14);//13
             if(update_urgent_level(s_task_id, s_wbs, i_urgent_level, 2, s_action_id)==1)
-                tlc_task_list->SetItemText(sel_item, 18, wxT("2"));
+                tlc_task_list->SetItemText(sel_item, 19, wxT("2"));//18
         }
 
     }
@@ -1567,13 +1673,13 @@ void project_info_panel::Onmi_specialSelected(wxCommandEvent& event)
 
                 s_wbs = tlc_task_list->GetItemText(child_item, 0);
                 s_task_id = tlc_task_list->GetItemText(child_item, 1);
-                i_urgent_level= StrToInt(tlc_task_list->GetItemText(child_item, 18));
-                s_action_id = tlc_task_list->GetItemText(child_item, 13);
+                i_urgent_level= StrToInt(tlc_task_list->GetItemText(child_item, 19));//18
+                s_action_id = tlc_task_list->GetItemText(child_item, 14);//13
                 if(update_urgent_level(s_task_id, s_wbs, i_urgent_level, 3,s_action_id)==1)
                 {
 
                     tlc_task_list->SetItemText(child_item, 4,_("特紧急"));
-                    tlc_task_list->SetItemText(child_item, 18, wxT("3"));
+                    tlc_task_list->SetItemText(child_item, 19, wxT("3"));//18
                 }
 
                 child_item = tlc_task_list->GetNextSibling(child_item);
@@ -1585,10 +1691,10 @@ void project_info_panel::Onmi_specialSelected(wxCommandEvent& event)
 
             s_wbs = tlc_task_list->GetItemText(sel_item, 0);
             s_task_id = tlc_task_list->GetItemText(sel_item, 1);
-            i_urgent_level= StrToInt(tlc_task_list->GetItemText(sel_item, 18));
-            s_action_id = tlc_task_list->GetItemText(sel_item, 13);
+            i_urgent_level= StrToInt(tlc_task_list->GetItemText(sel_item, 19));//18
+            s_action_id = tlc_task_list->GetItemText(sel_item, 14);//13
             if(update_urgent_level(s_task_id, s_wbs, i_urgent_level, 3, s_action_id)==1)
-                tlc_task_list->SetItemText(sel_item, 18, wxT("3"));
+                tlc_task_list->SetItemText(sel_item, 19, wxT("3"));//18
         }
 
     }
@@ -1617,7 +1723,7 @@ void project_info_panel::Onmi_remarksSelected(wxCommandEvent& event)
         wxTreeItemId sel_item = *iter;
         if(tlc_task_list->GetItemParent(sel_item) == root)
         {
-            s_old_remarks= tlc_task_list->GetItemText(sel_item, 15);
+            s_old_remarks= tlc_task_list->GetItemText(sel_item, 16);//15
             s_task_id = tlc_task_list->GetItemText(sel_item, 1);
 
             wxTextEntryDialog tdlg(this, _("确认修改当前备注")+s_old_remarks, _("备注"), wxT(""), wxOK | wxCANCEL | wxTE_MULTILINE, wxDefaultPosition);
@@ -1633,7 +1739,7 @@ void project_info_panel::Onmi_remarksSelected(wxCommandEvent& event)
             s_sql = wxT("UPDATE s_review_info SET modify_date='")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id='")+gr_para.login_user+wxT("',  review_remarks='")+s_remarks+wxT("' where review_task_id='")+s_task_id+wxT("';");
             if(wxGetApp().app_sql_update(s_sql))
             {
-                tlc_task_list->SetItemText(sel_item, 15, s_remarks);
+                tlc_task_list->SetItemText(sel_item, 16, s_remarks);//15
                 wxGetApp().change_log(wxT("s_review_info"), s_task_id, wxT("review_remarks"), s_old_remarks, s_remarks);
 
             }
@@ -1819,11 +1925,11 @@ int project_info_panel::Copy()
             s_projec_name = s_projec_name.Left(i_pos);
             s_req_finish = tlc_task_list->GetItemText(sel_item, 3);
 
-            s_cm_res = tlc_task_list->GetItemText(sel_item, 6);
-            s_review_res = tlc_task_list->GetItemText(sel_item, 8);
-            s_branch = tlc_task_list->GetItemText(sel_item, 10);
-       //     s_remarks = tlc_task_list->GetItemText(sel_item, 15);
-         //   s_com_context=tlc_task_list->GetItemText(sel_item, 17);
+            s_cm_res = tlc_task_list->GetItemText(sel_item, 7);//6
+            s_review_res = tlc_task_list->GetItemText(sel_item, 9);//8
+            s_branch = tlc_task_list->GetItemText(sel_item, 11);//10
+       //     s_remarks = tlc_task_list->GetItemText(sel_item, 16);//15
+         //   s_com_context=tlc_task_list->GetItemText(sel_item, 18);//17
 
             while(child_item.IsOk())
             {
@@ -1832,8 +1938,8 @@ int project_info_panel::Copy()
                   s_lift_type = tlc_task_list->GetItemText(child_item, 2);
                   s_lift_no = tlc_task_list->GetItemText(child_item, 3);
                   s_urgent_level = tlc_task_list->GetItemText(child_item, 4);
-                  s_status = tlc_task_list->GetItemText(child_item, 11);
-                  s_wf_status = tlc_task_list->GetItemText(child_item, 12);
+                  s_status = tlc_task_list->GetItemText(child_item, 12);//11
+                  s_wf_status = tlc_task_list->GetItemText(child_item, 13);//12
 
 
                   str = str + s_task_id+wxT("\t")+s_wbsno+wxT("\t")+s_projec_name+wxT("\t")+s_lift_no+wxT("\t")+s_lift_type+wxT("\t")+
@@ -1852,19 +1958,19 @@ int project_info_panel::Copy()
                  s_projec_name = s_projec_name.Left(i_pos);
                  s_req_finish = tlc_task_list->GetItemText(parent_id, 3);
 
-                 s_cm_res = tlc_task_list->GetItemText(parent_id, 6);
-                 s_review_res = tlc_task_list->GetItemText(parent_id, 8);
-                 s_branch = tlc_task_list->GetItemText(parent_id, 10);
-        //         s_remarks = tlc_task_list->GetItemText(parent_id, 15);
-         //         s_com_context=tlc_task_list->GetItemText(parent_id, 17);
+                 s_cm_res = tlc_task_list->GetItemText(parent_id, 7);//6
+                 s_review_res = tlc_task_list->GetItemText(parent_id, 9);//8
+                 s_branch = tlc_task_list->GetItemText(parent_id, 11);//10
+        //         s_remarks = tlc_task_list->GetItemText(parent_id, 16);//15
+         //         s_com_context=tlc_task_list->GetItemText(parent_id, 18);//17
 
                  s_task_id = tlc_task_list->GetItemText(sel_item, 1);
                   s_wbsno = tlc_task_list->GetItemText(sel_item, 0);
                   s_lift_type = tlc_task_list->GetItemText(sel_item, 2);
                   s_lift_no = tlc_task_list->GetItemText(sel_item, 3);
                   s_urgent_level = tlc_task_list->GetItemText(sel_item, 4);
-                  s_status = tlc_task_list->GetItemText(sel_item, 11);
-                  s_wf_status = tlc_task_list->GetItemText(sel_item, 12);
+                  s_status = tlc_task_list->GetItemText(sel_item, 12);//11
+                  s_wf_status = tlc_task_list->GetItemText(sel_item, 13);//12
 
 
                   str = str + s_task_id+wxT("\t")+s_wbsno+wxT("\t")+s_projec_name+wxT("\t")+s_lift_no+wxT("\t")+s_lift_type+wxT("\t")+
@@ -1938,7 +2044,7 @@ void project_info_panel::Onmi_cm_resSelected(wxCommandEvent& event)
 
             s_task_id=tlc_task_list->GetItemText(sel_item, 1);
 
-            s_old_user = tlc_task_list->GetItemText(sel_item, 5);
+            s_old_user = tlc_task_list->GetItemText(sel_item, 6);//5
 
             if(check_subitem_status(sel_item))
             {
@@ -1946,8 +2052,8 @@ void project_info_panel::Onmi_cm_resSelected(wxCommandEvent& event)
                   if( wxGetApp().app_sql_update(s_sql))
                   {
                        wxGetApp().change_log(wxT("s_review_info"),s_task_id,wxT("res_cm"),s_old_user,s_user,wxT("by hand"));
-                       tlc_task_list->SetItemText(sel_item, 5,s_user);
-                       tlc_task_list->SetItemText(sel_item, 6, s_user_name);
+                       tlc_task_list->SetItemText(sel_item, 6,s_user);//5
+                       tlc_task_list->SetItemText(sel_item, 7, s_user_name);//6
                        wxLogMessage(s_task_id+_("变更商务负责人")+s_user_name+wxT("成功!"));
                   }
 
@@ -1985,7 +2091,7 @@ bool project_info_panel::check_subitem_status(wxTreeItemId &i_item)
 
     while(child_item.IsOk())
     {
-        s_action_id = tlc_task_list->GetItemText(child_item,13);
+        s_action_id = tlc_task_list->GetItemText(child_item,14);//13
         if(s_action_id==wxT("AT00000001")||s_action_id==wxT("AT00000002"))
         {
              return true;
@@ -2006,7 +2112,6 @@ void project_info_panel::Onmi_startSelected(wxCommandEvent& event)
         return;
     }
 
-    wxArrayString array_date;
 
     wxString str;
 
@@ -2034,9 +2139,9 @@ void project_info_panel::Onmi_startSelected(wxCommandEvent& event)
     if (saveFileDialog.ShowModal() == wxID_CANCEL)
         return;     // the user changed idea..
 
-    wxString s_sql = wxT("select review_task_id,review_drawing_qty,contract_id, project_name, instance_id, elevator_id,(select elevator_type from s_elevator_type_define where elevator_type_id= elevator_id) as elevator_type,lift_no, \
-                         res_cm, action_id, (select name from s_employee where employee_id=res_cm) as res_cm_name, start_date, review_engineer , (select name from s_employee where employee_id=review_engineer) as review_engineer_name, \
-                         finish_date,is_active, (select issue_date from s_review_communication where review_task_id=v_task_list4.review_task_id and issue_status>=0 and issue_status<3) as issue_date from v_task_list4 where (action_id='AT00000002' or action_id='AT00000026') and is_latest=true and is_del=false and status>=0 ");
+    wxString s_sql = wxT("select review_task_id,review_drawing_qty,contract_id, project_name, instance_id, elevator_id,(select elevator_type from s_elevator_type_define where elevator_type_id= elevator_id) as elevator_type,lift_no, flow_ser, nonstd_level,branch_id,\
+                         res_cm, action_id, (select name from s_employee where employee_id=res_cm) as res_cm_name, start_date, review_engineer , (select name from s_employee where employee_id=review_engineer) as review_engineer_name,(select  branch_name_cn from s_branch_info where branch_id=v_task_list4.branch_id) as branch_name,\
+                         finish_date,is_active, (select issue_date from s_review_communication where review_task_id=v_task_list4.review_task_id and issue_status>=0 and issue_status<3) as issue_date from v_task_list4 where workflow_id='WF0001' AND flow_ser<=4 and is_latest=true and is_del=false and status>=0 ");
 
     if(b_from && b_to)
         s_sql = s_sql + wxT(" and start_date >='")+DateToStrFormat(dt_from)+s_time+wxT("' and start_date<='")+DateToStrFormat(dt_to)+s_time+wxT("' ");
@@ -2047,7 +2152,7 @@ void project_info_panel::Onmi_startSelected(wxCommandEvent& event)
     if (!b_from && b_to)
         s_sql = s_sql + wxT(" and start_date <='")+DateToStrFormat(dt_to)+s_time+wxT("' ");
 
-    s_sql = s_sql +wxT(" order by instance_id, action_id, start_date Asc;");
+    s_sql = s_sql +wxT(" order by instance_id, flow_ser Asc;");
 
     wxPostgreSQLresult* _res;
 
@@ -2067,7 +2172,6 @@ void project_info_panel::Onmi_authorSelected(wxCommandEvent& event)
         return;
     }
 
-    wxArrayString array_date;
 
     wxString str;
 
@@ -2096,9 +2200,9 @@ void project_info_panel::Onmi_authorSelected(wxCommandEvent& event)
         return;     // the user changed idea...
 
 
-    wxString s_sql = wxT("select review_task_id,review_drawing_qty,contract_id, project_name, instance_id, elevator_id,(select elevator_type from s_elevator_type_define where elevator_type_id= elevator_id) as elevator_type,lift_no, \
-                         res_cm, (select name from s_employee where employee_id=res_cm) as res_cm_name, start_date, review_engineer , (select name from s_employee where employee_id=review_engineer) as review_engineer_name, \
-                         finish_date,is_active, (select issue_date from s_review_communication where review_task_id=v_task_list4.review_task_id and issue_status>=0 and issue_status<3) as issue_date from v_task_list4 where (action_id='AT00000002' or action_id='AT00000026') and is_latest=true and is_del=false and status>=0 ");
+    wxString s_sql = wxT("select review_task_id,review_drawing_qty,contract_id, project_name, instance_id, elevator_id,(select elevator_type from s_elevator_type_define where elevator_type_id= elevator_id) as elevator_type,lift_no,flow_ser, nonstd_level,branch_id,\
+                         res_cm, action_id,(select name from s_employee where employee_id=res_cm) as res_cm_name, start_date, review_engineer , (select name from s_employee where employee_id=review_engineer) as review_engineer_name, (select  branch_name_cn from s_branch_info where branch_id=v_task_list4.branch_id) as branch_name,\
+                         finish_date,is_active, (select issue_date from s_review_communication where review_task_id=v_task_list4.review_task_id and issue_status>=0 and issue_status<3) as issue_date from v_task_list4 where workflow_id='WF0001' AND flow_ser<=4 and is_latest=true and is_del=false and status>=0 ");
 
     if(b_from && b_to)
         s_sql = s_sql + wxT(" and finish_date >='")+DateToStrFormat(dt_from)+s_time+wxT("' and finish_date<='")+DateToStrFormat(dt_to)+s_time+wxT("' ");
@@ -2109,7 +2213,7 @@ void project_info_panel::Onmi_authorSelected(wxCommandEvent& event)
     if (!b_from && b_to)
         s_sql = s_sql + wxT(" and finish_date<='")+DateToStrFormat(dt_to)+s_time+wxT("' ");
 
-    s_sql = s_sql +wxT(" order by instance_id, action_id, finish_date Asc;");
+    s_sql = s_sql +wxT(" order by instance_id, flow_ser Asc;");
 
     wxPostgreSQLresult* _res;
 
@@ -2148,15 +2252,17 @@ void project_info_panel::save_file(wxString s_path, wxPostgreSQLresult* _res)
     }
 
     _res->MoveFirst();
-    wxString s_wbs_no;
+    wxString s_wbs_no, s_action;
     bool b_active = false;
+    bool b_continue = false;
      i=0;
-     wxDateTime d_finish;
+     wxDateTime d_finish,d_start;
     for(int  j=0;j<i_count;j++)
     {
 
         if(s_wbs_no != _res->GetVal(wxT("instance_id")))
         {
+            b_continue=false;
             s_wbs_no = _res->GetVal(wxT("instance_id"));
             str = _res->GetVal(wxT("review_task_id"));
             ws->label(i+1, 0, str.ToStdString());
@@ -2176,31 +2282,57 @@ void project_info_panel::save_file(wxString s_path, wxPostgreSQLresult* _res)
             ws->label(i+1, 7, str.ToStdWstring());
             str = _res->GetVal(wxT("res_cm_name"));
             ws->label(i+1, 8, str.ToStdWstring());
-            str =DateToAnsiStr(_res->GetDateTime(wxT("start_date")));
+
+            str = nstd_level_to_str(_res->GetInt(wxT("nonstd_level")));
+            ws->label(i+1, 14, str.ToStdString());
+
+            str = _res->GetVal(wxT("branch_name"));
+            ws->label(i+1, 15, str.ToStdWstring());
+
+            i+=1;
+        }
+
+        b_active = _res->GetBool(wxT("is_active"));
+
+        if(b_continue)
+        {
+            _res->MoveNext();
+            continue;
+        }else
+            b_continue = b_active;
+
+        s_action = _res->GetVal(wxT("action_id"));
+        d_start = _res->GetDateTime(wxT("start_date"));
+
+        if(s_action=="AT00000002")
+        {
+            str =DateToAnsiStr(d_start);
             ws->label(i+1, 9, str.ToStdString());
+        }
+
+        if(s_action=="AT00000025")
+        {
+            str = DateToAnsiStr(d_start);
+            ws->label(i+1, 11, str.ToStdString());
             str  = _res->GetVal(wxT("review_engineer_name"));
             ws->label(i+1, 10, str.ToStdWstring());
-            d_finish = _res->GetDateTime(wxT("finish_date"));
-            str =DateToAnsiStr(d_finish);
+        }
 
-            if (d_finish <= _res->GetDateTime(wxT("issue_date")))
-            {
-                ws->label(i+1, 11, str.ToStdString());
+        if (d_start <= _res->GetDateTime(wxT("issue_date")) and s_action=="AT00000025")
+        {
                 str = DateToAnsiStr(_res->GetDateTime(wxT("issue_date")));
                 ws->label(i+1, 12, str.ToStdString());
-            }
-
-
-            b_active = _res->GetBool(wxT("is_active"));
-            i++;
-        }else if(!b_active)
-        {
-            if(!_res->GetBool(wxT("is_active"))&& d_finish<=_res->GetDateTime(wxT("finish_date")))
-            {
-                str = DateToAnsiStr(_res->GetDateTime(wxT("finish_date")));
-                ws->label(i+1, 13, str.ToStdString());
-            }
         }
+
+        d_finish = _res->GetDateTime(wxT("finish_date"));
+
+
+        if(s_action=="AT00000026"&& !b_active)
+        {
+            str = DateToAnsiStr(d_finish);
+            ws->label(i+1, 13, str.ToStdString());
+        }
+
 
         _res->MoveNext();
     }
@@ -2246,5 +2378,41 @@ void project_info_panel::init_excel_head()
     array_excel_head.Add(str);
     str = "评审完成日期";
     array_excel_head.Add(str);
+    str = "非标等级";
+    array_excel_head.Add(str);
+    str = "分公司";
+    array_excel_head.Add(str);
 
+}
+
+void project_info_panel::Onmi_review_allSelected(wxCommandEvent& event)
+{
+   if (!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,不能进行任何操作!"));
+        return;
+    }
+    wxString str;
+
+
+    wxFileDialog     saveFileDialog(this, _("Save xls file"), "", "",
+                                       "xls files (*.xls)|*.xls", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+        return;     // the user changed idea..
+
+    wxString s_sql = wxT("select review_task_id,review_drawing_qty,contract_id, project_name, instance_id, elevator_id,(select elevator_type from s_elevator_type_define where elevator_type_id= elevator_id) as elevator_type,lift_no, flow_ser, nonstd_level,branch_id,\
+                         res_cm, action_id, (select name from s_employee where employee_id=res_cm) as res_cm_name, start_date, review_engineer , (select name from s_employee where employee_id=review_engineer) as review_engineer_name, (select  branch_name_cn from s_branch_info where branch_id=v_task_list4.branch_id) as branch_name,\
+                         finish_date,is_active, (select issue_date from s_review_communication where review_task_id=v_task_list4.review_task_id and issue_status>=0 and issue_status<3) as issue_date from v_task_list4 where workflow_id='WF0001' AND flow_ser<=4 and is_latest=true and is_del=false and status>=0 ");
+
+
+    s_sql = s_sql +wxT(" order by instance_id, flow_ser Asc;");
+
+    wxPostgreSQLresult* _res;
+
+    _res = wxGetApp().app_sql_select(s_sql);
+
+
+    wxString str_file = saveFileDialog.GetPath();
+
+    save_file(str_file, _res);
 }
