@@ -291,7 +291,7 @@ class instance_unit_info: public wxPanel
 		int m_rows;
 		bool b_refresh_project;
 
-		bool update_operator(wxString s_instance_id, wxString s_operator_id); //更新评审工作流第一步负责人
+		bool update_operator(wxString s_task_id, wxString s_operator_id); //更新评审工作流第一步负责人
         void save_file(wxString s_file);
 
 //		Rfc_Communication * sap_rfc_conn;

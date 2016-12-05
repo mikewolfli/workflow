@@ -2,194 +2,9 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="workflow_wf.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="89393" topLine="2378" />
-		</Cursor>
-	</File>
-	<File name="nstd_task_author.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1974" topLine="77" />
-		</Cursor>
-	</File>
-	<File name="interface\wxPostgreSQL.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1698" topLine="52" />
-		</Cursor>
-	</File>
-	<File name="po_confirm_panel.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="65293" topLine="1896" />
-		</Cursor>
-	</File>
 	<File name="interface\wxpg_utils.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="5529" topLine="145" />
-		</Cursor>
-	</File>
-	<File name="project_review_author_panel.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="6357" topLine="156" />
-		</Cursor>
-	</File>
-	<File name="wfApp.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="14384" topLine="544" />
-		</Cursor>
-	</File>
-	<File name="wfMain.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="51103" topLine="1496" />
-		</Cursor>
-	</File>
-	<File name="qrencode\bitstream.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="870" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="review_remarks_dlg.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="5927" topLine="95" />
-		</Cursor>
-	</File>
-	<File name="nstd_app_unit_list.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="895" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="rfc_communication.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="19122" topLine="327" />
-		</Cursor>
-	</File>
-	<File name="info_id_generator_panel.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3577" topLine="100" />
-		</Cursor>
-	</File>
-	<File name="security\base64.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="828" topLine="27" />
-		</Cursor>
-	</File>
-	<File name="ins_nonstd_proc_log.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="649" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="nstd_mat_apply.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="9581" topLine="281" />
-		</Cursor>
-	</File>
-	<File name="instance_unit_info.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="10435" topLine="264" />
-		</Cursor>
-	</File>
-	<File name="thread\curl_http.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="324" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="wf_stdafx.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="6314" topLine="226" />
-		</Cursor>
-	</File>
-	<File name="nstd_mat_task_list.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1916" topLine="61" />
-		</Cursor>
-	</File>
-	<File name="thread\curl_thread.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="228" topLine="53" />
-		</Cursor>
-	</File>
-	<File name="thread\mythread.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4680" topLine="168" />
-		</Cursor>
-	</File>
-	<File name="project_author_panel.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="22395" topLine="518" />
-		</Cursor>
-	</File>
-	<File name="nstd_task_author.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="574" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="project_info_panel.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="12628" topLine="455" />
-		</Cursor>
-	</File>
-	<File name="interface\wxpg_utils.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2700" topLine="117" />
-		</Cursor>
-	</File>
-	<File name="connect_para_dlg.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="72" />
-		</Cursor>
-	</File>
-	<File name="project_review_author_panel.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="98145" topLine="2754" />
-		</Cursor>
-	</File>
-	<File name="contract_label_print.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="27806" topLine="842" />
-		</Cursor>
-	</File>
-	<File name="project_review_panel.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="17805" topLine="429" />
-		</Cursor>
-	</File>
-	<File name="contractbook_br_dlg.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1293" topLine="53" />
-		</Cursor>
-	</File>
-	<File name="wfApp.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1695" topLine="42" />
-		</Cursor>
-	</File>
-	<File name="contractlabeldraw.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="7346" topLine="292" />
-		</Cursor>
-	</File>
-	<File name="wfMain.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="7870" topLine="211" />
-		</Cursor>
-	</File>
-	<File name="ctrl\treelistctrl.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="24607" topLine="600" />
-		</Cursor>
-	</File>
-	<File name="ndo_generator_panel.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="8253" topLine="121" />
-		</Cursor>
-	</File>
-	<File name="qrencode\mask.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="856" topLine="15" />
-		</Cursor>
-	</File>
-	<File name="nstd_app_unit_list.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2004" topLine="174" />
 		</Cursor>
 	</File>
 	<File name="review_remarks_dlg.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -197,54 +12,64 @@
 			<Cursor1 position="916" topLine="6" />
 		</Cursor>
 	</File>
+	<File name="project_author_panel.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="22395" topLine="518" />
+		</Cursor>
+	</File>
+	<File name="project_info_panel.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="12628" topLine="455" />
+		</Cursor>
+	</File>
+	<File name="project_review_author_panel.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="98145" topLine="2754" />
+		</Cursor>
+	</File>
+	<File name="contractbook_br_dlg.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1293" topLine="53" />
+		</Cursor>
+	</File>
+	<File name="project_review_panel.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="17805" topLine="429" />
+		</Cursor>
+	</File>
 	<File name="generated_id_display_panel.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="32199" topLine="947" />
 		</Cursor>
 	</File>
-	<File name="nstd_apply_panel.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="wfApp.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="21414" topLine="346" />
+			<Cursor1 position="14384" topLine="544" />
 		</Cursor>
 	</File>
-	<File name="info_id_generator_panel.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="info_id_generator_panel.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="32325" topLine="682" />
+			<Cursor1 position="3577" topLine="100" />
 		</Cursor>
 	</File>
-	<File name="nstd_author_panel.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="wfMain.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3405" topLine="55" />
+			<Cursor1 position="51103" topLine="1496" />
 		</Cursor>
 	</File>
-	<File name="ins_nonstd_proc_log.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="nstd_app_unit_list.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2925" topLine="209" />
+			<Cursor1 position="895" topLine="12" />
 		</Cursor>
 	</File>
-	<File name="nstd_ins_doc.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="qrencode\mask.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="6172" topLine="189" />
+			<Cursor1 position="856" topLine="15" />
 		</Cursor>
 	</File>
-	<File name="ins_proc_log.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="ctrl\treelistctrl.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="11472" topLine="467" />
-		</Cursor>
-	</File>
-	<File name="nstd_mat_apply.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="155252" topLine="4500" />
-		</Cursor>
-	</File>
-	<File name="instance_unit_info.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="55228" topLine="911" />
-		</Cursor>
-	</File>
-	<File name="nstd_mat_muti_level_task_list.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="18049" topLine="407" />
+			<Cursor1 position="24607" topLine="600" />
 		</Cursor>
 	</File>
 	<File name="wf_stdafx.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -252,14 +77,189 @@
 			<Cursor1 position="20711" topLine="939" />
 		</Cursor>
 	</File>
-	<File name="nstd_mat_task_list.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="nstd_mat_apply.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="15275" topLine="473" />
+			<Cursor1 position="9581" topLine="281" />
+		</Cursor>
+	</File>
+	<File name="ins_nonstd_proc_log.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2925" topLine="209" />
 		</Cursor>
 	</File>
 	<File name="wf_workflow_panel.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="43844" topLine="1232" />
+		</Cursor>
+	</File>
+	<File name="nstd_task_author.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="574" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="workflow_wf.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="89393" topLine="2378" />
+		</Cursor>
+	</File>
+	<File name="nstd_mat_task_list.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1916" topLine="61" />
+		</Cursor>
+	</File>
+	<File name="ins_proc_log.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="11472" topLine="467" />
+		</Cursor>
+	</File>
+	<File name="security\base64.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="828" topLine="27" />
+		</Cursor>
+	</File>
+	<File name="contract_label_print.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="27806" topLine="842" />
+		</Cursor>
+	</File>
+	<File name="interface\wxPostgreSQL.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1698" topLine="52" />
+		</Cursor>
+	</File>
+	<File name="instance_unit_info.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="52100" topLine="848" />
+		</Cursor>
+	</File>
+	<File name="interface\wxpg_utils.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2700" topLine="117" />
+		</Cursor>
+	</File>
+	<File name="thread\curl_http.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="324" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="review_remarks_dlg.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5927" topLine="95" />
+		</Cursor>
+	</File>
+	<File name="thread\curl_thread.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="228" topLine="53" />
+		</Cursor>
+	</File>
+	<File name="rfc_communication.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="19122" topLine="327" />
+		</Cursor>
+	</File>
+	<File name="thread\mythread.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4680" topLine="168" />
+		</Cursor>
+	</File>
+	<File name="contractlabeldraw.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7346" topLine="292" />
+		</Cursor>
+	</File>
+	<File name="ndo_generator_panel.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8253" topLine="121" />
+		</Cursor>
+	</File>
+	<File name="project_review_author_panel.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6357" topLine="156" />
+		</Cursor>
+	</File>
+	<File name="instance_unit_info.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10435" topLine="264" />
+		</Cursor>
+	</File>
+	<File name="wfApp.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1695" topLine="42" />
+		</Cursor>
+	</File>
+	<File name="qrencode\bitstream.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="870" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="nstd_app_unit_list.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2004" topLine="174" />
+		</Cursor>
+	</File>
+	<File name="wfMain.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7870" topLine="211" />
+		</Cursor>
+	</File>
+	<File name="nstd_apply_panel.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="21414" topLine="346" />
+		</Cursor>
+	</File>
+	<File name="nstd_author_panel.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3405" topLine="55" />
+		</Cursor>
+	</File>
+	<File name="connect_para_dlg.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="72" />
+		</Cursor>
+	</File>
+	<File name="nstd_ins_doc.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6172" topLine="189" />
+		</Cursor>
+	</File>
+	<File name="nstd_mat_apply.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="155252" topLine="4500" />
+		</Cursor>
+	</File>
+	<File name="wf_stdafx.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6314" topLine="226" />
+		</Cursor>
+	</File>
+	<File name="nstd_mat_muti_level_task_list.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="18049" topLine="407" />
+		</Cursor>
+	</File>
+	<File name="info_id_generator_panel.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="32325" topLine="682" />
+		</Cursor>
+	</File>
+	<File name="nstd_mat_task_list.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="15275" topLine="473" />
+		</Cursor>
+	</File>
+	<File name="ins_nonstd_proc_log.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="649" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="po_confirm_panel.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="65293" topLine="1896" />
+		</Cursor>
+	</File>
+	<File name="nstd_task_author.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1974" topLine="77" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

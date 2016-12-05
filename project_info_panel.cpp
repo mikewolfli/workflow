@@ -541,6 +541,7 @@ void project_info_panel::OnButton1Click(wxCommandEvent& event)
                    if(wf_active->Pass_proc(s_operator, "G0002", wxEmptyString, false))
                    {
                        s_wf_status=_("项目评审");
+                       update_review_engineer(s_operator, s_task_id);
                    }
                 }else
                 {
@@ -1173,7 +1174,7 @@ void project_info_panel::OnButton4Click(wxCommandEvent& event)
             s_branch_id = wxGetApp().get_branch_id(s_project);
         }
 
-        wxString s_operator;
+        wxString s_operator=wxEmptyString;
         if(!s_branch_id.IsEmpty())
         {
             s_operator= wxGetApp().get_operator_from_branch( s_branch_id, "G0002");
@@ -1182,6 +1183,7 @@ void project_info_panel::OnButton4Click(wxCommandEvent& event)
                 if(wf_review->Pass_proc(s_operator, "G0002", wxEmptyString, false))
                 {
                     s_wf_status=_("项目评审");
+                    update_review_engineer(s_operator, s_task_id);
                 }
             }
             else
@@ -1287,6 +1289,13 @@ int project_info_panel::update_unit_status(wxString s_wbs)
         return i_old_status;
 
     return -1;
+}
+
+bool project_info_panel::update_review_engineer(wxString s_engineer, wxString s_task_id)
+{
+    wxString str_sql = wxT(" UPDATE s_review_info SET review_engineer='")+s_engineer+wxT("' , modify_date='")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id='")+gr_para.login_user+wxT("' \
+                            where review_task_id ='")+s_task_id+wxT("' and active_status>=1;");
+    return wxGetApp().app_sql_update(str_sql);
 }
 
 wxString project_info_panel::create_review_header(wxString s_res_cm,wxString s_remarks, wxString s_qty)

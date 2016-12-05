@@ -737,6 +737,7 @@ void instance_unit_info::OnButton2Click(wxCommandEvent& event)
     wxString s_project_id=wxEmptyString;
 
     bool b_notice=false;
+    wxString s_branch_id;
 
     for (int i = 0; i < i_count; i++)
     {
@@ -838,9 +839,11 @@ void instance_unit_info::OnButton2Click(wxCommandEvent& event)
 
         int i_pos = str_res_cm.Find(wxT("-"));
         str_res_cm = str_res_cm.Left(i_pos);
+        //wxMessageBox("test","test");
 
-        wxString str_task_id = create_review_struct(array_head.Item(i),str_res_cm, array_wbs,array_task_units, array_old_status,i_urgent_level,str_desc,str_drawing_qty);
+        wxString str_task_id = create_review_struct( array_head.Item(i),str_res_cm, array_wbs,array_task_units, array_old_status,i_urgent_level,str_desc,str_drawing_qty);
 
+        //wxMessageBox("test","test");
         int i_units = array_task_units.GetCount();
 
         for(int i=0; i<i_units; i++)
@@ -868,14 +871,14 @@ void instance_unit_info::OnButton2Click(wxCommandEvent& event)
                 else i_status =1;
             }
 
-            wxString s_branch_id;
+
             if(s_project_id!=str_wbs_no.Left(10))
             {
                 s_project_id = str_wbs_no.Left(10);
                 s_branch_id = wxGetApp().get_branch_id(s_project_id);
             }
 
-            wxString s_operator;
+            wxString s_operator=wxEmptyString;
             if(!s_branch_id.IsEmpty())
             {
                s_operator= wxGetApp().get_operator_from_branch( s_branch_id, "G0002");
@@ -884,6 +887,7 @@ void instance_unit_info::OnButton2Click(wxCommandEvent& event)
                    if(wf_review->Pass_proc(s_operator, "G0002", wxEmptyString, false))
                    {
                        s_wf_status=_("项目评审");
+                       update_operator(str_task_id, s_operator);
                    }
                }else
                {
@@ -902,7 +906,7 @@ void instance_unit_info::OnButton2Click(wxCommandEvent& event)
 
  //               update_review_status(s_wbs,i_status,s_wf_status);
  //               update_review_units_status(str_task_id, str_wbs_no,i_status,i_old_status,s_wf_status, i_restart_times);
-                update_operator(str_wbs_no, str_res_cm);
+                //update_operator(str_task_id, str_res_cm);
                 mils_used = wxGetLocalTimeMillis() - start_mils;
                 wxLogMessage(_("项目:")+array_task_units.Item(i)+_("创建评审任务成功,耗时:")+NumToStr(mils_used)+wxT("ms!"));
             }
@@ -981,11 +985,14 @@ int instance_unit_info::get_restart_times(wxString s_wbs)
     return i_rel;
 }
 
-bool instance_unit_info::update_operator(wxString s_instance_id, wxString s_operator_id)
+bool instance_unit_info::update_operator(wxString s_task_id, wxString s_operator_id)
 {
-    wxString s_sql = wxT("UPDATE l_proc_act SET operator_id='")+s_operator_id+wxT("' where instance_id = '")+s_instance_id+wxT("' and \
-                    action_id = 'AT00000001' and workflow_id ='")+wf_str_review+wxT("';");
-    return wxGetApp().app_sql_update(s_sql);
+    /*wxString s_sql = wxT("UPDATE l_proc_act SET operator_id='")+s_operator_id+wxT("' where instance_id = '")+s_instance_id+wxT("' and \
+                    action_id = 'AT00000001' and workflow_id ='")+wf_str_review+wxT("';");*/
+   wxString str_sql = wxT(" UPDATE s_review_info SET review_engineer='")+s_operator_id+wxT("' , modify_date='")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id='")+gr_para.login_user+wxT("' \
+                            where review_task_id ='")+s_task_id+wxT("' and active_status>=1;");
+    return wxGetApp().app_sql_update(str_sql);
+    //return wxGetApp().app_sql_update(s_sql);
 }
 
 
@@ -1062,9 +1069,9 @@ bool instance_unit_info::check_review_restart_status(wxString s_instance)
 
 //更改评审逻辑，以unit为单位,无需instance_status更新。
 
-bool instance_unit_info::update_review_units_status(wxString s_task_id, wxString s_unit, int i_status, int i_old_status, wxString s_wf_status, int i_restart_times)
+bool instance_unit_info::update_review_units_status(wxString s_task_id, wxString s_unit, int i_status, int i_old_status, wxString s_wf_status,int i_restart_times)
 {
-    wxString str_sql = wxT("UPDATE s_review_units SET unit_status =")+NumToStr(i_status)+wxT(",unit_wf_status='")+s_wf_status+wxT("',unit_old_status='")+NumToStr(i_old_status)+wxT("',restart_times=")+NumToStr(i_restart_times)+wxT(", modify_date = '")+DateToAnsiStr(wxDateTime::Now())+
+    wxString str_sql = wxT("UPDATE s_review_units SET   unit_status =")+NumToStr(i_status)+wxT(",unit_wf_status='")+s_wf_status+wxT("',unit_old_status='")+NumToStr(i_old_status)+wxT("',restart_times=")+NumToStr(i_restart_times)+wxT(", modify_date = '")+DateToAnsiStr(wxDateTime::Now())+
                                wxT("',modify_emp_id = '")+gr_para.login_user+wxT("' WHERE wbs_no ='")+s_unit+wxT("' and review_task_id='")+s_task_id+wxT("';");
 
     return wxGetApp().app_sql_update(str_sql);
@@ -1098,19 +1105,23 @@ wxString instance_unit_info::create_review_struct(wxString s_project,wxString s_
 
                    update_review_units_latest(array_task_units.Item(i));//将is_latest置false
 
-                   if(i==i_count-1)
-                   {
+                   //if(i==i_count-1)
+                   //{
 
-                     str_sql = str_sql + wxT("('")+s_task_id+wxT("','")+array_wbs.Item(i)+wxT("','")+DateToAnsiStr(wxDateTime::Now())+wxT("','")+gr_para.login_user+wxT("','")+
-                             DateToAnsiStr(wxDateTime::Now())+wxT("','")+gr_para.login_user+wxT("','")+NumToStr(i_old_unit_status)+wxT("',1, '评审授权',")+NumToStr(i_urgent_level)+wxT("); ");
-                   }else
-                   {
+                     //str_sql = str_sql + wxT("('")+s_task_id+wxT("','")+array_wbs.Item(i)+wxT("','")+DateToAnsiStr(wxDateTime::Now())+wxT("','")+gr_para.login_user+wxT("','")+
+                    //         DateToAnsiStr(wxDateTime::Now())+wxT("','")+gr_para.login_user+wxT("','")+NumToStr(i_old_unit_status)+wxT("',1, '评审授权',")+NumToStr(i_urgent_level)+wxT(") ");                   }else
+                  // {
                      str_sql = str_sql + wxT("('")+s_task_id+wxT("','")+array_wbs.Item(i)+wxT("','")+DateToAnsiStr(wxDateTime::Now())+wxT("','")+gr_para.login_user+wxT("','")+
                              DateToAnsiStr(wxDateTime::Now())+wxT("','")+gr_para.login_user+wxT("','")+NumToStr(i_old_unit_status)+wxT("',1, '评审授权',")+NumToStr(i_urgent_level)+wxT("), ");
-                   }
+                   //}
 
                }
            }
+
+           if(str_sql.Trim().Right(1)==",")
+                str_sql.RemoveLast(1);
+
+           str_sql = str_sql+";";
 
            str_sql.Replace(wxT("''"),wxT("NULL"));
      //      wxMessageBox(str_sql);
