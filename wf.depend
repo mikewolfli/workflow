@@ -1740,7 +1740,7 @@
 	"utils/wf_operator.h"
 	<wx/imaglist.h>
 
-1480917641 source:d:\develop\code\workspace\wfcode\wf\project_info_panel.cpp
+1480986932 source:d:\develop\code\workspace\wfcode\wf\project_info_panel.cpp
 	"project_info_panel.h"
 	"wfApp.h"
 	<wx/tokenzr.h>
@@ -1911,7 +1911,7 @@
 	"wfMain.h"
 	<wx/image.h>
 
-1480925485 d:\develop\code\workspace\wfcode\wf\version.h
+1480987118 d:\develop\code\workspace\wfcode\wf\version.h
 
 1478849417 d:\develop\code\workspace\wfcode\wf\wfmain.h
 	<wx/menu.h>

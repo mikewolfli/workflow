@@ -333,7 +333,7 @@ void project_info_panel::OnButton_FeedbackClick(wxCommandEvent& event)
 
     wxArrayString array_group = wxGetApp().get_group();
 
-    if(array_group.Index(wxT("G0001")) == wxNOT_FOUND)
+    if(array_group.Index(wxT("G0017")) == wxNOT_FOUND && array_group.Index(wxT("G0001")) == wxNOT_FOUND)
         return;
 
     wxArrayTreeItemIds items;

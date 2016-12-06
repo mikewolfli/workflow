@@ -545,7 +545,7 @@ RFC_RC Rfc_Communication::rfc_connect()
     s_passwd = Base64::Decode(str);
     config->Read(wxT("client"),&s_client);
     config->Read(wxT("lang"),&s_lang);
-    wxLogMessage(s_user+":"+s_passwd);
+    //wxLogMessage(s_user+":"+s_passwd);
 
     loginParams[0].name = cU("ashost"); loginParams[0].value = stringTosapuc(s_ahost);
 	loginParams[1].name = cU("sysnr");	loginParams[1].value = stringTosapuc(s_sysnr);

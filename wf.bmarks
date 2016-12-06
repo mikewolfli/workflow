@@ -1,92 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="interface\wxpg_utils.h" open="0" top="0" tabpos="0">
-		<Cursor position="5529" topLine="145" />
-	</File>
-	<File name="review_remarks_dlg.h" open="0" top="0" tabpos="0">
-		<Cursor position="916" topLine="6" />
-	</File>
-	<File name="project_author_panel.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="22395" topLine="518" />
-		<Book_Marks positions="24027" />
-	</File>
-	<File name="project_info_panel.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="12628" topLine="455" />
-		<BrowseMarks positions="11703" />
-	</File>
-	<File name="project_review_author_panel.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="98145" topLine="2754" />
-		<BrowseMarks positions="99025" />
-	</File>
-	<File name="contractbook_br_dlg.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="1293" topLine="53" />
-		<BrowseMarks positions="10420" />
-	</File>
-	<File name="project_review_panel.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="17805" topLine="429" />
-	</File>
-	<File name="generated_id_display_panel.cpp" open="0" top="0" tabpos="6">
-		<Cursor position="32199" topLine="947" />
-	</File>
-	<File name="wfApp.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="14384" topLine="544" />
-		<BrowseMarks positions="16544" />
-	</File>
-	<File name="info_id_generator_panel.h" open="0" top="0" tabpos="0">
-		<Cursor position="3577" topLine="100" />
-	</File>
-	<File name="wfMain.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="51103" topLine="1496" />
-	</File>
-	<File name="nstd_app_unit_list.h" open="0" top="0" tabpos="0">
-		<Cursor position="895" topLine="12" />
-	</File>
-	<File name="qrencode\mask.c" open="0" top="0" tabpos="0">
-		<Cursor position="856" topLine="15" />
-	</File>
-	<File name="ctrl\treelistctrl.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="24607" topLine="600" />
-	</File>
-	<File name="wf_stdafx.cpp" open="0" top="0" tabpos="9">
-		<Cursor position="20711" topLine="939" />
-	</File>
-	<File name="nstd_mat_apply.h" open="0" top="0" tabpos="0">
-		<Cursor position="9581" topLine="281" />
-	</File>
-	<File name="ins_nonstd_proc_log.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="2925" topLine="209" />
-	</File>
-	<File name="wf_workflow_panel.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="43844" topLine="1232" />
-	</File>
-	<File name="nstd_task_author.h" open="0" top="0" tabpos="0">
-		<Cursor position="574" topLine="12" />
-	</File>
-	<File name="workflow_wf.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="89393" topLine="2378" />
-		<Book_Marks positions="0,0,5294,8313,24137,20196,13869,35168,35084,37005,37103,22126,24047,54624,46553,43009,58676,74944,69181,36148" />
-	</File>
-	<File name="nstd_mat_task_list.h" open="0" top="0" tabpos="4">
-		<Cursor position="1916" topLine="61" />
-	</File>
-	<File name="ins_proc_log.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="11472" topLine="467" />
-	</File>
 	<File name="security\base64.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="828" topLine="27" />
-	</File>
-	<File name="contract_label_print.cpp" open="0" top="0" tabpos="5">
-		<Cursor position="27806" topLine="842" />
-		<BrowseMarks positions="24217" />
 	</File>
 	<File name="interface\wxPostgreSQL.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1698" topLine="52" />
 	</File>
-	<File name="instance_unit_info.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="51006" topLine="707" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="46123,117697,146681,4792,4531,9490,25798,23707,5684,13026,6051,60241,75428,79530,79736,74838,53070,37651,38870,145836" />
+	<File name="qrencode\mask.c" open="0" top="0" tabpos="0">
+		<Cursor position="856" topLine="15" />
 	</File>
 	<File name="interface\wxpg_utils.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="2700" topLine="117" />
@@ -94,78 +16,167 @@
 	<File name="thread\curl_http.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="324" topLine="0" />
 	</File>
-	<File name="review_remarks_dlg.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="5927" topLine="95" />
-	</File>
 	<File name="thread\curl_thread.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="228" topLine="53" />
-	</File>
-	<File name="rfc_communication.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="19122" topLine="327" />
-		<BrowseMarks positions="13912" />
 	</File>
 	<File name="thread\mythread.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="4680" topLine="168" />
 	</File>
-	<File name="contractlabeldraw.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="7346" topLine="292" />
-	</File>
-	<File name="ndo_generator_panel.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="8253" topLine="121" />
+	<File name="project_info_panel.h" open="0" top="0" tabpos="0">
+		<Cursor position="4723" topLine="124" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
 	</File>
 	<File name="project_review_author_panel.h" open="0" top="0" tabpos="0">
-		<Cursor position="6357" topLine="156" />
-	</File>
-	<File name="instance_unit_info.h" open="0" top="0" tabpos="3">
-		<Cursor position="10435" topLine="264" />
-	</File>
-	<File name="wfApp.h" open="0" top="0" tabpos="3">
-		<Cursor position="1695" topLine="42" />
-	</File>
-	<File name="qrencode\bitstream.c" open="0" top="0" tabpos="1">
-		<Cursor position="870" topLine="12" />
+		<Cursor position="5653" topLine="156" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
 	</File>
 	<File name="nstd_app_unit_list.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="2004" topLine="174" />
 	</File>
-	<File name="wfMain.h" open="0" top="0" tabpos="0">
-		<Cursor position="7870" topLine="211" />
+	<File name="ndo_generator_panel.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="8253" topLine="121" />
 	</File>
 	<File name="nstd_apply_panel.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="21414" topLine="346" />
 	</File>
+	<File name="contract_label_print.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="27806" topLine="842" />
+		<BrowseMarks positions="24217" />
+	</File>
 	<File name="nstd_author_panel.cpp" open="0" top="0" tabpos="1">
 		<Cursor position="3405" topLine="55" />
-	</File>
-	<File name="connect_para_dlg.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="0" topLine="72" />
 	</File>
 	<File name="nstd_ins_doc.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="6172" topLine="189" />
 	</File>
+	<File name="wfApp.h" open="0" top="0" tabpos="3">
+		<Cursor position="1695" topLine="42" />
+	</File>
+	<File name="connect_para_dlg.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="72" />
+	</File>
 	<File name="nstd_mat_apply.cpp" open="0" top="0" tabpos="1">
 		<Cursor position="155252" topLine="4500" />
+	</File>
+	<File name="wfMain.h" open="0" top="0" tabpos="0">
+		<Cursor position="7870" topLine="211" />
+	</File>
+	<File name="info_id_generator_panel.h" open="0" top="0" tabpos="0">
+		<Cursor position="3577" topLine="100" />
+	</File>
+	<File name="contractlabeldraw.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="7346" topLine="292" />
+	</File>
+	<File name="nstd_mat_muti_level_task_list.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="18049" topLine="407" />
+	</File>
+	<File name="ins_nonstd_proc_log.h" open="0" top="0" tabpos="0">
+		<Cursor position="649" topLine="12" />
+	</File>
+	<File name="ctrl\treelistctrl.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="24607" topLine="600" />
+	</File>
+	<File name="nstd_mat_task_list.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="15275" topLine="473" />
+	</File>
+	<File name="instance_unit_info.h" open="0" top="0" tabpos="3">
+		<Cursor position="10261" topLine="248" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="nstd_task_author.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1974" topLine="77" />
 	</File>
 	<File name="wf_stdafx.h" open="0" top="0" tabpos="3">
 		<Cursor position="6314" topLine="226" />
 	</File>
-	<File name="nstd_mat_muti_level_task_list.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="18049" topLine="407" />
+	<File name="review_remarks_dlg.h" open="0" top="0" tabpos="0">
+		<Cursor position="916" topLine="6" />
+	</File>
+	<File name="po_confirm_panel.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="65293" topLine="1896" />
+	</File>
+	<File name="qrencode\bitstream.c" open="0" top="0" tabpos="1">
+		<Cursor position="870" topLine="12" />
+	</File>
+	<File name="interface\wxpg_utils.h" open="0" top="0" tabpos="0">
+		<Cursor position="5529" topLine="145" />
+	</File>
+	<File name="project_author_panel.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="22395" topLine="518" />
+		<Book_Marks positions="24027" />
+	</File>
+	<File name="project_info_panel.cpp" open="1" top="1" tabpos="3">
+		<Cursor position="22883" topLine="536" />
+		<BrowseMarks positions="47490" />
+		<Book_Marks positions="43759" />
+	</File>
+	<File name="project_review_author_panel.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="31881" topLine="593" />
+		<BrowseMarks positions="99025" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="project_review_panel.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="17805" topLine="429" />
+	</File>
+	<File name="nstd_app_unit_list.h" open="0" top="0" tabpos="0">
+		<Cursor position="895" topLine="12" />
+	</File>
+	<File name="contractbook_br_dlg.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="1293" topLine="53" />
+		<BrowseMarks positions="10420" />
+	</File>
+	<File name="wfApp.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="14384" topLine="544" />
+		<BrowseMarks positions="16544" />
+	</File>
+	<File name="generated_id_display_panel.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="32199" topLine="947" />
+	</File>
+	<File name="wfMain.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="51103" topLine="1496" />
 	</File>
 	<File name="info_id_generator_panel.cpp" open="0" top="0" tabpos="1">
 		<Cursor position="32325" topLine="682" />
 		<BrowseMarks positions="32241" />
 	</File>
-	<File name="nstd_mat_task_list.cpp" open="0" top="0" tabpos="5">
-		<Cursor position="15275" topLine="473" />
+	<File name="nstd_mat_apply.h" open="0" top="0" tabpos="0">
+		<Cursor position="9581" topLine="281" />
 	</File>
-	<File name="ins_nonstd_proc_log.h" open="0" top="0" tabpos="0">
-		<Cursor position="649" topLine="12" />
+	<File name="ins_nonstd_proc_log.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="2925" topLine="209" />
 	</File>
-	<File name="po_confirm_panel.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="65293" topLine="1896" />
+	<File name="ins_proc_log.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="11472" topLine="467" />
 	</File>
-	<File name="nstd_task_author.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1974" topLine="77" />
+	<File name="nstd_mat_task_list.h" open="0" top="0" tabpos="4">
+		<Cursor position="1916" topLine="61" />
+	</File>
+	<File name="instance_unit_info.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="62204" topLine="1103" />
+		<BrowseMarks positions="61347" />
+		<Book_Marks positions="56320,61212,51430,52031,60269,9490,25798,23707,5684,13026,6051,60241,75428,79530,79736,74838,53070,37651,38870,145836" />
+	</File>
+	<File name="wf_stdafx.cpp" open="0" top="0" tabpos="9">
+		<Cursor position="20711" topLine="939" />
+	</File>
+	<File name="nstd_task_author.h" open="0" top="0" tabpos="0">
+		<Cursor position="574" topLine="12" />
+	</File>
+	<File name="review_remarks_dlg.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="5927" topLine="95" />
+	</File>
+	<File name="wf_workflow_panel.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="43844" topLine="1232" />
+	</File>
+	<File name="rfc_communication.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="19122" topLine="327" />
+		<BrowseMarks positions="13912" />
+	</File>
+	<File name="workflow_wf.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="89393" topLine="2378" />
+		<Book_Marks positions="0,0,5294,8313,24137,20196,13869,35168,35084,37005,37103,22126,24047,54624,46553,43009,58676,74944,69181,36148" />
 	</File>
 </BrowseTracker_layout_file>
