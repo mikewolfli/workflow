@@ -1747,7 +1747,7 @@ void project_review_author_panel::OnButton_FeedbackClick(wxCommandEvent & event)
                 continue;
             }
 
-            if(str_status == wxT("2") || str_status.IsEmpty())
+            if(str_status == wxT("2") || str_status.IsEmpty()|| str_status ==wxT("0"))
             {
 
                 if(create_communication(str_task_id, str_status, str_context))

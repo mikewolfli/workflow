@@ -458,7 +458,7 @@ void project_info_panel::OnButton1Click(wxCommandEvent& event)
 
     wxArrayString array_group = wxGetApp().get_group();
 
-    if(array_group.Index(wxT("G0001")) == wxNOT_FOUND)
+    if(array_group.Index(wxT("G0001")) == wxNOT_FOUND&&array_group.Index(wxT("G0017")) == wxNOT_FOUND)
         return;
 
     wxArrayTreeItemIds items;
@@ -1010,7 +1010,7 @@ void project_info_panel::OnButton4Click(wxCommandEvent& event)
 
     wxArrayString array_group = wxGetApp().get_group();
 
-    if(array_group.Index(wxT("G0001")) == wxNOT_FOUND)
+    if(array_group.Index(wxT("G0001")) == wxNOT_FOUND&&array_group.Index(wxT("G0017")) == wxNOT_FOUND)
         return;
 
     if(choice_status->GetSelection()==3)
