@@ -72,6 +72,7 @@ const long instance_unit_info::idMenu_Contract_id = wxNewId();
 const long instance_unit_info::idMenu_contract_br_search = wxNewId();
 const long instance_unit_info::idMenu_ContractBook_Search = wxNewId();
 const long instance_unit_info::idMenu_Change_Lender = wxNewId();
+const long instance_unit_info::idMenu_create_folder = wxNewId();
 const long instance_unit_info::idMenu_All = wxNewId();
 const long instance_unit_info::idMenu_NSTD_LEVEL = wxNewId();
 const long instance_unit_info::idMenu_UnSt = wxNewId();
@@ -231,6 +232,9 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     mi_cb_lender = new wxMenuItem((&menu_project_filter), idMenu_Change_Lender, _("项目合同借阅人转借"), _("项目合同借阅人转借"), wxITEM_NORMAL);
     menu_project_filter.Append(mi_cb_lender);
     menu_project_filter.AppendSeparator();
+    mi_folder = new wxMenuItem((&menu_project_filter), idMenu_create_folder, _("创建文件夹"), _("创建文件夹"), wxITEM_NORMAL);
+    menu_project_filter.Append(mi_folder);
+    menu_project_filter.AppendSeparator();
     MenuItem9 = new wxMenuItem((&menu_project_filter), idMenu_All, _("全部项目(&A)"), _("显示全部项目"), wxITEM_NORMAL);
     menu_project_filter.Append(MenuItem9);
     MenuItem9->Enable(false);
@@ -317,6 +321,7 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     Connect(idMenu_contract_br_search,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_contract_br_searchSelected);
     Connect(idMenu_ContractBook_Search,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_contractbook_searchSelected);
     Connect(idMenu_Change_Lender,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_change_lenderSelected);
+    Connect(idMenu_create_folder,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_folderSelected);
     Connect(idMenu_All,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem9Selected);
     Connect(idMenu_NSTD_LEVEL,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem26Selected);
     Connect(idMenu_UnSt,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem10Selected);
@@ -1285,14 +1290,14 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
             {
 
                 wf_configure = new wf_operator(str_instance, wf_str_configure, t_template);
-                if (i_catalog!=6&&!check_g4_group(str_instance))
+               // if (i_catalog!=6&&!check_g4_group(str_instance))
                     wf_configure->start_proc(str_desc, false, b_log_pass);
-                else
+               /* else
                 {
                     wxString s_operator = wxGetApp().get_leader(wxT("G0004"));
                     wxString s_group = wxT("G0004");
                     wf_configure->start_proc(s_operator, s_group);
-                }
+                }*/
 
                 update_contract_book_status(str_instance, 1);
                 wf_configure->update_instance(1);
@@ -1512,7 +1517,13 @@ void instance_unit_info::Create_Folder(wxArrayString a_wbs)
                     {
 
                         if(ldir.Make(s_sub_folder))
+                        {
                             wxLogMessage(_("成功-子文件夹")+s_sub_folder);
+                            if(a_sub_folder.Item(k)=="0700 SPEC&GAD")
+                            {
+                                ldir.Make(s_sub_folder+wxT("\\旧版清单"));
+                            }
+                        }
                         else
                         {
                             wxLogMessage(_("失败-子文件夹")+s_sub_folder);
@@ -2342,6 +2353,7 @@ void instance_unit_info::Show_control()
         Button3->Show(false);
         Button4->Show(false);
         Button5->Show(true);
+        mi_folder->Enable(false);
 
         button_cancel_restart->Show(false);
         Button_Cancel_project->Show(false);
@@ -2377,6 +2389,7 @@ void instance_unit_info::Show_control()
         Button3->Show(true);
         Button4->Show(true);
         Button5->Show(false);
+        mi_folder->Enable(true);
 
         button_cancel_restart->Show(true);
         Button_Cancel_project->Show(true);
@@ -2417,6 +2430,7 @@ void instance_unit_info::Show_control()
         Button3->Show(false);
         Button4->Show(false);
         Button5->Show(true);
+        mi_folder->Enable(false);
 
         button_cancel_restart->Show(false);
         Button_Cancel_project->Show(false);
@@ -2455,6 +2469,7 @@ void instance_unit_info::Show_control()
         Button5->Show(false);
         button_sap_by_internal->Show(true);
         button_sap_by_wbs->Show(false);
+        mi_folder->Enable(false);
 
         button_cancel_restart->Show(false);
         Button_Cancel_project->Show(false);
@@ -4645,4 +4660,45 @@ void instance_unit_info::Onmi_delv_mc2_hSelected(wxCommandEvent& event)
     b_refresh = true;
     refresh_list();
     b_refresh = false;
+}
+
+void instance_unit_info::Onmi_folderSelected(wxCommandEvent& event)
+{
+    if (!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,不能进行任何操作!"));
+        return;
+    }
+
+    wxArrayInt array_sel_line = gd_unit_info->GetSelectedRows();
+    if (array_sel_line.IsEmpty())
+    {
+        wxLogMessage(_("尚未选择项目，无法后续操作!"));
+        return;
+    }
+
+    if (wxMessageBox(_("是否确认创建文件夹?"), _("确认"), wxYES_NO) != wxYES)
+        return;
+
+    int i_count = array_sel_line.GetCount();
+
+    wxArrayString array_wbs;
+    wxString str_wbs;
+
+    int i_status,i,j;
+
+    for(i=0;i<i_count;i++)
+    {
+        str_wbs = gd_unit_info->GetCellValue(array_sel_line.Item(i), 1).Trim();
+
+        array_wbs.Add(str_wbs);
+    }
+
+    if(array_wbs.IsEmpty())
+    {
+        wxLogMessage(_("未选中任何项目。"));
+        return;
+    }
+
+    Create_Folder(array_wbs);
 }

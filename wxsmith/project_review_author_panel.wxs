@@ -7,17 +7,6 @@
 			<object class="sizeritem">
 				<object class="wxGridBagSizer" variable="GridBagSizer1" member="no">
 					<object class="sizeritem">
-						<object class="wxStaticBoxSizer" variable="sbox_author" member="no">
-							<label>待授权任务清单</label>
-						</object>
-						<colspan>6</colspan>
-						<rowspan>6</rowspan>
-						<col>0</col>
-						<row>0</row>
-						<flag>wxALL|wxEXPAND</flag>
-						<option>6</option>
-					</object>
-					<object class="sizeritem">
 						<object class="wxBoxSizer" variable="BoxSizer2" member="no">
 							<orient>wxVERTICAL</orient>
 							<object class="sizeritem">
@@ -120,16 +109,34 @@
 						<flag>wxALL|wxEXPAND</flag>
 						<option>1</option>
 					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer3" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="sbox_author" member="no">
+									<label>待授权任务清单</label>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="sb_group" member="no">
+									<label>组员任务清单</label>
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>2</option>
+							</object>
+						</object>
+						<colspan>6</colspan>
+						<rowspan>6</rowspan>
+						<col>0</col>
+						<row>0</row>
+						<flag>wxALL|wxEXPAND</flag>
+						<option>6</option>
+					</object>
 				</object>
 				<flag>wxALL|wxEXPAND</flag>
 				<option>2</option>
-			</object>
-			<object class="sizeritem">
-				<object class="wxStaticBoxSizer" variable="sb_group" member="no">
-					<label>组员任务清单</label>
-				</object>
-				<flag>wxALL|wxEXPAND</flag>
-				<option>1</option>
 			</object>
 		</object>
 		<object class="wxMenu" variable="menu_author" member="yes">

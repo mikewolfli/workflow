@@ -255,6 +255,8 @@ void nstd_app_unit_list::refresh_list()
        i_active=1;
     else if(!b_active && i_active==0)
         i_active=0;
+    else if(b_active && i_active==1)
+        i_active=0;
 
     if(i_active==1)
      {

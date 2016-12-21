@@ -135,7 +135,7 @@ project_author_panel::project_author_panel(wxWindow* parent,wxWindowID id,const 
         Button_Review->Show(false);
         Button4->Show(false);
         refresh_new_res_list(m_group);
-        Button_AUTH->Show(false);
+        Button_AUTH->Show(true);
     }else if(m_leader && m_group == "G0014")
     {
         Button4->Show(false);
@@ -144,9 +144,9 @@ project_author_panel::project_author_panel(wxWindow* parent,wxWindowID id,const 
         mi_review->Enable(false);
         Button_AUTH->Show(true);
 
-        refresh_res_list("CF");
-    }
-    else if (m_leader && m_group=="G0004")
+        refresh_res_list();
+    }else
+ /*   else if (m_leader && m_group=="G0004")
     {
         Button4->Show(false);
   //      Button1->SetLabel(_("项目授权"));
@@ -156,7 +156,7 @@ project_author_panel::project_author_panel(wxWindow* parent,wxWindowID id,const 
 
         refresh_res_list("CFM");
 
-    }else
+    }else*/
     {
         MenuItem3->Enable(false);
         MenuItem4->Enable(false);
@@ -171,7 +171,7 @@ project_author_panel::project_author_panel(wxWindow* parent,wxWindowID id,const 
 
     str_freeze.Empty();
 
-    wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
+    wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,workflow_id,\
                          instance_id as wbs_no, lift_no, elevator_id, elevator_type, project_catalog, action_id, action_name, req_configure_finish, special_info, \
                          (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent, nonstd_level,conf_batch_id from v_task_list1 WHERE action_id = 'AT00000003' \
                          AND is_active = true AND operator_id = '")+gr_para.login_user+ wxT("' ");
@@ -242,6 +242,7 @@ void project_author_panel::BuildDataViewCtrl()
     tlc_proj_list->AddColumn(_("梯型ID"),0,wxALIGN_LEFT,-1,false,false);//12
     tlc_proj_list->AddColumn(_("任务批次"), 0, wxALIGN_LEFT, -1, false, false);//13
     tlc_proj_list->AddColumn(_("特殊标识"), 100, wxALIGN_LEFT, -1, true, false); //14
+    tlc_proj_list->AddColumn(_("workflow_id"), 0, wxALIGN_LEFT, -1, false, false); //15
 
     wxTreeItemId root = tlc_proj_list->AddRoot (_("配置项目"));
 }
@@ -307,18 +308,19 @@ void project_author_panel::refresh_list()
     int i_status;
     bool is_urgent;
 
-    wxString l_index, s_project_name, s_wbs, s_lift_id, s_elevator_type, s_project_type, s_req_finish, s_res_person,s_action_id, s_action_name, s_lifttype_id, s_index, s_special_info;
+    wxString l_index, s_project_name, s_wbs, s_lift_id, s_elevator_type, s_project_type, s_req_finish, s_res_person,s_action_id, s_action_name, s_lifttype_id, s_index, s_special_info, s_workflow_id;
 
     wxTreeItemId prj_item,leaf_item;
     int i_type;
 
     _res->MoveFirst();
 
-
+    //wxLogMessage(strSql);
     for(int i = 0; i<irow;i++)
     {
         s_project_name = _res->GetVal(wxT("project_name"));
         s_index=_res->GetVal(wxT("conf_batch_id"));
+        s_workflow_id = _res->GetVal(wxT("workflow_id"));
 
         if(_res->GetVal(wxT("project_id")) != l_index || s_req_finish != DateToStrFormat(_res->GetDate(wxT("req_configure_finish"))) || s_elevator_type != _res->GetVal(wxT("elevator_type"))|| i_type != _res->GetInt(wxT("project_catalog"))|| s_action_id !=_res->GetVal(wxT("action_id")))
         {
@@ -326,7 +328,7 @@ void project_author_panel::refresh_list()
             prj_item = tlc_proj_list->AppendItem(root,s_project_name+"-"+l_index);
             tlc_proj_list->SetItemText(prj_item,1,l_index);
             tlc_proj_list->SetItemText(prj_item, 13, s_index);
-
+            tlc_proj_list->SetItemText(prj_item, 15, s_workflow_id);
         }
 
         s_wbs = _res->GetVal(wxT("wbs_no"));
@@ -371,6 +373,7 @@ void project_author_panel::refresh_list()
         tlc_proj_list->SetItemText(leaf_item, 12, s_lifttype_id);
         tlc_proj_list->SetItemText(leaf_item, 13, s_index);
         tlc_proj_list->SetItemText(leaf_item, 14, s_special_info);
+        tlc_proj_list->SetItemText(leaf_item, 15, s_workflow_id);
 
         _res->MoveNext();
     }
@@ -632,13 +635,20 @@ void project_author_panel::refresh_new_res_list(wxString s_group)
     _res->Clear();
 }
 
-void project_author_panel::refresh_res_list(wxString s_group_cata)
+void project_author_panel::refresh_res_list(/*wxString s_group_cata*/)
 {
     lc_res->DeleteAllItems();
 
-    wxString strSql = wxT("SELECT concat(employee_id,'-',name) AS res_person, (select count(*) from l_proc_act \
+    /*wxString strSql = wxT("SELECT concat(employee_id,'-',name) AS res_person, (select count(*) from l_proc_act \
                           where operator_id = employee_id AND is_active=true AND action_id = 'AT00000004') AS proj_qty, \
                           group_name, group_id FROM v_group_member WHERE group_catalog = '")+s_group_cata+wxT("' AND plant = '")+gr_para.plant+wxT("' and status=true ORDER BY group_name ,res_person ASC;");
+
+    */
+    wxString strSql = wxT("SELECT concat(employee_id,'-',name) AS res_person, (select count(*) from l_proc_act \
+                          where operator_id = employee_id AND is_active=true AND action_id = 'AT00000004') AS proj_qty, \
+                          group_name, group_id FROM v_group_member WHERE group_catalog like 'CF%' and plant = '")+gr_para.plant+wxT("' and status=true ORDER BY group_name ,res_person ASC;");
+
+
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(strSql);
 
     if(_res->Status()!= PGRES_TUPLES_OK)
@@ -948,12 +958,12 @@ void project_author_panel::OnButton1Click(wxCommandEvent& event)
     if(m_leader&&(m_group=="G0006"||m_group=="G0007"||m_group=="G0008"))
     {
         refresh_new_res_list(m_group);
-    }else if(m_leader && m_group == "G0014")
+    }else /*if(m_leader && m_group == "G0014")
         refresh_res_list("CF");
-    else if (m_leader && m_group=="G0004")
-        refresh_res_list("CFM");
-    else
-        return;
+    else if (m_leader && m_group=="G0004")*/
+        refresh_res_list();
+    //else
+       // return;
 
     refresh_list();
 }
@@ -1569,7 +1579,7 @@ void project_author_panel::OnMenuItem3Selected(wxCommandEvent& event)
      Button_AUTH->Enable(true);
 
     m_case = 0;
-    wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
+    wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id, workflow_id,\
                          instance_id as wbs_no, lift_no,elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, special_info, \
                          (SELECT concat(operator_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000003' \
                          AND is_active = true AND operator_id = '")+gr_para.login_user+ wxT("' ");
@@ -1598,12 +1608,12 @@ void project_author_panel::OnMenuItem4Selected(wxCommandEvent& event)
 
     if(m_leader&&(m_group=="G0006"||m_group=="G0007"||m_group=="G0008"))
     {
-            strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
+            strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,workflow_id,\
                          instance_id as wbs_no, lift_no,elevator_id, elevator_type, project_catalog,action_id, action_name, req_configure_finish, special_info, \
                          (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000004' \
                          AND is_active = true and group_id='")+m_group+wxT("' ");
     }else if(m_leader && (m_group == "G0014" || m_group=="G0004"))
-            strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,\
+            strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id,workflow_id,\
                          instance_id as wbs_no, lift_no, elevator_id,elevator_type, project_catalog,action_id, action_name, req_configure_finish, special_info, \
                          (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent,nonstd_level,conf_batch_id  from v_task_list1 WHERE action_id = 'AT00000004' \
                          AND is_active = true ");
@@ -1760,18 +1770,18 @@ void project_author_panel::OnButton2Click(wxCommandEvent& event)
     {
         refresh_list();
         refresh_new_res_list(m_group);
-    }else if(m_leader && m_group == "G0014")
+    }else /*if(m_leader && m_group == "G0014")
     {
         refresh_list();
         refresh_res_list("CF");
     }
-    else if(m_leader && m_group=="G0004")
+    else if(m_leader && m_group=="G0004")*/
     {
         refresh_list();
-        refresh_res_list("CFM");
+        refresh_res_list();
     }
-    else
-        return;
+   // else
+     //   return;
 }
 
 void project_author_panel::OnButton3Click(wxCommandEvent& event)
@@ -1897,7 +1907,7 @@ void project_author_panel::Onlc_resItemActivated(wxListEvent& event)
     wxString s_operator = li_item.GetText().Left(8);
 
     m_case = 1;
-    wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id, special_info, \
+    wxString strSql = wxT("SELECT  concat(contract_id,' ', project_name) as project_name, project_id, special_info, conf_batch_id,workflow_id,\
                          instance_id as wbs_no, lift_no, elevator_id,elevator_type, project_catalog,  action_id, action_name, req_configure_finish, \
                          (SELECT concat(employee_id,'-',name) from s_employee WHERE employee_id = operator_id) as operator, status, is_urgent, nonstd_level from v_task_list1 WHERE action_id = 'AT00000004' \
                          AND is_active = true AND operator_id = '")+s_operator+wxT("' ");
@@ -2748,25 +2758,24 @@ void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
     }
 
 
-    wxString s_wbs, s_sql;
+    wxString s_wbs;
 
-    wxString s_own_group = wxGetApp().get_only_group();
+    wxString s_workflow_id;
+    wxString s_group, s_flag;
 
-    wxString s_aim_operator, s_aim_group;
+    wxArrayString a_flag, a_group;
 
-    if(s_own_group==wxT("G0014"))
-    {
-        s_aim_group=wxT("G0004");
-        s_aim_operator= wxGetApp().get_leader(s_aim_group);
-    }else if(s_own_group==wxT("G0004"))
-    {
-        s_aim_group=wxT("G0014");
-        s_aim_operator= wxGetApp().get_leader(s_aim_group);
-    }else
-        return;
+    s_group="G0006";
+    a_group.Add(s_group);
+    s_flag = "M";
+    a_flag.Add(s_flag);
 
+    s_group="G0007";
+    a_group.Add(s_group);
+    s_flag = "E";
+    a_flag.Add(s_flag);
 
-    if(wxMessageBox(_("授权人更改为:")+wxGetApp().get_name(s_aim_operator),_("此操作变更授权人，是否继续？"),wxYES_NO,this)!=wxYES)
+    if(wxMessageBox("此操作将变更配置工作流，是否继续？","变更确认!",wxYES_NO)!=wxYES)
         return;
 
     wxTreeItemId del_item;
@@ -2774,6 +2783,9 @@ void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
     for( iter = items.begin(); iter<items.end(); iter++)
     {
         wxTreeItemId sel_item = *iter;
+
+        s_workflow_id = tlc_proj_list->GetItemText(sel_item, 15);
+
         if(tlc_proj_list->GetItemParent(sel_item)==root)
         {
             wxTreeItemIdValue cookie;
@@ -2782,18 +2794,15 @@ void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
             {
                 bool b_del=false;
                 s_wbs = tlc_proj_list->GetItemText(child_item, 0);
-                s_sql=wxT("UPDATE l_proc_act SET operator_id='")+s_aim_operator+wxT("', group_id='")+s_aim_group+wxT("', modify_date='")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where \
-                              instance_id='")+s_wbs+wxT("' and workflow_id='WF0002' AND action_id='AT00000003' and is_active=true;")  ;
-                if (wxGetApp().app_sql_update(s_sql))
+                if (change_workflow(s_wbs, s_workflow_id, a_flag, a_group))
                 {
-                    wxLogMessage(s_wbs+":授权人成功变更为:"+wxGetApp().get_name(s_aim_operator)+":成功!");
-                    wxGetApp().change_log("l_proc_act",s_wbs+"-AT00000003","operator_id",gr_para.login_user,s_aim_operator,"by hand");
-                    //wxGetApp().change_log("l_proc_act",s_wbs+"-AT00000003","group_id",s_own_group,s_aim_group,"by hand");
+                    wxLogMessage(s_wbs+":变更工作流成功!");
+
                     del_item = child_item;
                     b_del=true;
                 }else
                 {
-                    wxLogMessage(s_wbs+"变更授权人失败!");
+                    wxLogMessage(s_wbs+"变更工作流失败!");
                 }
 
                 child_item = tlc_proj_list->GetNextSibling(child_item);
@@ -2812,14 +2821,9 @@ void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
                 s_wbs = tlc_proj_list->GetItemText(sel_item, 0);
                 wxTreeItemId parent_item = tlc_proj_list->GetItemParent(sel_item);
 
-                s_sql=wxT("UPDATE l_proc_act SET operator_id='")+s_aim_operator+wxT("', group_id='")+s_aim_group+wxT("', modify_date='")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where \
-                              instance_id='")+s_wbs+wxT("' and workflow_id='WF0002' AND action_id='AT00000003' and is_active=true;")  ;
-            if (wxGetApp().app_sql_update(s_sql))
+          if (change_workflow(s_wbs, s_workflow_id, a_flag, a_group))
             {
-                wxLogMessage(s_wbs+":授权人成功变更为:"+wxGetApp().get_name(s_aim_operator)+":成功!");
-                wxGetApp().change_log("l_proc_act",s_wbs+"-AT00000003","operator_id",gr_para.login_user,s_aim_operator,"by hand");
-                //wxGetApp().change_log("l_proc_act",s_wbs+"-AT00000003","group_id",s_own_group,s_aim_group,"by hand");
-
+                wxLogMessage(s_wbs+":变更工作流成功!");
                 tlc_proj_list->Delete(sel_item);
 
                 if(tlc_proj_list->GetChildrenCount(parent_item)== 0)
@@ -2828,10 +2832,115 @@ void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
             else
             {
                 wxLogMessage(s_wbs+"变更授权人失败!");
+
             }
         }
     }
 
+}
+
+bool project_author_panel::change_workflow(wxString s_wbs, wxString s_workflow, wxArrayString array_flag, wxArrayString array_group)
+{
+    v_wf_action * t_template = get_template_action(wf_str_configure);
+    v_wf_action * t_new_template = get_template_action(wf_str_new_config);
+    wf_operator * wf_configure=0;
+    wf_operator_ex * wf_new_conf=0;
+    wxString s_group = wxGetApp().get_only_group();
+    int i_pos, i_active;
+    wf_process * l_proc_act =0;
+
+    if(s_workflow==wf_str_configure)
+    {
+        wf_configure = new wf_operator(s_wbs, wf_str_configure, t_template);
+        wf_configure->cancel_log(1);
+       if(wf_configure->delete_process())
+       {
+           if(wf_configure)
+              delete wf_configure;
+
+            for(int j=0; j<2;j++)
+            {
+
+                wf_new_conf = new wf_operator_ex(s_wbs, wf_str_new_config, t_new_template,array_flag.Item(j));
+                wf_new_conf->start_proc(array_group.Item(j), wxEmptyString, false);
+                //wf_new_conf->update_instance(1);
+                if (wf_new_conf)
+                    delete wf_new_conf;
+
+            }
+
+            return true;
+
+       }else
+       {
+            if(wf_configure)
+              delete wf_configure;
+
+            return false;
+       }
+
+    }else if(s_workflow==wf_str_new_config)
+    {
+        i_pos = array_group.Index(s_group);
+        wxString s_flag;
+
+        if(array_flag.Item(i_pos)=="M")
+            s_flag = "E";
+        else
+            s_flag= "M";
+
+        wf_new_conf = new wf_operator_ex(s_wbs, wf_str_new_config, t_new_template,s_flag);
+
+
+        l_proc_act= wf_new_conf->get_current_process();
+
+        i_active = l_proc_act->MoveToActive();
+        if(i_active > 0)
+        {
+            wxString s_sql=wxT("UPDATE l_proc_act SET is_active=false, modify_date='")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where \
+                              instance_id='")+s_wbs+wxT("' and operator_id ='")+gr_para.login_user+wxT("' and workflow_id='WF0006' AND is_active=true;");
+
+            if(wxGetApp().app_sql_update(s_sql))
+            {
+                if(wf_new_conf)
+                    delete wf_new_conf;
+
+               return true;
+            }else
+            {
+                if(wf_new_conf)
+                    delete wf_new_conf;
+
+                return false;
+            }
+
+        }
+        else
+        {
+
+            if(wf_new_conf->delete_process())
+            {
+                if(wf_new_conf)
+                    delete wf_new_conf;
+
+                wf_configure = new wf_operator(s_wbs, wf_str_configure, t_template);
+                wf_configure->start_proc("配置工作流切换", false, true);
+
+                if(wf_configure)
+                    delete wf_configure;
+
+                return true;
+            }else
+            {
+                 if(wf_new_conf)
+                    delete wf_new_conf;
+
+                return false;
+            }
+
+        }
+
+    }
 
 }
 

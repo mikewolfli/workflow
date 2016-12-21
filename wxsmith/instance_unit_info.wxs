@@ -349,6 +349,12 @@
 				<handler function="Onmi_change_lenderSelected" entry="EVT_MENU" />
 			</object>
 			<object class="separator" />
+			<object class="wxMenuItem" name="idMenu_create_folder" variable="mi_folder" member="yes">
+				<label>创建文件夹</label>
+				<help>创建文件夹</help>
+				<handler function="Onmi_folderSelected" entry="EVT_MENU" />
+			</object>
+			<object class="separator" />
 			<object class="wxMenuItem" name="idMenu_All" variable="MenuItem9" member="yes">
 				<label>全部项目(&amp;A)</label>
 				<help>显示全部项目</help>

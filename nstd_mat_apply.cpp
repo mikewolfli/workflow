@@ -3665,7 +3665,7 @@ void nstd_mat_apply::OnButton_EngineerClick(wxCommandEvent& event)
 
     str_group_list.Add(m_group);
 
-     wxArrayString  s_members = wxGetApp().get_member_in_group(str_group_list );
+     wxArrayString  s_members = wxGetApp().get_member_in_group(str_group_list, true );
 
     wxSingleChoiceDialog cdlg(this, _("请选择操作人员:"),_("操作选择"),s_members);
 

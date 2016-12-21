@@ -507,6 +507,7 @@ wxString wfApp::get_only_group()
     wxArrayString array_group = get_group();
     if(array_group.GetCount() == 1)
     {
+        wxString str = array_group.Item(0);
         return array_group.Item(0);
     }
 

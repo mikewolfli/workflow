@@ -58,12 +58,11 @@ project_review_author_panel::project_review_author_panel(wxWindow * parent, wxWi
     wxBoxSizer* BoxSizer1;
     wxStaticBoxSizer* sb_group;
     wxStaticBoxSizer* StaticBoxSizer1;
+    wxBoxSizer* BoxSizer3;
 
     Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("wxID_ANY"));
     BoxSizer1 = new wxBoxSizer(wxVERTICAL);
     GridBagSizer1 = new wxGridBagSizer(0, 0);
-    sbox_author = new wxStaticBoxSizer(wxHORIZONTAL, this, _("待授权任务清单"));
-    GridBagSizer1->Add(sbox_author, wxGBPosition(0, 0), wxGBSpan(6, 6), wxALL|wxEXPAND, 0);
     BoxSizer2 = new wxBoxSizer(wxVERTICAL);
     Button_Author = new wxButton(this, ID_BUTTON_AUTHOR, _("授权/评审/审核"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON_AUTHOR"));
     BoxSizer2->Add(Button_Author, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5);
@@ -87,9 +86,13 @@ project_review_author_panel::project_review_author_panel(wxWindow * parent, wxWi
     lv_person = new wxListView(this, ID_LISTVIEW_PERSON, wxDefaultPosition, wxSize(185,224), wxLC_REPORT, wxDefaultValidator, _T("ID_LISTVIEW_PERSON"));
     StaticBoxSizer1->Add(lv_person, 1, wxALL|wxEXPAND, 0);
     GridBagSizer1->Add(StaticBoxSizer1, wxGBPosition(0, 7), wxGBSpan(6, 2), wxALL|wxEXPAND, 0);
-    BoxSizer1->Add(GridBagSizer1, 2, wxALL|wxEXPAND, 0);
+    BoxSizer3 = new wxBoxSizer(wxVERTICAL);
+    sbox_author = new wxStaticBoxSizer(wxHORIZONTAL, this, _("待授权任务清单"));
+    BoxSizer3->Add(sbox_author, 1, wxALL|wxEXPAND, 0);
     sb_group = new wxStaticBoxSizer(wxHORIZONTAL, this, _("组员任务清单"));
-    BoxSizer1->Add(sb_group, 1, wxALL|wxEXPAND, 0);
+    BoxSizer3->Add(sb_group, 2, wxALL|wxEXPAND, 0);
+    GridBagSizer1->Add(BoxSizer3, wxGBPosition(0, 0), wxGBSpan(6, 6), wxALL|wxEXPAND, 0);
+    BoxSizer1->Add(GridBagSizer1, 2, wxALL|wxEXPAND, 0);
     SetSizer(BoxSizer1);
     mi_expand = new wxMenuItem((&menu_author), idMenu_Expand, _("全部展开(&E)"), _("项目展开"), wxITEM_NORMAL);
     menu_author.Append(mi_expand);
@@ -1048,11 +1051,11 @@ void project_review_author_panel::refresh_level()
 
         if(i_review_status==1)
         {
-            tlc_task_list->SetItemImage(item, 6);//20150813
+            tlc_task_list->SetItemImage(item, 5);//20150813
         }
         else if(i_review_status == 2)
         {
-            tlc_task_list->SetItemImage(item, 7);//20150813
+            tlc_task_list->SetItemImage(item, 6);//20150813
         }
         else
             tlc_task_list->SetItemImage(item, -1);

@@ -21,6 +21,7 @@ class project_review_panel: public wxPanel
 		wxButton* Button_Finish;
 		wxMenu menu_review_log;
 		wxMenuItem* mi_process;
+		wxMenuItem* mi_draw_qty;
 		wxButton* Button_Communication;
 		wxMenuItem* mi_review_history;
 		wxButton* Button_Return;
@@ -49,6 +50,7 @@ class project_review_panel: public wxPanel
 		static const long ID_BUTTON2;
 		static const long ID_BUTTON3;
 		static const long idMenu_process;
+		static const long idMenu_draw_qty;
 		static const long idMenu_restart_log;
 		static const long idMenu_Communication_log;
 		static const long idMenu_pos;
@@ -66,6 +68,7 @@ class project_review_panel: public wxPanel
 		void Onmi_processSelected(wxCommandEvent& event);
 		void Onmi_review_historySelected(wxCommandEvent& event);
 		void Onmi_posSelected(wxCommandEvent& event);
+		void Onmi_draw_qtySelected(wxCommandEvent& event);
 		//*)
 		void OnChar(wxTreeEvent& event);
 
@@ -90,6 +93,7 @@ class project_review_panel: public wxPanel
         wxImageList* m_imageList;
 
 		bool create_communication(wxString s_task_id, wxString &s_status, wxString &s_context, bool b_close = false);
+		bool update_drawing_qty(wxString s_task_id, wxString s_drawing_qty);
 
 		DECLARE_EVENT_TABLE()
 };

@@ -45,7 +45,7 @@ class project_author_panel: public wxPanel
 		void BuildDataViewCtrl();
 		void init_list_header();
 		void refresh_list();
-		void refresh_res_list(wxString s_group_cata);
+		void refresh_res_list(/*wxString s_group_cata*/);
 
 		void refresh_new_res_list(wxString s_group);
 		void pass_proc_new(wxString s_flag);
@@ -140,6 +140,7 @@ class project_author_panel: public wxPanel
 
        bool check_other_way(wxString s_instance, wxString s_flag);
        wxArrayString get_other_way(wxString s_lift_type, wxString s_flag);
+       bool change_workflow(wxString s_wbs, wxString s_workflow, wxArrayString array_flag, wxArrayString array_group);
 
         wxString where_clause;
 

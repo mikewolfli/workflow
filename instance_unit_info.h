@@ -73,6 +73,7 @@ class instance_unit_info: public wxPanel
 		wxButton* Button5;
 		wxMenuItem* MenuItem3;
 		wxButton* Button3;
+		wxMenuItem* mi_folder;
 		wxButton* button_sap_by_internal;
 		wxMenuItem* MenuItem23;
 		wxMenu menu_project_filter;
@@ -182,6 +183,7 @@ class instance_unit_info: public wxPanel
 		static const long idMenu_contract_br_search;
 		static const long idMenu_ContractBook_Search;
 		static const long idMenu_Change_Lender;
+		static const long idMenu_create_folder;
 		static const long idMenu_All;
 		static const long idMenu_NSTD_LEVEL;
 		static const long idMenu_UnSt;
@@ -269,6 +271,7 @@ class instance_unit_info: public wxPanel
 		void Onmi_special_infoSelected(wxCommandEvent& event);
 		void Onmi_mc2_hSelected(wxCommandEvent& event);
 		void Onmi_delv_mc2_hSelected(wxCommandEvent& event);
+		void Onmi_folderSelected(wxCommandEvent& event);
 		//*)
 
 		int get_same_project_count(wxString s_project, const wxArrayString s_unit_list);

@@ -16,6 +16,7 @@ const long project_review_panel::ID_BUTTON1 = wxNewId();
 const long project_review_panel::ID_BUTTON2 = wxNewId();
 const long project_review_panel::ID_BUTTON3 = wxNewId();
 const long project_review_panel::idMenu_process = wxNewId();
+const long project_review_panel::idMenu_draw_qty = wxNewId();
 const long project_review_panel::idMenu_restart_log = wxNewId();
 const long project_review_panel::idMenu_Communication_log = wxNewId();
 const long project_review_panel::idMenu_pos = wxNewId();
@@ -51,6 +52,8 @@ project_review_panel::project_review_panel(wxWindow* parent,wxWindowID id,const 
 	SetSizer(BoxSizer1);
 	mi_process = new wxMenuItem((&menu_review_log), idMenu_process, _("项目评审流程信息(&I)"), _("项目评审流程信息"), wxITEM_NORMAL);
 	menu_review_log.Append(mi_process);
+	mi_draw_qty = new wxMenuItem((&menu_review_log), idMenu_draw_qty, _("更改图纸套数(&D)"), _("更改图纸套数"), wxITEM_NORMAL);
+	menu_review_log.Append(mi_draw_qty);
 	mi_review_history = new wxMenuItem((&menu_review_log), idMenu_restart_log, _("重启评审历史(&H)"), _("重启评审历史"), wxITEM_NORMAL);
 	menu_review_log.Append(mi_review_history);
 	mi_com_log = new wxMenuItem((&menu_review_log), idMenu_Communication_log, _("问题传递log(&L)"), _("问题传递log"), wxITEM_NORMAL);
@@ -65,6 +68,7 @@ project_review_panel::project_review_panel(wxWindow* parent,wxWindowID id,const 
 	Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&project_review_panel::OnButton_ReturnClick);
 	Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&project_review_panel::OnButton_RefreshClick);
 	Connect(idMenu_process,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_review_panel::Onmi_processSelected);
+	Connect(idMenu_draw_qty,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_review_panel::Onmi_draw_qtySelected);
 	Connect(idMenu_restart_log,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_review_panel::Onmi_review_historySelected);
 	Connect(idMenu_Communication_log,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_review_panel::Onmi_com_logSelected);
 	Connect(idMenu_pos,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&project_review_panel::Onmi_posSelected);
@@ -1345,3 +1349,67 @@ void project_review_panel::OnChar(wxTreeEvent& event)
 
     event.Skip();
 }
+
+void project_review_panel::Onmi_draw_qtySelected(wxCommandEvent& event)
+{
+       if(!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,无法做任何操作!"));
+        return;
+    }
+
+    if(!wxGetApp().conn->IsAlive())
+    {
+        wxLogMessage(_("系统连接已断开,请重新连接!"));
+        wxGetApp().clear_login();
+        return;
+    }
+
+    wxArrayString array_group = wxGetApp().get_group();
+
+    if(array_group.Index(wxT("G0002")) == wxNOT_FOUND)
+        return;
+
+    wxArrayTreeItemIds items;
+    wxTreeItemId root = tlc_task_list->GetRootItem();
+
+    wxArrayTreeItemIds::iterator iter;
+    tlc_task_list->GetSelections( items );
+
+    if(items.IsEmpty())
+    {
+        wxLogMessage(_("请选择任务！"));
+        return;
+    }
+
+    wxString str_task_id, str_draw_qty;
+    for( iter = items.begin(); iter<items.end(); iter++)
+    {
+        wxTreeItemId sel_item = *iter;
+        if (tlc_task_list->GetItemParent(sel_item)==root&&sel_item.IsOk())
+        {
+            str_task_id = tlc_task_list->GetItemText(sel_item, 1);
+            str_draw_qty = tlc_task_list->GetItemText(sel_item, 13);//20150813
+
+            wxTextEntryDialog tdlg(this, _("请输入新的图纸套数"), _("图纸套数变更"), str_draw_qty, wxTextEntryDialogStyle, wxDefaultPosition);
+            tdlg.SetTextValidator(wxFILTER_DIGITS);
+            if (tdlg.ShowModal() == wxID_CANCEL)
+                return;
+
+            str_draw_qty = tdlg.GetValue();
+
+            if(update_drawing_qty(str_task_id, str_draw_qty))
+                tlc_task_list->SetItemText(sel_item, 13, str_draw_qty);//20150813
+        }
+    }
+}
+
+
+bool project_review_panel::update_drawing_qty(wxString s_task_id, wxString s_drawing_qty)
+{
+    wxString str_sql = wxT("UPDATE s_review_info SET review_drawing_qty =")+s_drawing_qty+wxT(",modify_date = '")+DateToAnsiStr(wxDateTime::Now())+
+                       wxT("',modify_emp_id = '")+gr_para.login_user+wxT("' WHERE review_task_id ='")+ s_task_id+wxT("';");
+
+    return wxGetApp().app_sql_update(str_sql);
+}
+

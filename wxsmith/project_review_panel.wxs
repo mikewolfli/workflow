@@ -61,6 +61,11 @@
 				<help>项目评审流程信息</help>
 				<handler function="Onmi_processSelected" entry="EVT_MENU" />
 			</object>
+			<object class="wxMenuItem" name="idMenu_draw_qty" variable="mi_draw_qty" member="yes">
+				<label>更改图纸套数(&amp;D)</label>
+				<help>更改图纸套数</help>
+				<handler function="Onmi_draw_qtySelected" entry="EVT_MENU" />
+			</object>
 			<object class="wxMenuItem" name="idMenu_restart_log" variable="mi_review_history" member="yes">
 				<label>重启评审历史(&amp;H)</label>
 				<help>重启评审历史</help>
