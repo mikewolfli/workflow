@@ -2,12 +2,12 @@
 #define INSTANCE_UNIT_INFO_H
 
 //(*Headers(instance_unit_info)
+#include <wx/button.h>
+#include <wx/grid.h>
 #include <wx/listctrl.h>
-#include <wx/sizer.h>
 #include <wx/menu.h>
 #include <wx/panel.h>
-#include <wx/grid.h>
-#include <wx/button.h>
+#include <wx/sizer.h>
 //*)
 
 //#include "interface/wxPostgreSQL.h"
@@ -29,69 +29,69 @@ class instance_unit_info: public wxPanel
 
 		//(*Declarations(instance_unit_info)
 		sqlResultGrid* gd_unit_info;
-		wxButton* Button_DEL_project;
-		wxListCtrl* lc_project;
-		wxMenuItem* mi_cb_lender;
-		wxMenuItem* MenuItem8;
-		wxMenuItem* mi_delv_mc2_h;
-		wxButton* Button_Restore_project;
-		wxMenuItem* MenuItem26;
-		wxMenuItem* MenuItem7;
-		wxMenuItem* mi_proj_name;
-		wxButton* Button4;
-		wxMenuItem* MenuItem25;
-		wxMenuItem* MenuItem5;
-		wxMenuItem* MenuItem2;
-		wxMenuItem* mi_add_contract_id;
 		wxButton* Button1;
-		wxMenuItem* mi_delivery_date;
-		wxMenuItem* mi_special_info;
-		wxMenu menu_unit_info_renew;
-		wxMenuItem* mi_urgent;
-		wxMenuItem* MenuItem1;
-		wxMenuItem* MenuItem4;
-		wxMenuItem* MenuItem14;
-		wxMenuItem* MenuItem11;
-		wxButton* Button_Cal_Basic_Info;
-		wxButton* Button_NSTD_SAP_UPDATE;
-		wxMenuItem* MenuItem_Weight;
-		wxButton* button_sap_by_wbs;
-		wxMenuItem* MenuItem15;
-		wxMenuItem* MenuItem22;
-		wxMenuItem* mi_hex;
-		wxMenuItem* MenuItem17;
-		wxMenuItem* mi_cb_search;
-		wxMenuItem* MenuItem13;
-		wxButton* Button_Cancel_project;
-		wxMenuItem* MenuItem10;
-		wxMenuItem* mi_unit_in_contract;
 		wxButton* Button2;
-		wxMenuItem* MenuItem12;
-		wxMenuItem* MenuItem24;
-		wxMenuItem* mi_syc_din;
-		wxMenuItem* mi_contract;
-		wxButton* Button5;
-		wxMenuItem* MenuItem3;
 		wxButton* Button3;
-		wxMenuItem* mi_folder;
-		wxButton* button_sap_by_internal;
-		wxMenuItem* MenuItem23;
-		wxMenu menu_project_filter;
-		wxMenuItem* MenuItem_Review;
-		wxMenuItem* mi_print_label;
-		wxMenuItem* MenuItem_Basic_Info;
-		wxMenuItem* mi_search_contract;
-		wxMenuItem* MenuItem21;
-		wxMenuItem* mi_contract_br_search;
-		wxMenuItem* MenuItem16;
-		wxMenuItem* mi_Excel_export;
-		wxMenuItem* mi_mc2_h;
-		wxMenuItem* MenuItem9;
-		wxButton* button_cancel_restart;
-		wxMenuItem* MenuItem18;
-		wxMenuItem* mi_generate_contract;
+		wxButton* Button4;
+		wxButton* Button5;
+		wxButton* Button_Cal_Basic_Info;
+		wxButton* Button_Cancel_project;
+		wxButton* Button_DEL_project;
+		wxButton* Button_NSTD_SAP_UPDATE;
+		wxButton* Button_Restore_project;
 		wxButton* Button_syc_to_din;
+		wxButton* button_cancel_restart;
+		wxButton* button_sap_by_internal;
+		wxButton* button_sap_by_wbs;
+		wxListCtrl* lc_project;
+		wxMenu menu_project_filter;
+		wxMenu menu_unit_info_renew;
+		wxMenuItem* MenuItem10;
+		wxMenuItem* MenuItem11;
+		wxMenuItem* MenuItem12;
+		wxMenuItem* MenuItem13;
+		wxMenuItem* MenuItem14;
+		wxMenuItem* MenuItem15;
+		wxMenuItem* MenuItem16;
+		wxMenuItem* MenuItem17;
+		wxMenuItem* MenuItem18;
 		wxMenuItem* MenuItem19;
+		wxMenuItem* MenuItem1;
+		wxMenuItem* MenuItem21;
+		wxMenuItem* MenuItem22;
+		wxMenuItem* MenuItem23;
+		wxMenuItem* MenuItem24;
+		wxMenuItem* MenuItem25;
+		wxMenuItem* MenuItem26;
+		wxMenuItem* MenuItem2;
+		wxMenuItem* MenuItem3;
+		wxMenuItem* MenuItem4;
+		wxMenuItem* MenuItem5;
+		wxMenuItem* MenuItem7;
+		wxMenuItem* MenuItem8;
+		wxMenuItem* MenuItem9;
+		wxMenuItem* MenuItem_Basic_Info;
+		wxMenuItem* MenuItem_Review;
+		wxMenuItem* MenuItem_Weight;
+		wxMenuItem* mi_Excel_export;
+		wxMenuItem* mi_add_contract_id;
+		wxMenuItem* mi_cb_lender;
+		wxMenuItem* mi_cb_search;
+		wxMenuItem* mi_contract;
+		wxMenuItem* mi_contract_br_search;
+		wxMenuItem* mi_delivery_date;
+		wxMenuItem* mi_delv_mc2_h;
+		wxMenuItem* mi_folder;
+		wxMenuItem* mi_generate_contract;
+		wxMenuItem* mi_hex;
+		wxMenuItem* mi_mc2_h;
+		wxMenuItem* mi_print_label;
+		wxMenuItem* mi_proj_name;
+		wxMenuItem* mi_search_contract;
+		wxMenuItem* mi_special_info;
+		wxMenuItem* mi_syc_din;
+		wxMenuItem* mi_unit_in_contract;
+		wxMenuItem* mi_urgent;
 		//*)
         wxMenuItem* MenuItem20;
 
@@ -121,8 +121,12 @@ class instance_unit_info: public wxPanel
 		wxString str_unit_header;
 
 		void Compress_array(wxPostgreSQLresult * res, wxArrayString & array_sel);
-		bool update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_temp);
+		bool update_nonstd_conf_date();
+        bool get_nonstd_array(wxString s_wbs);
+
 		wxArrayString array_update_conf;
+		wxArrayString array_links;
+		wxArrayString array_now;
 		void Show_control();
 		wxString create_review_struct(wxString s_project,wxString s_res_cm, const wxArrayString &array_wbs, wxArrayString &array_task_units, wxArrayInt array_old_status,int i_urgent_level=1, wxString s_remarks=wxEmptyString, wxString s_qty=_("0"));
 
@@ -283,6 +287,7 @@ class instance_unit_info: public wxPanel
 		int get_review_status(wxString s_wbs);
 
 		void Create_Folder(wxArrayString a_wbs);
+		void Create_proj_Folder(wxArrayString a_wbs);
 		bool update_contract_book_status(wxString s_wbs, int i_status);
 		wxString get_full_prj_info(wxString s_prj);
 

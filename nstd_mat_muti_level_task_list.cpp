@@ -124,6 +124,8 @@ void nstd_mat_muti_level_task_list::refresh_list()
     }
     wxString str_sql, str_sql1,str_sql2;
 
+    wxString s_group = wxGetApp().get_only_group();
+
     wxTreeItemId root = tlc_task_list->GetRootItem();
     tlc_task_list->DeleteChildren (root);
 
@@ -144,15 +146,29 @@ void nstd_mat_muti_level_task_list::refresh_list()
         str_sql = str_sql1 +wxT(" UNION ")+str_sql2 + wxT(" ORDER BY drawing_req_date, index_id ASC;");
     }else if(m_receive_mode==1)
     {
-        str_sql1 = wxT("(SELECT index_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
+
+        if(s_group == wxT("G0003")||s_group == wxT("G0004")|| s_group == wxT("G0005"))
+        {
+            str_sql1 = wxT("(SELECT index_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
+                          nonstd_catalog, nonstd_desc,  res_person,(select name from s_employee where employee_id = res_person) as res_person_name, header_status as status,\
+                          nonstd_value, link_list from v_nonstd_app_item  WHERE header_status>=3 and res_person ='")+gr_para.login_user+wxT("' and index_id not in (select index_id from l_nonstd_app_item_instance where index_id =v_nonstd_app_item.index_id))");
+
+
+            str_sql2 = wxT("(SELECT index_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
+                          nonstd_catalog, nonstd_desc,  res_person,(select name from s_employee where employee_id = res_person) as res_person_name, header_status as status,\
+                          nonstd_value, link_list from  v_nonstd_app_item_instance  where (header_status=3 or header_status=10) AND (res_engineer ='")+gr_para.login_user+wxT("' OR res_person ='")+gr_para.login_user+wxT("') AND (status=1 OR status=0) )" );
+        }
+        else
+        {
+            str_sql1 = wxT("(SELECT index_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
                           nonstd_catalog, nonstd_desc,  res_person,(select name from s_employee where employee_id = res_person) as res_person_name, header_status as status,\
                           nonstd_value, link_list from v_nonstd_app_item  WHERE header_status=3 and res_person ='")+gr_para.login_user+wxT("')");
 
-
-        str_sql2 = wxT("(SELECT index_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
+            str_sql2 = wxT("(SELECT index_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
                           nonstd_catalog, nonstd_desc,  res_person,(select name from s_employee where employee_id = res_person) as res_person_name, header_status as status,\
                           nonstd_value, link_list from  v_nonstd_app_item_instance  where (header_status=3 or header_status=10) AND res_engineer ='")+gr_para.login_user+wxT("' AND status=1 )" );
 
+        }
         str_sql = str_sql1 +wxT(" UNION ")+str_sql2 + wxT(" ORDER BY drawing_req_date, index_id ASC;");
     }
 

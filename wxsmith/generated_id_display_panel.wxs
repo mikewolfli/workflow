@@ -18,6 +18,7 @@
 										<item>WBS BOM更改通知单</item>
 										<item>非标设计指令</item>
 										<item>技术变更执行通知单</item>
+										<item>非标点无法实现通知</item>
 									</content>
 									<handler function="OnChoice_catalogSelect" entry="EVT_CHOICE" />
 								</object>

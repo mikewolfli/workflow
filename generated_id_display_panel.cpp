@@ -42,6 +42,7 @@ generated_id_display_panel::generated_id_display_panel(wxWindow* parent,wxWindow
 	Choice_catalog->Append(_("WBS BOM更改通知单"));
 	Choice_catalog->Append(_("非标设计指令"));
 	Choice_catalog->Append(_("技术变更执行通知单"));
+	Choice_catalog->Append(_("非标点无法实现通知"));
 	GridBagSizer1->Add(Choice_catalog, wxGBPosition(0, 0), wxDefaultSpan, wxALL|wxALIGN_CENTER_VERTICAL, 5);
 	Button_refresh = new wxButton(this, ID_BUTTON_REFRESH, _("刷新单据"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON_REFRESH"));
 	GridBagSizer1->Add(Button_refresh, wxGBPosition(0, 2), wxDefaultSpan, wxALL|wxALIGN_CENTER_VERTICAL, 5);
@@ -79,9 +80,9 @@ generated_id_display_panel::generated_id_display_panel(wxWindow* parent,wxWindow
 	Connect(ID_BUTTON_CANCEL,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&generated_id_display_panel::OnButton_cancelClick);
 	//*)
 
-    wxArrayString array_group = wxGetApp().get_group();
+    array_group = wxGetApp().get_group();
 
-    if(array_group.Index(wxT("G0011"))!=wxNOT_FOUND)
+    if(array_group.Index(wxT("G0011"))!=wxNOT_FOUND||array_group.Index(wxT("G0019"))!=wxNOT_FOUND)
     {
         Button_cancel->Show(true);
         Button_Restore->Show(true);
@@ -136,6 +137,12 @@ generated_id_display_panel::generated_id_display_panel(wxWindow* parent,wxWindow
             break;
         }
 
+        if(array_group.Index(wxT("G0019"))!=wxNOT_FOUND)
+        {
+            m_clause1=m_clause1+wxT(" and publisher='")+gr_para.login_user+wxT("' ");
+        }
+
+
     }
     else
     {
@@ -160,7 +167,6 @@ generated_id_display_panel::generated_id_display_panel(wxWindow* parent,wxWindow
     {
         m_clause=m_clause1+m_clause2;
     }
-
 
     m_clause_att = wxEmptyString;
     refresh_list();
@@ -632,6 +638,74 @@ void generated_id_display_panel::init_list_header()
         itemCol.SetWidth(50);
         lv_list->InsertColumn(27, itemCol);
         break;
+    case 5:
+        itemCol.SetText(_("通知单编号"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(100);
+        lv_list->InsertColumn(0,itemCol);
+
+        itemCol.SetText(_("制单人ID"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(0);
+        lv_list->InsertColumn(1,itemCol);
+
+        itemCol.SetText(_("制单人"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(80);
+        lv_list->InsertColumn(2,itemCol);
+
+         itemCol.SetText(_("制单日期"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(100);
+        lv_list->InsertColumn(3,itemCol);
+
+        itemCol.SetText(_("执行人"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(100);
+        lv_list->InsertColumn(4,itemCol);
+
+        itemCol.SetText(_("发布人ID"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(0);
+        lv_list->InsertColumn(5,itemCol);
+
+        itemCol.SetText(_("发布人"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(80);
+        lv_list->InsertColumn(6,itemCol);
+
+        itemCol.SetText(_("发布日期"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(100);
+        lv_list->InsertColumn(7,itemCol);
+
+        itemCol.SetText(_("项目编号"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(80);
+        lv_list->InsertColumn(8,itemCol);
+
+        itemCol.SetText(_("项目名称"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(100);
+        lv_list->InsertColumn(9,itemCol);
+
+        itemCol.SetText(_("项目阶段"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(100);
+        lv_list->InsertColumn(10,itemCol);
+
+        itemCol.SetText(_("非标类型"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(100);
+        lv_list->InsertColumn(11,itemCol);
+
+        itemCol.SetText(_("非标名称"));
+        itemCol.SetImage(-1);
+        itemCol.SetWidth(200);
+        lv_list->InsertColumn(12,itemCol);
+
+
+        break;
     default:
         break;
 
@@ -673,6 +747,7 @@ void generated_id_display_panel::refresh_list()
                      (select name from s_employee where employee_id = apply_person) as apply_name, (select name from s_employee where employee_id =publisher)as publish_name \
                  FROM l_internal_com_table where ")+m_clause+m_clause_att+wxT(" order by ll_id asc;");
         _res = wxGetApp().app_sql_select(s_sql);
+
 
 
         if(_res->Status()!= PGRES_TUPLES_OK)
@@ -1050,6 +1125,70 @@ void generated_id_display_panel::refresh_list()
         _res->Clear();
 
         break;
+
+    case 5:
+        s_sql = wxT("SELECT notice_id, apply_person, apply_date, publisher, publish_date, is_active, is_published, proj_no, project_name, nstd_type, nstd_name,filler, \
+                  nstd_step,(select name from s_employee where employee_id = apply_person) as apply_name, (select name from s_employee where employee_id =publisher)as publish_name \
+                     FROM l_nstd_nocan_notice where ")+m_clause+m_clause_att+wxT(" order by notice_id asc;");
+        _res = wxGetApp().app_sql_select(s_sql);
+
+        wxLogMessage(s_sql);
+
+        if(_res->Status()!= PGRES_TUPLES_OK)
+        {
+            _res->Clear();
+            return;
+        }
+
+        i_count = _res->GetRowsNumber();
+        for(i=0;i<i_count;i++)
+        {
+             str=_res->GetVal(wxT("notice_id"));
+
+             tmp = lv_list->InsertItem(i, str);
+
+             str = _res->GetVal(wxT("apply_person"));
+             lv_list->SetItem(tmp, 1, str);
+
+             str = _res->GetVal(wxT("apply_name"));
+             lv_list->SetItem(tmp, 2, str);
+
+             str = DateToStrFormat(_res->GetDate(wxT("apply_date")));
+             lv_list->SetItem(tmp, 3, str);
+
+              str = _res->GetVal(wxT("filler"));
+             lv_list->SetItem(tmp, 4, str);
+
+             str = _res->GetVal(wxT("publisher"));
+             lv_list->SetItem(tmp, 5, str);
+
+             str = _res->GetVal(wxT("publish_name"));
+             lv_list->SetItem(tmp, 6, str);
+
+            str = DateToStrFormat(_res->GetDate(wxT("publish_date")));
+             lv_list->SetItem(tmp, 7, str);
+
+             str = _res->GetVal(wxT("proj_no"));
+             lv_list->SetItem(tmp, 8, str);
+
+             str = _res->GetVal(_("project_name"));
+             lv_list->SetItem(tmp, 9, str);
+
+             str = _res->GetVal(_("nstd_step"));
+             lv_list->SetItem(tmp, 10, str);
+
+             str = _res->GetVal(_("nstd_type"));
+             lv_list->SetItem(tmp, 11, str);
+
+             str = _res->GetVal(_("nstd_name"));
+             lv_list->SetItem(tmp, 12, str);
+
+
+             _res->MoveNext();
+        }
+
+        _res->Clear();
+        break;
     default:
         break;
 
@@ -1098,6 +1237,10 @@ void generated_id_display_panel::OnChoice_filterSelect(wxCommandEvent& event)
         m_clause1 = wxT(" is_active =true ");
         break;
     }
+    if(array_group.Index(wxT("G0019"))!=wxNOT_FOUND)
+    {
+        m_clause1=m_clause1+wxT(" and publisher='")+gr_para.login_user+wxT("' ");
+    }
 
     init_list_header();
     if(!m_clause1.IsEmpty()&&!m_clause2.IsEmpty())
@@ -1125,7 +1268,6 @@ void generated_id_display_panel::OnChoice_catalogSelect(wxCommandEvent& event)
 
     m_mode = Choice_catalog->GetSelection();
 
-    wxArrayString array_group = wxGetApp().get_group();
 
     if(b_info)
     {
@@ -1143,6 +1285,11 @@ void generated_id_display_panel::OnChoice_catalogSelect(wxCommandEvent& event)
           default:
             m_clause1 = wxT(" is_active =true ");
             break;
+        }
+
+        if(array_group.Index(wxT("G0019"))!=wxNOT_FOUND)
+        {
+            m_clause1=m_clause1+wxT(" and publisher='")+gr_para.login_user+wxT("' ");
         }
 
     }else
@@ -1247,6 +1394,14 @@ bool generated_id_display_panel::change_item(long i_item, int i_mode)
 
          s_table = wxT("l_tce_notice");
          s_key_word = wxT("tcen_id");
+        break;
+
+    case 5:
+           s_sql_start = wxT("UPDATE l_nstd_nocan_notice SET ");
+         s_sql_end = wxT(" where notice_id = '")+s_id+wxT("' ");
+
+         s_table = wxT("l_nstd_nocan_notice");
+         s_key_word = wxT("notice_id");
         break;
     default:
         break;

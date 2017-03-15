@@ -395,6 +395,69 @@ wxString wfApp::get_ser_id(wxString _table_str, wxString _para_str)
 
 }
 
+wxString wfApp::get_ser_id2(wxString _table_str, wxString _para_str)
+{
+    if(!gr_para.login_status||conn->Status()!= CONNECTION_OK)
+        return wxEmptyString;
+
+    wxString result;
+    long l_counter;
+    int i_step;
+    wxString pre_c,fol_c;
+
+    wxString lquery = wxT("select current_counter, counter_step, pre_char, fol_char from s_number_counter where table_str = '")+_table_str+wxT("' and table_para_str ='")+_para_str+wxT("'");
+    wxPostgreSQLresult * l_res = conn->Execute(lquery);
+
+
+    if(l_res->Status()!= PGRES_TUPLES_OK)
+        return wxEmptyString;
+
+    int irow = l_res->NumRows();
+    if(irow<1)
+        return wxEmptyString;
+
+    if(irow>1)
+    {
+        wxLogMessage(_("数据库表中存在重复数据,请核查!"));
+        return wxEmptyString;
+    }
+
+    l_counter = l_res->GetLong(wxT("current_counter"));
+    i_step = l_res->GetInt(wxT("counter_step"));
+    pre_c = l_res->GetVal(wxT("pre_char"));
+    fol_c = l_res->GetVal(wxT("fol_char"));
+
+    if(!fol_c.IsEmpty())
+         result = pre_c  + wxT("-") + NumToStr(l_counter)  + fol_c;
+    else
+        result = pre_c + wxT("-") + NumToStr(l_counter);
+
+    l_res->Clear();
+
+    bool b_run = true;
+
+    l_counter = l_counter + i_step;
+
+
+    lquery = wxT("UPDATE s_number_counter SET current_counter = '")+NumToStr(l_counter)+wxT("' WHERE table_str = '")+_table_str+wxT("' and table_para_str ='")+_para_str+wxT("'");
+
+    do
+    {
+        l_res = conn->Execute(lquery);
+
+        if(l_res->Status() == PGRES_FATAL_ERROR)
+            b_run = false;
+
+        l_res->Clear();
+
+    }
+    while(!b_run);
+
+
+    return result;
+
+}
+
 wxArrayString wfApp::Get_header(wxString _table_str, wxArrayString &_para_str)
 {
     wxArrayString str_header;
@@ -987,9 +1050,42 @@ wxArrayString  wfApp::get_sub_eng_list(int &i_count,bool b_twig)
 
 }
 
-bool wfApp::check_new_config(wxArrayString &a_group, wxArrayString &a_flag,int &i_count, wxString s_lift_type)
+bool wfApp::check_is_highspeed(wxString s_wbs)
 {
-    wxString s_sql = wxT("select * from s_flow_unit_list where elevator_type_id='")+s_lift_type+wxT("';");
+    wxString s_sql = wxT("select speed from s_unit_parameter where wbs_no='")+s_wbs+wxT("';");
+    wxPostgreSQLresult * res = app_sql_select(s_sql);
+
+    if(res->Status()!= PGRES_TUPLES_OK)
+    {
+        res->Clear();
+        return false;
+    }
+
+    int i_count =  res->GetRowsNumber();
+
+    if(i_count==0)
+    {
+        res->Clear();
+        return false;
+    }
+
+    double f_speed = res->GetDouble(wxT("speed"));
+
+    if(f_speed >= 3.0)
+    {
+        res->Clear();
+        return true;
+    }else
+    {
+        res->Clear();
+        return false;
+    }
+
+}
+
+bool wfApp::check_new_config(wxArrayString &a_group, wxArrayString &a_flag,int &i_count, wxString s_lift_type, wxString &s_att_case)
+{
+    wxString s_sql = wxT("select * from s_flow_unit_list where elevator_type_id='")+s_lift_type+wxT("' AND is_nonstd=True;");
     wxPostgreSQLresult * res = app_sql_select(s_sql);
 
     a_flag.Clear();
@@ -1020,6 +1116,8 @@ bool wfApp::check_new_config(wxArrayString &a_group, wxArrayString &a_flag,int &
 
          str = res->GetVal(wxT("group_id"));
          a_group.Add(str);
+
+         s_att_case = res->GetVal(wxT("att_case"));
 
          res->MoveNext();
     }

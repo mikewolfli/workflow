@@ -639,7 +639,7 @@ void nstd_mat_apply::refresh_top_gui()
             tc_nstd_reason->Enable(true);
             if(m_use_status == 3 || m_use_status == 4)
                combo_nstd_item_catalog->Enable(false);
-            else if(m_group!="G0004")
+            else if(m_group!="G0004"&&m_group!="G0003")
                 combo_nstd_item_catalog->Enable(true);
         }
 
@@ -660,11 +660,11 @@ void nstd_mat_apply::refresh_gui_check()
 
     if(m_use_status ==0 || m_use_status==3 || m_use_status == 4)
     {
-        if(m_res_person.s_res_id == gr_para.login_user&&m_group!="G0004")
+        if(m_res_person.s_res_id == gr_para.login_user&&m_group!="G0004"&&m_group!="G0003")
         {
            enable_check(true);
            enable_grid(false);
-        }else  if(m_group=="G0004")
+        }else  if(m_group=="G0004" || m_group=="G0003")
         {
             if(m_engineer.s_res_id==gr_para.login_user||m_cs_mode)
             {
@@ -1709,7 +1709,7 @@ bool nstd_mat_apply::check_prj_info_attach_finished(wxArrayString& a_wbs)
        }
     }
 
-    str_sql = str_sql+ wxT(" and elevator_type in ('TE-GL1','TE-GL','TE-Evolution1','RF1','RF2','TE-HP61','TE-Synergy','RF3') order by wbs_no ASC;");
+    str_sql = str_sql+ wxT(" and elevator_type in ('TE-GL1','TE-GL','TE-Evolution1','RF1','RF2','TE-HP61','TE-Synergy','RF3','RF1-S','TE-Evolution') order by wbs_no ASC;");
 
    // wxMessageBox(str_sql ,_(""));
     wxPostgreSQLresult * _res = wxGetApp().app_sql_select(str_sql);
@@ -1919,7 +1919,7 @@ void nstd_mat_apply::OnButton_SearchClick(wxCommandEvent& event)
 
    if(m_group == wxT("G0003")||m_group == wxT("G0004")|| m_group == wxT("G0005")||m_group==wxT("G0018"))
     {
-        if(m_group==wxT("G0004"))
+        if(m_group==wxT("G0004")||m_group==wxT("G0003"))
             StaticText8->SetLabel(wxT("分任务号"));
         else
             StaticText8->SetLabel(wxT("批次"));
@@ -2385,7 +2385,7 @@ void nstd_mat_apply::add_batch( )
     m_nstd_mat_app_id.Empty();
     tc_nstd_mat_app_id->Clear();
 
-    if(m_group!=wxT("G0004"))
+    if(m_group!=wxT("G0004")&&m_group!=wxT("G0003"))
         add_nstd_mat_id();
     else
         add_nstd_mat_id(false);
@@ -2755,7 +2755,7 @@ void nstd_mat_apply::OnButton_Import_MatClick(wxCommandEvent& event)
     }
 
     wxString str_group = wxGetApp().get_only_group();
-    if(str_group != wxT("G0006") && str_group != wxT("G0007") && str_group != wxT("G0008")&& str_group!=wxT("G0004")&&!m_design)
+    if(str_group != wxT("G0006") && str_group != wxT("G0007") && str_group != wxT("G0008")&& str_group!=wxT("G0003")&&str_group!=wxT("G0004")&&!m_design)
     {
         wxLogMessage(_("您所属的组无此权限!"));
         return;
@@ -3046,7 +3046,7 @@ void nstd_mat_apply::show_gui_control()
 
             Button_Receive->Show(true);
             Button_task_list->Show(true);
-            Button_CONF_APPLY->Show(false);
+            Button_CONF_APPLY->Show(true);
 
         }else
         {
@@ -3057,7 +3057,7 @@ void nstd_mat_apply::show_gui_control()
 
         Button_Generate->Show(true);
 
-        if((m_group=="G0004")&&!m_cs_mode)
+        if((m_group=="G0004"||m_group=="G0003")&&!m_cs_mode)
         {
             sb_low_task->Show(true);
             st_nstd_engineer->Show(true);
@@ -3418,7 +3418,7 @@ void nstd_mat_apply::OnButton_CONF_APPLYClick(wxCommandEvent& event)
     m_units = dlg_task.array_select;
     wxString l_link_list = get_link_wbs(m_units);
 
-    wxString str_sql = wxT("SELECT index_id FROM l_nonstd_app_item where link_list like '%")+l_link_list+wxT("%' AND res_person ='")+gr_para.login_user +wxT("';");
+    wxString str_sql = wxT("SELECT index_id FROM v_nonstd_app_item where link_list like '%")+l_link_list+wxT("%' AND res_person ='")+gr_para.login_user +wxT("' and header_status>=0;");
 
 
     wxPostgreSQLresult * _res = wxGetApp().app_sql_select(str_sql);
@@ -3514,6 +3514,8 @@ void nstd_mat_apply::OnButton_CONF_APPLYClick(wxCommandEvent& event)
         m_index_id = str_serial_id+wxT("-1");
         array_search_result.Clear();
         save_item(str_serial_id, l_link_list, s_nstd_catalog);
+
+        //add_batch();
 
         refresh_top_gui();
         refresh_low_gui();
@@ -3693,7 +3695,7 @@ void nstd_mat_apply::OnButton_EngineerClick(wxCommandEvent& event)
                       tc_low_nstd_reason->GetValue()+wxT("', status = '1',ins_start_date='")+DateToAnsiStr(wxDateTime::Now())+wxT("' where index_id = '")+m_index_id+wxT("' AND batch_id = '")+m_batch_id+wxT("';");
     l_query.Replace(wxT("''"),wxT("NULL"));
 
-    wxLogMessage(l_query);
+    //wxLogMessage(l_query);
     if(wxGetApp().app_sql_update(l_query))
     {
 
@@ -3990,16 +3992,69 @@ void nstd_mat_apply::OnButton_CancelClick(wxCommandEvent& event)
             wxLogMessage(_("分任务已经取消，不必重复操作!"));
             return;
         }*/
+        int i_pos=-1;
+        if(m_batch_id.IsEmpty())
+        {
+            if(wxMessageBox(_("此任务批次已经清空，是否确认取消此任务?"),_("确认"),wxYES_NO)==wxNO)
+                return;
 
-        if(wxMessageBox(_("操作会彻底分任务，确认删除?"),_("确认"),wxYES_NO)==wxNO)
-             return;
+            i_pos=m_index_id.Find("-");
 
-        str_sql = wxT("DELETE FROM l_nonstd_app_item_instance WHERE index_id = '")+m_index_id+wxT("' and batch_id ='")+m_batch_id+wxT("';");
-       if(wxGetApp().app_sql_update(str_sql))
-       {
-           wxLogMessage(m_batch_id+_("分任务删除成功!"));
-           remove_batch();
-       }
+
+
+            str_sql = wxT("UPDATE l_nonstd_app_header SET modify_emp_id ='")+gr_para.login_user+wxT("',modify_date ='")+DateToAnsiStr(wxDateTime::Now())+wxT("',status=-1  where \
+                           nonstd_id='")+m_index_id.Left(i_pos)+wxT("';");
+
+             if(wxGetApp().app_sql_update(str_sql))
+             {
+                 wxLogMessage("主任务取消成功!");
+                 tc_index_id->Clear();
+                 m_index_id.Empty();
+                 m_res_person.Clear();
+                 tc_res_person->Clear();
+                 gd_mat_list->ClearGrid();
+
+                 clear_content();
+
+             }
+        }
+        else
+        {
+
+            if(wxMessageBox(_("操作会彻底分任务，确认删除?"),_("确认"),wxYES_NO)==wxNO)
+                return;
+
+            str_sql = wxT("DELETE FROM l_nonstd_app_item_instance WHERE index_id = '")+m_index_id+wxT("' and batch_id ='")+m_batch_id+wxT("';");
+
+            if(wxGetApp().app_sql_update(str_sql))
+            {
+                wxLogMessage(m_batch_id+_("分任务删除成功!"));
+                remove_batch();
+/*
+                if(m_batch_id.IsEmpty())
+                {
+                    i_pos=m_index_id.Find("-");
+
+
+
+                    str_sql = wxT("UPDATE l_nonstd_app_header SET modify_emp_id ='")+gr_para.login_user+wxT("',modify_date ='")+DateToAnsiStr(wxDateTime::Now())+wxT("',status=-1  where \
+                           nonstd_id='")+m_index_id.Left(i_pos)+wxT("';");
+
+                    if(wxGetApp().app_sql_update(str_sql))
+                    {
+                        wxLogMessage("所有分任务删除完成后，主任务"+m_index_id.Left(i_pos)+"自动取消成功!");
+                        tc_index_id->Clear();
+                        m_index_id.Empty();
+                        m_res_person.Clear();
+                        tc_res_person->Clear();
+                        gd_mat_list->ClearGrid();
+
+                        clear_content();
+
+                    }
+                }*/
+            }
+        }
 /*       str_sql = wxT("UPDATE l_nonstd_app_item_instance SET modify_emp_id ='")+gr_para.login_user+wxT("',modify_date ='")+DateToAnsiStr(wxDateTime::Now())+wxT("', status = '-1' where index_id = '")+m_index_id+wxT("' AND batch_id = '")+m_batch_id+wxT("';");
        if(wxGetApp().app_sql_update(str_sql))
        {

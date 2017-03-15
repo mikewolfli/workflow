@@ -1008,7 +1008,7 @@
 	<wx/dialog.h>
 	<wx/combobox.h>
 
-1480641914 d:\develop\code\workspace\wfcode\wf\wfapp.h
+1484536019 d:\develop\code\workspace\wfcode\wf\wfapp.h
 	<wx/app.h>
 	<wx/snglinst.h>
 	"interface/wxPostgreSQL.h"
@@ -1035,7 +1035,7 @@
 	<wx/string.h>
 	<stdlib.h>
 
-1478849417 d:\develop\code\workspace\wfcode\wf\wf_stdafx.h
+1484020081 d:\develop\code\workspace\wfcode\wf\wf_stdafx.h
 	<wx/wx.h>
 	<wx/string.h>
 	<wx/tokenzr.h>
@@ -1163,7 +1163,7 @@
 	<wx/dialog.h>
 	"wfApp.h"
 
-1478849416 source:d:\develop\code\workspace\wfcode\wf\ins_proc_log.cpp
+1486190429 source:d:\develop\code\workspace\wfcode\wf\ins_proc_log.cpp
 	"ins_proc_log.h"
 	<wx/intl.h>
 	<wx/string.h>
@@ -1175,7 +1175,7 @@
 	<wx/dialog.h>
 	"wfApp.h"
 
-1482306014 source:d:\develop\code\workspace\wfcode\wf\instance_unit_info.cpp
+1489474518 source:d:\develop\code\workspace\wfcode\wf\instance_unit_info.cpp
 	"instance_unit_info.h"
 	"wfApp.h"
 	<wx/choicdlg.h>
@@ -1201,13 +1201,13 @@
 	<wx/intl.h>
 	<wx/string.h>
 
-1481254851 d:\develop\code\workspace\wfcode\wf\instance_unit_info.h
+1489472561 d:\develop\code\workspace\wfcode\wf\instance_unit_info.h
+	<wx/button.h>
+	<wx/grid.h>
 	<wx/listctrl.h>
-	<wx/sizer.h>
 	<wx/menu.h>
 	<wx/panel.h>
-	<wx/grid.h>
-	<wx/button.h>
+	<wx/sizer.h>
 	"interface/sqlresulttable.h"
 	"utils/wf_operator.h"
 	"thread/mythread.h"
@@ -1598,7 +1598,7 @@
 	<wx/dialog.h>
 	"interface/wxPostgreSQL.h"
 
-1481270670 source:d:\develop\code\workspace\wfcode\wf\nstd_mat_apply.cpp
+1488776417 source:d:\develop\code\workspace\wfcode\wf\nstd_mat_apply.cpp
 	"nstd_mat_apply.h"
 	"nstd_mat_task_list.h"
 	"wfApp.h"
@@ -1646,7 +1646,7 @@
 	"interface/sqlresulttable.h"
 	"ctrl/treelistctrl.h"
 
-1479872605 source:d:\develop\code\workspace\wfcode\wf\nstd_mat_muti_level_task_list.cpp
+1483947190 source:d:\develop\code\workspace\wfcode\wf\nstd_mat_muti_level_task_list.cpp
 	"nstd_mat_muti_level_task_list.h"
 	"wfApp.h"
 	<wx/tokenzr.h>
@@ -1719,7 +1719,7 @@
 	<wx/dialog.h>
 	"wfApp.h"
 
-1482122340 source:d:\develop\code\workspace\wfcode\wf\project_author_panel.cpp
+1484556391 source:d:\develop\code\workspace\wfcode\wf\project_author_panel.cpp
 	"project_author_panel.h"
 	"wfApp.h"
 	<wx/bitmap.h>
@@ -1875,7 +1875,7 @@
 	<wx/log.h>
 	<wx/arrimpl.cpp>
 
-1478849417 source:d:\develop\code\workspace\wfcode\wf\wf_workflow_panel.cpp
+1487725924 source:d:\develop\code\workspace\wfcode\wf\wf_workflow_panel.cpp
 	"wf_workflow_panel.h"
 	"wfApp.h"
 	"nstd_mat_task_list.h"
@@ -1900,7 +1900,7 @@
 	"interface/sqlresulttable.h"
 	"utils/wf_operator.h"
 
-1481269135 source:d:\develop\code\workspace\wfcode\wf\wfapp.cpp
+1488427640 source:d:\develop\code\workspace\wfcode\wf\wfapp.cpp
 	"wfApp.h"
 	"pugixml.hpp"
 	"security/base64.h"
@@ -1911,9 +1911,9 @@
 	"wfMain.h"
 	<wx/image.h>
 
-1482305591 d:\develop\code\workspace\wfcode\wf\version.h
+1489562609 d:\develop\code\workspace\wfcode\wf\version.h
 
-1478849417 d:\develop\code\workspace\wfcode\wf\wfmain.h
+1489562339 d:\develop\code\workspace\wfcode\wf\wfmain.h
 	<wx/menu.h>
 	<wx/frame.h>
 	<wx/statusbr.h>
@@ -1942,8 +1942,9 @@
 	"generated_id_display_panel.h"
 	"ndo_generator_panel.h"
 	"ncr_proc_panel.h"
+	"nstd_nocan_panel.h"
 
-1478849417 d:\develop\code\workspace\wfcode\wf\workflow_wf.h
+1487725835 d:\develop\code\workspace\wfcode\wf\workflow_wf.h
 	<wx/sizer.h>
 	<wx/menu.h>
 	<wx/panel.h>
@@ -1951,6 +1952,7 @@
 	"ctrl/treelistctrl.h"
 	"utils/wf_operator.h"
 	<wx/imaglist.h>
+	"xlslib.h"
 
 1478849408 d:\develop\code\workspace\wfcode\wf\ctrl\taskbarbaloon.h
 	<wx/wx.h>
@@ -1964,7 +1966,7 @@
 	<wx/button.h>
 	"ctrl/treelistctrl.h"
 
-1478849417 source:d:\develop\code\workspace\wfcode\wf\wfmain.cpp
+1489562486 source:d:\develop\code\workspace\wfcode\wf\wfmain.cpp
 	"wfMain.h"
 	<wx/msgdlg.h>
 	<wx/aboutdlg.h>
@@ -1981,7 +1983,7 @@
 	<wx/intl.h>
 	<wx/string.h>
 
-1478849417 source:d:\develop\code\workspace\wfcode\wf\workflow_wf.cpp
+1488776406 source:d:\develop\code\workspace\wfcode\wf\workflow_wf.cpp
 	"workflow_wf.h"
 	<wx/textdlg.h>
 	<wx/bitmap.h>
@@ -2226,7 +2228,7 @@
 	<wx/button.h>
 	<wx/dialog.h>
 
-1478849416 source:d:\develop\code\workspace\wfcode\wf\info_id_generator_panel.cpp
+1486617415 source:d:\develop\code\workspace\wfcode\wf\info_id_generator_panel.cpp
 	"info_id_generator_panel.h"
 	"wfApp.h"
 	"wf_search.h"
@@ -2245,7 +2247,7 @@
 	<wx/gbsizer.h>
 	<wx/button.h>
 
-1478849416 d:\develop\code\workspace\wfcode\wf\generated_id_display_panel.h
+1484183421 d:\develop\code\workspace\wfcode\wf\generated_id_display_panel.h
 	<wx/listctrl.h>
 	<wx/sizer.h>
 	<wx/textctrl.h>
@@ -2254,14 +2256,14 @@
 	<wx/gbsizer.h>
 	<wx/button.h>
 
-1478849416 source:d:\develop\code\workspace\wfcode\wf\generated_id_display_panel.cpp
+1484289700 source:d:\develop\code\workspace\wfcode\wf\generated_id_display_panel.cpp
 	"generated_id_display_panel.h"
 	"wfApp.h"
 	"utils/wf_operator.h"
 	<wx/intl.h>
 	<wx/string.h>
 
-1478849417 source:d:\develop\code\workspace\wfcode\wf\units_list_dlg.cpp
+1488258770 source:d:\develop\code\workspace\wfcode\wf\units_list_dlg.cpp
 	"units_list_dlg.h"
 	"wfApp.h"
 	"utils/wf_operator.h"
@@ -2603,4 +2605,19 @@
 	<wx/sizer.h>
 	<wx/button.h>
 	<wx/dialog.h>
+
+1484287996 source:d:\develop\code\workspace\wfcode\wf\nstd_nocan_panel.cpp
+	"nstd_nocan_panel.h"
+	"wfApp.h"
+	<wx/intl.h>
+	<wx/string.h>
+
+1484286711 d:\develop\code\workspace\wfcode\wf\nstd_nocan_panel.h
+	<wx/sizer.h>
+	<wx/stattext.h>
+	<wx/textctrl.h>
+	<wx/panel.h>
+	<wx/gbsizer.h>
+	<wx/button.h>
+	<wx/combobox.h>
 

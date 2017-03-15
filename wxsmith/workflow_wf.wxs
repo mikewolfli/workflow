@@ -112,6 +112,11 @@
 				<help>显示非标物料清单</help>
 				<handler function="OnMenuItem6Selected" entry="EVT_MENU" />
 			</object>
+			<object class="wxMenuItem" name="id_export_task_detail" variable="mi_export_tasks" member="yes">
+				<label>导出当前任务列表</label>
+				<help>导出当前任务列表</help>
+				<handler function="Onmi_export_tasksSelected" entry="EVT_MENU" />
+			</object>
 			<object class="separator" />
 			<object class="wxMenuItem" name="idMenu_Car_or_DC_weight" variable="MenuItem_WEIGHT" member="yes">
 				<label>显示/修改轿厢空重和装潢重量(&amp;D)</label>

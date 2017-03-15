@@ -2760,10 +2760,10 @@ void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
 
     wxString s_wbs;
 
-    wxString s_workflow_id;
+    wxString s_workflow_id, s_elevator_id, s_case;
     wxString s_group, s_flag;
 
-    wxArrayString a_flag, a_group;
+    wxArrayString a_flag, a_group, a_flag_h, a_group_h;
 
     s_group="G0006";
     a_group.Add(s_group);
@@ -2774,6 +2774,9 @@ void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
     a_group.Add(s_group);
     s_flag = "E";
     a_flag.Add(s_flag);
+
+    int i_count;
+    bool b_change=false;
 
     if(wxMessageBox("此操作将变更配置工作流，是否继续？","变更确认!",wxYES_NO)!=wxYES)
         return;
@@ -2786,6 +2789,7 @@ void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
 
         s_workflow_id = tlc_proj_list->GetItemText(sel_item, 15);
 
+
         if(tlc_proj_list->GetItemParent(sel_item)==root)
         {
             wxTreeItemIdValue cookie;
@@ -2794,7 +2798,17 @@ void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
             {
                 bool b_del=false;
                 s_wbs = tlc_proj_list->GetItemText(child_item, 0);
-                if (change_workflow(s_wbs, s_workflow_id, a_flag, a_group))
+                s_elevator_id = tlc_proj_list->GetItemText(child_item, 12);
+                wxGetApp().check_new_config(a_group_h, a_flag_h, i_count, s_elevator_id, s_case);
+                if(wxGetApp().check_is_highspeed(s_wbs))
+                {
+                    b_change = change_workflow(s_wbs, s_workflow_id, a_flag_h, a_group_h);
+                }else
+                {
+                    b_change = change_workflow(s_wbs, s_workflow_id, a_flag, a_group);
+                }
+
+                if (b_change)
                 {
                     wxLogMessage(s_wbs+":变更工作流成功!");
 
@@ -2818,10 +2832,21 @@ void project_author_panel::OnButton_AUTHClick(wxCommandEvent& event)
         }else
         {
 
-                s_wbs = tlc_proj_list->GetItemText(sel_item, 0);
-                wxTreeItemId parent_item = tlc_proj_list->GetItemParent(sel_item);
+            s_wbs = tlc_proj_list->GetItemText(sel_item, 0);
+            s_elevator_id = tlc_proj_list->GetItemText(sel_item, 12);
+            wxTreeItemId parent_item = tlc_proj_list->GetItemParent(sel_item);
 
-          if (change_workflow(s_wbs, s_workflow_id, a_flag, a_group))
+            wxGetApp().check_new_config(a_group_h, a_flag_h, i_count, s_elevator_id, s_case);
+            if(wxGetApp().check_is_highspeed(s_wbs))
+            {
+                b_change = change_workflow(s_wbs, s_workflow_id, a_flag_h, a_group_h);
+            }
+            else
+            {
+                b_change = change_workflow(s_wbs, s_workflow_id, a_flag, a_group);
+            }
+
+            if(b_change)
             {
                 wxLogMessage(s_wbs+":变更工作流成功!");
                 tlc_proj_list->Delete(sel_item);

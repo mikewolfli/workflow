@@ -65,6 +65,7 @@ class generated_id_display_panel: public wxPanel
 
 
 		wxString m_clause_att;
+		wxArrayString array_group;
 		int m_sel;
 		bool change_item(long i_item, int i_mode);//0-cancel, 1-send, 2-restore
 

@@ -38,6 +38,7 @@ public:
     int contractbook_lender_change(wxString s_cid, wxString s_aim);
     wxString get_ser_no(wxString _table_str, wxString _para_str);
     wxString get_ser_id(wxString _table_str, wxString _para_str);
+    wxString get_ser_id2(wxString _table_str, wxString _para_str);
     bool is_have(wxString lquery);
     wxArrayString Get_header(wxString _table_str, wxArrayString & _para_str);
     bool app_sql_update(wxString &_query);//include insert and update)
@@ -58,7 +59,8 @@ public:
     bool update_data_in_database(wxString change_key, wxString change_value, wxString table_name, wxString pri_key, wxString pri_value);
 
     bool get_client_version();
-    bool check_new_config(wxArrayString &a_group, wxArrayString &a_flag,int &i_count, wxString s_lift_type);
+    bool check_new_config(wxArrayString &a_group, wxArrayString &a_flag,int &i_count, wxString s_lift_type, wxString &s_att_case);
+    bool check_is_highspeed(wxString s_wbs);
     wxArrayString  get_sub_eng_list(int &i_count, bool b_twig=false);
     wxString get_direct_leader(wxString _user);
     bool update_new_nstd_config(wxString s_nstd_id, int i_status);

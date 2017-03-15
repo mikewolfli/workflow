@@ -41,6 +41,7 @@
 #include "generated_id_display_panel.h"
 #include "ndo_generator_panel.h"
 #include "ncr_proc_panel.h"
+#include "nstd_nocan_panel.h"
 
 extern   para gr_para;
 
@@ -187,6 +188,7 @@ private:
     po_confirm_panel * panel_po_confirm;
     ndo_generator_panel* panel_ndo_generator;
     ncr_proc_panel * panel_ncr_proc;
+    nstd_nocan_panel * panel_nstd_nocan;
   //  Rfc_Communication * sap_rfc_conn;
 
     void OnToolBoxItemSelected(wxToolBoxEvent & event);
@@ -196,6 +198,7 @@ private:
     void OnLogout();
     void OnAuiNotebookPageChanged(wxAuiNotebookEvent& evt);
     void SetToolBoxItemSelected(int i_index);
+    void show_about();
 
 
 
@@ -225,7 +228,9 @@ private:
 
     int get_index_of_cwt_blocks(wxString &str, wxArrayBlocks & arr_blocks);
     Value_Pool * get_same_value_pool(wxString str, int i_col, Value_Pool* p_result);
-    bool update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_temp);
+    bool update_nonstd_conf_date(wxArrayString&a_nstd, wxArrayString&a_link, wxArrayString &a_now);
+    bool get_nonstd_array(wxString s_wbs, wxArrayString&a_nstd, wxArrayString&a_link, wxArrayString &a_now);
+
 
     wxArrayBlocks get_cwt_blocks_info(int i_case_col,int i_result_col,wxArrayInt &array_range, Value_Pool* p_value, wxArraySupport &array_str);
 

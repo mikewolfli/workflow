@@ -236,7 +236,7 @@ info_id_generator_panel::info_id_generator_panel(wxWindow* parent,wxWindowID id,
 
     wxArrayString array_group = wxGetApp().get_group();
 
-    if(array_group.Index(wxT("G0001"))!=wxNOT_FOUND||array_group.Index(wxT("G0002"))!=wxNOT_FOUND||array_group.Index(wxT("G0009"))!=wxNOT_FOUND)
+    if(array_group.Index(wxT("G0001"))!=wxNOT_FOUND||array_group.Index(wxT("G0017"))!=wxNOT_FOUND||array_group.Index(wxT("G0002"))!=wxNOT_FOUND||array_group.Index(wxT("G0009"))!=wxNOT_FOUND)
     {
         sb_spec_gad->Show(true);
         st_sg->Show(true);
@@ -725,7 +725,7 @@ void info_id_generator_panel::OnButton_NCE_genClick(wxCommandEvent& event)
              gr_para.login_user+wxT("','")+DateToAnsiStr(wxDateTime::Now())+wxT("',true, false);");
 
 
-    wxLogMessage(s_sql);
+    //wxLogMessage(s_sql);
     s_sql.Replace(wxT("''"),wxT("NULL"));
 
     if(wxGetApp().app_sql_update(s_sql))

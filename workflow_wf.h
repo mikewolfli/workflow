@@ -11,6 +11,8 @@
 #include "ctrl/treelistctrl.h"
 #include "utils/wf_operator.h"
 #include <wx/imaglist.h>
+#include "xlslib.h"
+using namespace xlslib_core;
 
 class workflow_wf: public wxPanel
 {
@@ -37,6 +39,7 @@ class workflow_wf: public wxPanel
 		wxMenuItem* MenuItem6;
 		wxMenuItem* MenuItem_WEIGHT;
 		wxMenuItem* mi_cb_change;
+		wxMenuItem* mi_export_tasks;
 		//*)
 
         void refresh_list();
@@ -75,6 +78,7 @@ class workflow_wf: public wxPanel
 		static const long idMenu_SSearch;
 		static const long idMenu_Nstd;
 		static const long idMenu_MTList;
+		static const long id_export_task_detail;
 		static const long idMenu_Car_or_DC_weight;
 		static const long idMenu_Res_Filter;
 		//*)
@@ -102,6 +106,7 @@ class workflow_wf: public wxPanel
 		void OnMenuItem_WEIGHTSelected(wxCommandEvent& event);
 		void Onmi_cb_changeSelected(wxCommandEvent& event);
 		void Onmi_contractbook_br_searchSelected(wxCommandEvent& event);
+		void Onmi_export_tasksSelected(wxCommandEvent& event);
 		//*)
 
        bool make_evaluate(wf_process * s_process, wxString s_batch_id);
@@ -128,6 +133,9 @@ class workflow_wf: public wxPanel
        bool b_show;
 
        bool check_contract_br_log(wxString s_wbs, wxString &s_cid);
+
+       void export_excel(wxString s_wbs, worksheet* ws, int i_row);
+       void write_head(worksheet* ws);
 
         wxString str_tasks_header, str_group_tasks_header;
 		DECLARE_EVENT_TABLE()

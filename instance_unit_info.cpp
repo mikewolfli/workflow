@@ -1276,8 +1276,24 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
         int i_restart;
 
         start_mils = wxGetLocalTimeMillis();
+        wxString s_case;
+        bool b_new_config=false;
 
-        if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type))//新的配置工作流，由非标负责
+        if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type, s_case))
+            b_new_config=false;
+        else
+        {
+            if(!s_case.IsEmpty())
+            {
+              if(!wxGetApp().check_is_highspeed(str_instance))
+                   b_new_config=false;
+              else
+                  b_new_config=true;
+            }else
+                b_new_config=true;
+        }
+
+        if(!b_new_config)//新的配置工作流，由非标负责
         {
             i_restart = check_is_start_flow(str_instance, wf_str_configure);
 
@@ -1370,11 +1386,10 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
             array_wbs.Add(str_instance);
         }
 
-
     }
 
     if(!array_wbs.IsEmpty())
-         Create_Folder(array_wbs);
+         Create_proj_Folder(array_wbs);
 
     if (t_template)
         delete [] t_template;
@@ -1425,6 +1440,118 @@ bool instance_unit_info::update_contract_book_status(wxString s_wbs, int i_statu
                 wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where contract_doc_id='")+s_doc+wxT("';");
 
    return  wxGetApp().app_sql_update(s_sql);
+}
+
+void instance_unit_info::Create_proj_Folder(wxArrayString a_wbs)
+{
+    wxArrayString a_project,a_folder;
+
+
+    int i_count = a_wbs.GetCount();
+    int i_proj=0;
+    wxString s_project=wxEmptyString;
+    for(int j=0;j<i_count;j++)
+    {
+        if(s_project != a_wbs.Item(j).Left(10))
+        {
+            i_proj+=1;
+            s_project=a_wbs.Item(j).Left(10);
+            a_project.Add(s_project);
+        }
+
+    }
+    wxString str_folder,str, str_path;
+
+    for(int i=0; i<i_proj; i++)
+    {
+        s_project = a_project.Item(i);
+
+        str_folder = get_full_prj_info(s_project);
+
+        str_folder = a_project.Item(i)+str_folder;
+
+        str_folder.Replace(wxT("/"),wxT(""));
+
+        a_folder.Add(str_folder);
+    }
+
+    wxArrayString a_sub_folder;
+
+
+    pugi::xml_document ldoc;
+    pugi::xml_node lnode,litem;
+    pugi::xml_parse_result result;
+
+    result = ldoc.load_file("para.xml");
+
+    if(result)
+    {
+        lnode = ldoc.child("StartFolder");
+        for(litem = lnode.first_child(); litem; litem = litem.next_sibling())
+        {
+            str = wxString(litem.text().as_string());
+            a_sub_folder.Add(str);
+        }
+
+        lnode = ldoc.child("StartPath");
+        str_path = wxString(lnode.child_value("item"));
+    }
+    else
+        return;
+
+    wxDir ldir;
+    wxString s_folder, s_sub_folder;
+
+    for(int m=0; m<i_proj; m++)
+    {
+        ldir.Open(str_path);
+
+        if(ldir.IsOpened())
+        {
+            s_folder = str_path+wxT("\\")+a_folder.Item(m);
+
+            if(!ldir.Exists(s_folder))
+            {
+                if(ldir.Make(s_folder))
+                {
+                    wxLogMessage(_("成功-主资源文件夹。")+s_folder);
+                }else
+                {
+                    wxLogMessage(_("失败:")+s_folder);
+                    continue;
+                }
+            }
+
+
+            if(ldir.Open(s_folder))
+            {
+                int i_folder_num = a_sub_folder.GetCount();
+                for(int k=0; k<i_folder_num; k++)
+                {
+                                                                                                              s_sub_folder = s_folder+wxT("\\")+a_sub_folder.Item(k);
+                    if(!ldir.Exists(s_sub_folder))
+                    {
+
+                        if(ldir.Make(s_sub_folder))
+                        {
+                            wxLogMessage(_("成功-子文件夹")+s_sub_folder);
+                            if(a_sub_folder.Item(k)=="0700 SPEC&GAD")
+                            {
+                                ldir.Make(s_sub_folder+wxT("\\旧版清单"));
+                            }
+                        }
+                        else
+                        {
+                            wxLogMessage(_("失败-子文件夹")+s_sub_folder);
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+   // wxLogMessage(_("资源文件夹创建成功:"));
 }
 
 void instance_unit_info::Create_Folder(wxArrayString a_wbs)
@@ -1984,18 +2111,22 @@ void instance_unit_info::OnMenuItem4Selected(wxCommandEvent& event)
                 wxGetApp().change_log(wxT("s_unit_info"), str_wbsno, wxT("req_configure_finish"), s_source, str_date, wxT("hand"));
 
 
-                update_nonstd_conf_date(str_wbsno,StrToDateTime(s_date));
+                //update_nonstd_conf_date(str_wbsno,StrToDateTime(s_date));
+                get_nonstd_array(str_wbsno);
             }
         }
-
+        update_nonstd_conf_date();
         array_update_conf.Clear();
+        array_links.Clear();
+        array_now.Clear();
+
     }
     b_refresh = true;
     refresh_list();
     b_refresh = false;
 }
 
-bool instance_unit_info::update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_temp)
+bool instance_unit_info::get_nonstd_array(wxString s_wbs)
 {
     wxString str_sql = wxT("SELECT * FROM l_nonstd_app_header where link_list like '%")+s_wbs+wxT("%' and (status >= 0 and status < 10)  ;");
 
@@ -2017,13 +2148,23 @@ bool instance_unit_info::update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_t
         return false;
     }
 
-    wxString s_app_id;
+    wxString s_app_id, s_link, s_now;
 
     _res->MoveFirst();
 
     for(int i=0;i<i_count;i++)
     {
         s_app_id = _res->GetVal(wxT("nonstd_id"));
+        s_link = _res->GetVal(wxT("link_list"));
+        s_now = DateToAnsiStr(_res->GetDateTime(wxT("drawing_req_date")));
+        if(array_update_conf.Index(s_app_id)!=wxNOT_FOUND)
+        {
+            _res->MoveNext();
+            continue;
+        }
+
+        //array_update_conf.Add(s_app_id);
+
         if(array_update_conf.Index(s_app_id)!=wxNOT_FOUND)
         {
             _res->MoveNext();
@@ -2031,37 +2172,67 @@ bool instance_unit_info::update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_t
         }
 
         array_update_conf.Add(s_app_id);
-
-        int i_status = _res->GetInt(wxT("status"));
-
-        if(i_status ==-1)
-        {
-            _res->MoveNext();
-            continue;
-        }
-
-        wxDateTime dt_now = _res->GetDateTime(wxT("drawing_req_date"));
-
-        if(dt_temp.IsEarlierThan(wxDateTime::Now()))
-        {
-            _res->MoveNext();
-            continue;
-        }
-
-        str_sql = wxT("UPDATE l_nonstd_app_header SET drawing_req_date='")+DateToAnsiStr(dt_temp)+wxT("', modify_date='")+DateToAnsiStr(wxDateTime::Now())+
-                wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where nonstd_id ='")+s_app_id+wxT("';");
-
-        if (wxGetApp().app_sql_update(str_sql))
-        {
-                wxLogMessage(_("非标：") + s_app_id + _("图纸要求日期变更为:") + DateToStrFormat(dt_temp) + _("成功!"));
-                wxGetApp().change_log(wxT("l_nonstd_app_header"), s_app_id, wxT("drawing_req_date"), DateToAnsiStr(dt_now), DateToAnsiStr(dt_temp), wxT("hand"));
-        }
+        array_links.Add(s_link);
+        array_now.Add(s_now);
 
         _res->MoveNext();
 
     }
 
     _res->Clear();
+}
+
+bool instance_unit_info::update_nonstd_conf_date()
+{
+    wxString str_sql;
+    wxString s_list, s_nstd;
+    wxPostgreSQLresult * _res;
+    int icount = array_update_conf.GetCount();
+    wxDateTime dt_aim;
+
+    for(int i=0;i<icount;i++)
+    {
+        s_nstd = array_update_conf.Item(i);
+        s_list = array_links.Item(i);
+        s_list.RemoveLast();
+        s_list.Replace(";","','");
+        str_sql = wxT("select req_configure_finish from s_unit_info where wbs_no in ('")+s_list+wxT("') and status>=0;");
+        _res = wxGetApp().app_sql_select(str_sql);
+
+        int i_qty = _res->GetRowsNumber();
+
+        if(i_qty==0)
+        {
+            _res->Clear();
+            continue;
+        }
+
+        dt_aim = _res->GetDateTime(wxT("req_configure_finish"));
+
+        for(int j=1;j<i_qty;j++)
+        {
+            _res->MoveNext();
+
+            if(dt_aim.IsLaterThan(_res->GetDateTime(wxT("req_configure_finish"))))
+            {
+                dt_aim = _res->GetDateTime(wxT("req_configure_finish"));
+            }
+
+        }
+
+        _res->Clear();
+
+        str_sql = wxT("UPDATE l_nonstd_app_header SET drawing_req_date='")+DateToAnsiStr(dt_aim)+wxT("', modify_date='")+DateToAnsiStr(wxDateTime::Now())+
+                wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where nonstd_id ='")+s_nstd+wxT("';");
+
+        if (wxGetApp().app_sql_update(str_sql))
+        {
+                wxLogMessage(_("非标：") + s_nstd + _("图纸要求日期变更为:") + DateToStrFormat(dt_aim) + _("成功!"));
+                wxGetApp().change_log(wxT("l_nonstd_app_header"), s_nstd, wxT("drawing_req_date"), array_now.Item(i), DateToAnsiStr(dt_aim), wxT("hand"));
+        }
+
+
+    }
 
 
 }
@@ -2609,6 +2780,8 @@ void instance_unit_info::OnButton4Click(wxCommandEvent& event)
     }
     wf_operator * wf_configure;
     wf_operator_ex * wf_new_conf;
+    wxString s_case;
+    bool b_new_config=false;
 
     wxString str_instance;
     wxLongLong mils_used, start_mils;
@@ -2646,7 +2819,21 @@ void instance_unit_info::OnButton4Click(wxCommandEvent& event)
 
         int i_times = update_restart_status(str_instance, true);
 
-        if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type))//新的配置工作流，由非标负责
+        if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type, s_case))
+            b_new_config=false;
+        else
+        {
+            if(!s_case.IsEmpty())
+            {
+              if(!wxGetApp().check_is_highspeed(str_instance))
+                   b_new_config=false;
+              else
+                  b_new_config=true;
+            }else
+                b_new_config=true;
+        }
+
+        if(!b_new_config)//新的配置工作流，由非标负责
         {
             update_basic_finish_status(str_instance);
             wf_configure = new wf_operator(str_instance, wf_str_configure, t_template);
@@ -2740,7 +2927,8 @@ void instance_unit_info::Onbutton_cancel_restartClick(wxCommandEvent& event)
     wf_operator * wf_configure=NULL;
     wf_operator_ex * wf_new_conf=NULL;
 
-    wxString str_instance, s_lift_type;
+    wxString str_instance, s_lift_type,s_case;
+    bool b_new_config=false;
 
     wxArrayString array_wbs, array_group, array_flag;
 
@@ -2761,7 +2949,21 @@ void instance_unit_info::Onbutton_cancel_restartClick(wxCommandEvent& event)
 
         int i_ways;
 
-        if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type))//新的配置工作流，由非标负责
+        if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type, s_case))
+            b_new_config=false;
+        else
+        {
+            if(!s_case.IsEmpty())
+            {
+              if(!wxGetApp().check_is_highspeed(str_instance))
+                   b_new_config=false;
+              else
+                  b_new_config=true;
+            }else
+                b_new_config=true;
+        }
+
+        if(!b_new_config)//新的配置工作流，由非标负责
         {
             update_basic_finish_status(str_instance, true);
             wf_configure = new wf_operator(str_instance, wf_str_configure, t_template);
@@ -2989,7 +3191,8 @@ void instance_unit_info::OnButton_Cancel_projectClick(wxCommandEvent& event)
     wf_operator * wf_configure;
     wf_operator_ex * wf_new_conf;
 
-    wxString str_instance, s_lift_type;
+    wxString str_instance, s_lift_type,s_case;
+    bool b_new_config=false;
 
     wxArrayString array_wbs, array_group, array_flag;
     wxLongLong mils_used, start_mils;
@@ -3009,7 +3212,21 @@ void instance_unit_info::OnButton_Cancel_projectClick(wxCommandEvent& event)
 
         int i_ways;
 
-        if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type))//新的配置工作流，由非标负责
+        if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type, s_case))
+            b_new_config=false;
+        else
+        {
+            if(!s_case.IsEmpty())
+            {
+              if(!wxGetApp().check_is_highspeed(str_instance))
+                   b_new_config=false;
+              else
+                  b_new_config=true;
+            }else
+                b_new_config=true;
+        }
+
+        if(!b_new_config)//新的配置工作流，由非标负责
         {
             wf_configure = new wf_operator(str_instance, wf_str_configure, t_template);
 
@@ -3067,7 +3284,8 @@ void instance_unit_info::OnButton_Restore_projectClick(wxCommandEvent& event)
     v_wf_action * t_new_template = get_template_action(wf_str_new_config);
     wf_operator * wf_configure;
     wf_operator_ex * wf_new_conf;
-    wxString str_instance, s_lift_type;
+    wxString str_instance, s_lift_type, s_case;
+    bool b_new_config;
 
     wxArrayString array_wbs, array_group, array_flag;
     wxLongLong mils_used, start_mils;
@@ -3086,7 +3304,21 @@ void instance_unit_info::OnButton_Restore_projectClick(wxCommandEvent& event)
 
         int i_ways;
 
-        if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type))//新的配置工作流，由非标负责
+        if(!wxGetApp().check_new_config(array_group, array_flag, i_ways, s_lift_type, s_case))
+            b_new_config=false;
+        else
+        {
+            if(!s_case.IsEmpty())
+            {
+              if(!wxGetApp().check_is_highspeed(str_instance))
+                   b_new_config=false;
+              else
+                  b_new_config=true;
+            }else
+                b_new_config=true;
+        }
+
+        if(!b_new_config)//新的配置工作流，由非标负责
         {
             wf_configure = new wf_operator(str_instance, wf_str_configure, t_template);
             wf_configure->restore_task();
@@ -4700,5 +4932,6 @@ void instance_unit_info::Onmi_folderSelected(wxCommandEvent& event)
         return;
     }
 
-    Create_Folder(array_wbs);
+    //Create_Folder(array_wbs);
+    Create_proj_Folder(array_wbs);
 }

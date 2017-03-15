@@ -306,6 +306,11 @@ void wfFrame::OnQuit(wxCommandEvent& event)
 
 void wfFrame::OnAbout(wxCommandEvent& event)
 {
+    show_about();
+}
+
+void wfFrame::show_about()
+{
     wxString msg = wxbuildinfo(long_f);
     wxAboutDialogInfo info;
     wxDateTime dt = wxDateTime::Today();
@@ -586,6 +591,15 @@ void wfFrame::OnToggleNotebookPanel(wxWindowID i_id)
               aui_notebook->AddPage(panel_ndo_generator, _("非标设计指令取号"),true, b_bitmap->GetSubBitmap(wxRect(250,0,16,16)));
           }else aui_notebook->ChangeSelection(i_index);
           break;
+    case ID_GENERATE_ID_NOCAN:
+        i_index = aui_notebook->GetPageIndex(panel_nstd_nocan);
+        if(i_index==wxNOT_FOUND)
+        {
+            panel_nstd_nocan = new nstd_nocan_panel(aui_notebook, wxID_ANY);
+            aui_notebook->AddPage(panel_nstd_nocan, _("非标点无法实现通知取号"), true, b_bitmap->GetSubBitmap(wxRect(266,0,16,16)));
+
+       } else aui_notebook->ChangeSelection(i_index);
+        break;
     case ID_SETUP_AUTHORITY:
           break;
     case ID_SETUP_DATABASE_CONFIGURE:
@@ -614,7 +628,7 @@ void wfFrame::OnToggleNotebookPanel(wxWindowID i_id)
         SetToolBoxItemSelected(-1);
         break;
     case ID_INVIDIUAL_INFO:
-
+        //show_about();
         break;
     default:
         break;
@@ -902,7 +916,7 @@ wxToolBox * wfFrame::create_toolbox(wxRect &r_rect)
 //add items in toolbox
     wxToolBoxItem tb_item;
     wxWindowID i_id;
-    for (int i=0; i<21; i++)
+    for (int i=0; i<24; i++)
     {
         i_id = ID_PRJ_REVIEW_INFO+i;
         tb_item.SetID(i_id);
@@ -968,6 +982,11 @@ wxToolBox * wfFrame::create_toolbox(wxRect &r_rect)
             break;
         case ID_GENERATE_ID_NSTD_DESIGN:
             tb_item.SetCaption(_("非标设计指令取号"));
+            tab_report->AddItem(tb_item);
+            break;
+
+        case ID_GENERATE_ID_NOCAN:
+            tb_item.SetCaption(_("非标点无法实现通知取号"));
             tab_report->AddItem(tb_item);
             break;
         case ID_SETUP_AUTHORITY:
@@ -1217,7 +1236,7 @@ bool wfFrame::init_select_case()
 bool wfFrame::update_project_from_sap(wxArrayString&array_thread_wbs, Value_Pool * pool_basic, Value_Pool* pool_para, int i_way)
 {
 
-     int i_count = array_thread_wbs.GetCount();
+    int i_count = array_thread_wbs.GetCount();
     if(pool_basic->GetNumOfRows()==0)
     {
         wxLogMessage(_("SAP系统内无相关资料."));
@@ -1231,6 +1250,10 @@ bool wfFrame::update_project_from_sap(wxArrayString&array_thread_wbs, Value_Pool
 
     line_header = pool_basic->Get_Name();
 
+    wxArrayString array_update_conf;
+    wxArrayString array_links;
+    wxArrayString array_now;
+
 /*
     int i_cols = line_header->num_cols;
     wxString str;
@@ -1239,8 +1262,8 @@ bool wfFrame::update_project_from_sap(wxArrayString&array_thread_wbs, Value_Pool
         str=str+line_header->cols[k]+wxT("\n");
 
     }
-//测试
-    wxMessageBox(str,_(""));*/
+//测试*/
+    //wxMessageBox(_("test1"),_(""));
 
     for(int j=0;j<i_count;j++)
     {
@@ -1266,6 +1289,7 @@ bool wfFrame::update_project_from_sap(wxArrayString&array_thread_wbs, Value_Pool
 
         if(update_project_unit_info(s_wbs,line, line_header,i_way))
         {
+            get_nonstd_array(s_wbs, array_update_conf, array_links, array_now);
 
             wxLogMessage(s_wbs+_("更新表头和unit信息成功!"));
             Value_Pool * pool_wbs_para = get_same_value_pool(s_wbs,0, pool_para);
@@ -1303,6 +1327,12 @@ bool wfFrame::update_project_from_sap(wxArrayString&array_thread_wbs, Value_Pool
         }
 
     }
+
+
+    update_nonstd_conf_date(array_update_conf, array_links, array_now);
+    array_update_conf.Clear();
+    array_links.Clear();
+    array_now.Clear();
 
     return true;
 
@@ -1443,7 +1473,8 @@ bool wfFrame::update_project_unit_info(wxString str, Str_Line* line_value, Str_L
  //   wxMessageBox(str_sql);
     if(wxGetApp().app_sql_update(str_sql))
     {
-        update_nonstd_conf_date(str, StrToDateTime(s_req_configure_finish));
+        //update_nonstd_conf_date(str, StrToDateTime(s_req_configure_finish));
+
         wxLogMessage(str+_("Unit信息更新成功!"));
     }else
     {
@@ -1455,7 +1486,8 @@ bool wfFrame::update_project_unit_info(wxString str, Str_Line* line_value, Str_L
 
 }
 
-bool wfFrame::update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_temp)
+
+bool wfFrame::get_nonstd_array(wxString s_wbs, wxArrayString&a_nstd, wxArrayString&a_link, wxArrayString &a_now)
 {
     wxString str_sql = wxT("SELECT * FROM l_nonstd_app_header where link_list like '%")+s_wbs+wxT("%' and (status >= 0 and status < 10)  ;");
 
@@ -1477,55 +1509,90 @@ bool wfFrame::update_nonstd_conf_date(wxString s_wbs, wxDateTime dt_temp)
         return false;
     }
 
-    wxString s_app_id;
+    wxString s_app_id, s_link, s_now;
 
     _res->MoveFirst();
-    wxArrayString array_update_conf;
 
     for(int i=0;i<i_count;i++)
     {
         s_app_id = _res->GetVal(wxT("nonstd_id"));
-        if(array_update_conf.Index(s_app_id)!=wxNOT_FOUND)
+        s_link = _res->GetVal(wxT("link_list"));
+        s_now = DateToAnsiStr(_res->GetDateTime(wxT("drawing_req_date")));
+        if(a_nstd.Index(s_app_id)!=wxNOT_FOUND)
         {
             _res->MoveNext();
             continue;
         }
 
-        array_update_conf.Add(s_app_id);
+        //array_update_conf.Add(s_app_id);
 
-        int i_status = _res->GetInt(wxT("status"));
 
-        if(i_status ==-1)
-        {
-            _res->MoveNext();
-            continue;
-        }
-
-        wxDateTime dt_now = _res->GetDateTime(wxT("drawing_req_date"));
-
-        if(dt_temp.IsEarlierThan(wxDateTime::Now()))
-        {
-            _res->MoveNext();
-            continue;
-        }
-
-        str_sql = wxT("UPDATE l_nonstd_app_header SET drawing_req_date='")+DateToAnsiStr(dt_temp)+wxT("', modify_date='")+DateToAnsiStr(wxDateTime::Now())+
-                wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where nonstd_id ='")+s_app_id+wxT("';");
-
-        if (wxGetApp().app_sql_update(str_sql))
-        {
-                wxLogMessage(_("非标：") + s_app_id + _("图纸要求日期变更为:") + DateToStrFormat(dt_temp) + _("成功!"));
-                wxGetApp().change_log(wxT("l_nonstd_app_header"), s_app_id, wxT("drawing_req_date"), DateToAnsiStr(dt_now), DateToAnsiStr(dt_temp), wxT("hand"));
-        }
+        a_nstd.Add(s_app_id);
+        a_link.Add(s_link);
+        a_now.Add(s_now);
 
         _res->MoveNext();
 
     }
-    array_update_conf.Clear();
 
     _res->Clear();
+}
+
+bool wfFrame::update_nonstd_conf_date(wxArrayString&a_nstd, wxArrayString&a_link, wxArrayString &a_now)
+{
+    wxString str_sql;
+    wxString s_list, s_nstd;
+    wxPostgreSQLresult * _res;
+    int icount = a_nstd.GetCount();
+    wxDateTime dt_aim;
+
+    for(int i=0;i<icount;i++)
+    {
+        s_nstd = a_nstd.Item(i);
+        s_list = a_link.Item(i);
+        s_list.RemoveLast();
+        s_list.Replace(";","','");
+        str_sql = wxT("select req_configure_finish from s_unit_info where wbs_no in ('")+s_list+wxT("') and status>=0;");
+        _res = wxGetApp().app_sql_select(str_sql);
+
+        int i_qty = _res->GetRowsNumber();
+
+        //wxMessageBox(_("test3"),_(""));
+
+        if(i_qty==0)
+        {
+            _res->Clear();
+            continue;
+        }
+
+        dt_aim = _res->GetDateTime(wxT("req_configure_finish"));
+
+        for(int j=1;j<i_qty;j++)
+        {
+            _res->MoveNext();
+
+            if(dt_aim.IsLaterThan(_res->GetDateTime(wxT("req_configure_finish"))))
+            {
+                dt_aim = _res->GetDateTime(wxT("req_configure_finish"));
+            }
+
+        }
+
+        _res->Clear();
+
+        str_sql = wxT("UPDATE l_nonstd_app_header SET drawing_req_date='")+DateToAnsiStr(dt_aim)+wxT("', modify_date='")+DateToAnsiStr(wxDateTime::Now())+
+                wxT("', modify_emp_id='")+gr_para.login_user+wxT("' where nonstd_id ='")+s_nstd+wxT("';");
+
+        if (wxGetApp().app_sql_update(str_sql))
+        {
+                wxLogMessage(_("非标：") + s_nstd + _("图纸要求日期变更为:") + DateToStrFormat(dt_aim) + _("成功!"));
+                wxGetApp().change_log(wxT("l_nonstd_app_header"), s_nstd, wxT("drawing_req_date"), a_now.Item(i), DateToAnsiStr(dt_aim), wxT("hand"));
+        }
 
 
+    }
+
+    //wxMessageBox(_("test2"),_(""));
 }
 
 bool wfFrame::update_project_parameter(wxString str, Value_Pool* p_value)

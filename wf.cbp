@@ -221,6 +221,8 @@
 		<Unit filename="nstd_mat_muti_level_task_list.h" />
 		<Unit filename="nstd_mat_task_list.cpp" />
 		<Unit filename="nstd_mat_task_list.h" />
+		<Unit filename="nstd_nocan_panel.cpp" />
+		<Unit filename="nstd_nocan_panel.h" />
 		<Unit filename="nstd_reason_list.cpp" />
 		<Unit filename="nstd_reason_list.h" />
 		<Unit filename="nstd_task_author.cpp" />
@@ -366,6 +368,7 @@
 		<Unit filename="wxsmith/nstd_mat_apply.wxs" />
 		<Unit filename="wxsmith/nstd_mat_muti_level_task_list.wxs" />
 		<Unit filename="wxsmith/nstd_mat_task_list.wxs" />
+		<Unit filename="wxsmith/nstd_nocan_panel.wxs" />
 		<Unit filename="wxsmith/nstd_task_author.wxs" />
 		<Unit filename="wxsmith/nstd_task_tree_list.wxs" />
 		<Unit filename="wxsmith/po_confirm_panel.wxs" />
@@ -445,6 +448,7 @@
 					<wxDialog wxs="wxsmith/ncr_proc_dlg.wxs" src="ncr_proc_dlg.cpp" hdr="ncr_proc_dlg.h" fwddecl="0" i18n="1" name="ncr_proc_dlg" language="CPP" />
 					<wxPanel wxs="wxsmith/ncr_proc_panel.wxs" src="ncr_proc_panel.cpp" hdr="ncr_proc_panel.h" fwddecl="0" i18n="1" name="ncr_proc_panel" language="CPP" />
 					<wxDialog wxs="wxsmith/contractbook_br_dlg.wxs" src="contractbook_br_dlg.cpp" hdr="contractbook_br_dlg.h" fwddecl="0" i18n="1" name="contractbook_br_dlg" language="CPP" />
+					<wxPanel wxs="wxsmith/nstd_nocan_panel.wxs" src="nstd_nocan_panel.cpp" hdr="nstd_nocan_panel.h" fwddecl="0" i18n="1" name="nstd_nocan_panel" language="CPP" />
 				</resources>
 			</wxsmith>
 			<AutoVersioning>

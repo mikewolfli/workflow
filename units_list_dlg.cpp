@@ -94,8 +94,8 @@ void units_list_dlg::refresh_list()
     tlc_proj_list->DeleteChildren (root);
 
     wxString s_sql = wxT("SELECT contract_id, project_name,  wbs_no, project_id, elevator_id, lift_no, status, is_urgent, project_catalog, nonstd_level, req_delivery_date, \
-       req_configure_finish, batch_id, elevator_type, (select operator_id from l_proc_act where instance_id=wbs_no and action_id='AT00000004' and workflow_id='WF0002') as operator_id FROM v_unit_info where ")+
-       m_clause+wxT(" and status>=1 and status<=8 order by req_configure_finish, batch_id,wbs_no asc;");
+       req_configure_finish, batch_id, elevator_type, (select operator_id from l_proc_act where instance_id=wbs_no and action_id='AT00000004' and (flag=NULL OR flag='M')) as operator_id FROM v_unit_info where ")+
+       m_clause+wxT(" and status>=0 and status<=8 order by req_configure_finish, batch_id,wbs_no asc;");
 
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(s_sql);
     if(_res->Status()!= PGRES_TUPLES_OK)

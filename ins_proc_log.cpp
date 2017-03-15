@@ -427,7 +427,8 @@ void ins_proc_log::Refresh_list_view(wxArrayString & array_wbs_list, wxString _f
     }
     else
        str_sql = str_sql + wxT(") and (workflow_id='WF0002' OR workflow_id='WF0006') and flag like'%")+_flag+wxT("%'  ORDER BY instance_id, workflow_id, flow_ser ASC;");
-//    wxMessageBox(str_sql, _("test"),wxOK);
+    //wxMessageBox(str_sql, _("test"),wxOK);
+    //wxLogMessage(str_sql);
     _res = wxGetApp().app_sql_select(str_sql);
 
 

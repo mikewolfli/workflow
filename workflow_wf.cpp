@@ -31,6 +31,7 @@ const long workflow_wf::idMenu_Status = wxNewId();
 const long workflow_wf::idMenu_SSearch = wxNewId();
 const long workflow_wf::idMenu_Nstd = wxNewId();
 const long workflow_wf::idMenu_MTList = wxNewId();
+const long workflow_wf::id_export_task_detail = wxNewId();
 const long workflow_wf::idMenu_Car_or_DC_weight = wxNewId();
 const long workflow_wf::idMenu_Res_Filter = wxNewId();
 //*)
@@ -88,6 +89,8 @@ workflow_wf::workflow_wf(wxWindow* parent,wxWindowID id,const wxPoint& pos,const
     menu_workflow_popup.Append(MenuItem5);
     MenuItem6 = new wxMenuItem((&menu_workflow_popup), idMenu_MTList, _("显示非标物料清单(&M)\tM"), _("显示非标物料清单"), wxITEM_NORMAL);
     menu_workflow_popup.Append(MenuItem6);
+    mi_export_tasks = new wxMenuItem((&menu_workflow_popup), id_export_task_detail, _("导出当前任务列表"), _("导出当前任务列表"), wxITEM_NORMAL);
+    menu_workflow_popup.Append(mi_export_tasks);
     menu_workflow_popup.AppendSeparator();
     MenuItem_WEIGHT = new wxMenuItem((&menu_workflow_popup), idMenu_Car_or_DC_weight, _("显示/修改轿厢空重和装潢重量(&D)"), _("显示轿厢空重和装潢重量"), wxITEM_NORMAL);
     menu_workflow_popup.Append(MenuItem_WEIGHT);
@@ -109,6 +112,7 @@ workflow_wf::workflow_wf(wxWindow* parent,wxWindowID id,const wxPoint& pos,const
     Connect(idMenu_SSearch,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&workflow_wf::OnMenuItem4Selected);
     Connect(idMenu_Nstd,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&workflow_wf::OnMenuItem5Selected);
     Connect(idMenu_MTList,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&workflow_wf::OnMenuItem6Selected);
+    Connect(id_export_task_detail,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&workflow_wf::Onmi_export_tasksSelected);
     Connect(idMenu_Car_or_DC_weight,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&workflow_wf::OnMenuItem_WEIGHTSelected);
     Connect(idMenu_Res_Filter,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&workflow_wf::OnMenuItem7Selected);
     //*)
@@ -545,7 +549,7 @@ bool workflow_wf::check_prj_info_attach_finished(wxArrayString& a_wbs)
        }
     }
 
-    str_sql = str_sql+ wxT(" and elevator_type in ('TE-GL1','TE-GL','TE-Evolution1','RF1','RF2','TE-HP61','TE-Synergy','RF3') order by wbs_no ASC;");
+    str_sql = str_sql+ wxT(" and elevator_type in ('TE-GL1','TE-GL','TE-Evolution1','RF1','RF2','TE-HP61','TE-Synergy','RF3','RF1-S','TE-Evolution') order by wbs_no ASC;");
 
    // wxMessageBox(str_sql ,_(""));
     wxPostgreSQLresult * _res = wxGetApp().app_sql_select(str_sql);
@@ -3527,4 +3531,190 @@ void workflow_wf::Onmi_contractbook_br_searchSelected(wxCommandEvent& event)
     dlg.set_mode(0);
     dlg.refresh_list(s_case, 1);
     dlg.ShowModal();
+}
+
+void workflow_wf::Onmi_export_tasksSelected(wxCommandEvent& event)
+{
+     if (!gr_para.login_status)
+    {
+        wxLogMessage(_("尚未登陆,无法做任何操作!"));
+        return;
+    }
+    if (!wxGetApp().conn->IsAlive())
+    {
+        wxLogMessage(_("系统连接已断开,请重新连接!"));
+        wxGetApp().clear_login();
+        return;
+    }
+
+    wxFileDialog     saveFileDialog(this, _("Save xls file"), "", "","xls files (*.xls)|*.xls", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+        return;     // the user changed idea...
+    wxString s_path = saveFileDialog.GetPath();
+
+    int i_count;
+    int error_msg;
+    std::string filename;
+    workbook* wb1 = NULL;
+
+
+    wxPostgreSQLresult* _res;
+    wxString str_query;
+
+    wxTreeItemId root = tlc_task_list->GetRootItem();
+    tlc_task_list->DeleteChildren (root);
+
+    str_query = wxT("SELECT  conf_batch_id, instance_id, action_id, workflow_id, action_name,  elevator_type, contract_id,  project_name ,special_info, load,speed,\
+                    lift_no , req_configure_finish as req_finish_date , is_return, req_delivery_date, nonstd_level, (select doc_desc from s_doc where doc_id = step_desc_id) as doc_desc , workflow_id, status, is_urgent, return_time, \
+                    project_catalog, flow_ser,flag FROM v_task_list_with_para WHERE \
+                    is_active = true AND operator_id = '")+gr_para.login_user+wxT("' AND (workflow_id = 'WF0002' or workflow_id='WF0006') ORDER BY  req_finish_date, conf_batch_id, action_id, instance_id ASC ;");
+
+
+    _res = wxGetApp().app_sql_select(str_query);
+
+    if(_res->Status()!= PGRES_TUPLES_OK)
+    {
+        return;
+    }
+
+    wxString str, s_wbs;
+    wxString s_batch, s_type, s_instance;
+    int i_load=0;
+    double  d_speed=0.0;
+    int i_rows = _res->GetRowsNumber();
+
+    if(i_rows==0)
+    {
+        _res->Clear();
+        return;
+    }
+
+    wb1 = new workbook;
+    worksheet* ws = wb1->sheet("sheet1");
+
+    write_head(ws);
+
+    _res->MoveFirst();
+
+    for(int i=0;i<i_rows;i++)
+    {
+
+        s_batch = _res->GetVal(wxT("conf_batch_id"));
+        s_type = _res->GetVal(wxT("elevator_type"));
+        i_load = _res->GetInt(wxT("load"));
+        d_speed = d_speed!=_res->GetDouble(wxT("speed"));
+        str = _res->GetVal(wxT("contract_id"));
+
+        ws->label(i+1,0, str.ToStdString());
+
+        str = _res->GetVal(wxT("project_id"));
+        ws->label(i+1, 1,str.ToStdString() );
+
+        str = _res->GetVal(wxT("project_name"));
+        ws->label(i+1, 2,str.ToStdWstring());
+
+        str = _res->GetVal(wxT("elevator_type"));
+        ws->label(i+1, 3,str.ToStdString() );
+
+        str = _res->GetVal(wxT("lift_no"));
+        ws->label(i+1, 4, str.ToStdWstring());
+
+        ws->number(i+1,5,i_load );
+
+        ws->number(i+1, 6, d_speed);
+
+        str = nstd_level_to_str(_res->GetInt(wxT("nonstd_level")));
+        ws->label(i+1, 7, str.ToStdString());
+
+        str = _res->GetVal(wxT("special_info"));
+        ws->label(i+1, 8, str.ToStdWstring());
+
+        str =DateToStrFormat(_res->GetDate(wxT("req_finish_date")));
+        ws->label(i+1, 9, str.ToStdString());
+
+        str = DateToStrFormat(_res->GetDate(wxT("req_delivery_date")));
+        ws->label(i+1, 10, str.ToStdString());
+
+        str = _res->GetVal(wxT("doc_desc"));
+        ws->label(i+1, 11, str.ToStdWstring());
+
+        s_instance= _res->GetVal(wxT("instance_id"));
+
+        export_excel(s_instance, ws, i+1);
+
+        _res->MoveNext();
+
+    }
+
+    _res->Clear();
+}
+
+void workflow_wf::write_head(worksheet* ws)
+{
+    wxString str = wxT("合同号");
+    ws->label(0,0,str.ToStdWstring());
+
+    str = wxT("项目号");
+    ws->label(0,1,str.ToStdWstring());
+
+    str= wxT("项目名称");
+    ws->label(0,2,str.ToStdWstring());
+
+    str= wxT("梯型");
+    ws->label(0,3,str.ToStdWstring());
+
+    str = wxT("梯号");
+    ws->label(0,4,str.ToStdWstring());
+
+    str=wxT("载重");
+    ws->label(0,5,str.ToStdWstring());
+
+    str=wxT("速度");
+    ws->label(0,6,str.ToStdWstring());
+
+    str = wxT("非标等级");
+    ws->label(0,7,str.ToStdWstring());
+
+    str=wxT("特殊标识");
+    ws->label(0,8,str.ToStdWstring());
+
+    str = wxT("要求配置完成日期");
+    ws->label(0,9,str.ToStdWstring());
+
+    str = wxT("预计发货期");
+    ws->label(0,10,str.ToStdWstring());
+
+    str = wxT("工程师");
+    ws->label(0,11,str.ToStdWstring());
+
+    str = wxT("授权日期");
+    ws->label(0,12,str.ToStdWstring());
+
+    str = wxT("项目完成");
+    ws->label(0,13,str.ToStdWstring());
+
+    str = wxT("项目执行备注");
+    ws->label(0,14,str.ToStdWstring());
+
+    str = wxT("非标1内容");
+    ws->label(0,15,str.ToStdWstring());
+
+    str = wxT("非标工程师");
+    ws->label(0,16,str.ToStdWstring());
+
+    str = wxT("授权日");
+    ws->label(0,17,str.ToStdWstring());
+
+    str = wxT("非标完成日");
+    ws->label(0,18,str.ToStdWstring());
+}
+
+void workflow_wf::export_excel(wxString s_wbs, worksheet* ws, int i_row)
+{
+    wxString str_sql = wxT("SELECT index_mat_id, concat(contract_id,' ', project_name,'-',project_id) as project_name, mat_req_date, drawing_req_date, \
+                          nonstd_catalog, nonstd_desc, nonstd_value, (select name from s_employee where employee_id = res_person) as res_person,\
+                          instance_nstd_desc, (select name from s_employee where employee_id = res_engineer) as res_engineer, status, link_list from v_nonstd_app_item_instance where link_list like '%")+s_wbs+ wxT("%' order by index_id ASC;");
+
+
+
 }
