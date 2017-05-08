@@ -836,6 +836,9 @@ wxString prj_status_to_str(int i_prj)
        case 8:
          str = wxT("DELIVERIED");
          break;
+       case 9:
+         str = wxT("PRE-PRODUCTION");
+         break;
        default:
            str.Empty();
          break;
@@ -928,11 +931,14 @@ int prj_str_to_status(wxString str_status)
     if(str_status == wxT("RELEASED"))
         return 6;
 
-    if(str_status == wxT("PART FINISH"));
+    if(str_status == wxT("PART FINISH"))
         return 7;
 
-    if(str_status == wxT("DELIVERIED"));
+    if(str_status == wxT("DELIVERIED"))
        return 8;
+
+    if(str_status == wxT("PRE-PRODUCTION"))
+        return 9;
 
     return -2;
 

@@ -1550,7 +1550,8 @@ bool wfFrame::update_nonstd_conf_date(wxArrayString&a_nstd, wxArrayString&a_link
     {
         s_nstd = a_nstd.Item(i);
         s_list = a_link.Item(i);
-        s_list.RemoveLast();
+        if(s_list.Right(1)==";")
+            s_list.RemoveLast();
         s_list.Replace(";","','");
         str_sql = wxT("select req_configure_finish from s_unit_info where wbs_no in ('")+s_list+wxT("') and status>=0;");
         _res = wxGetApp().app_sql_select(str_sql);

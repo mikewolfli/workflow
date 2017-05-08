@@ -199,18 +199,18 @@ void wf_workflow_panel::OnButton1Click(wxCommandEvent& event)
 
     for(int i=0; i<i_count; i++)
     {
-        if(str_workflow_id != gd_task_list->GetCellValue(array_sel_line.Item(i),13))
+        if(str_workflow_id != gd_task_list->GetCellValue(array_sel_line.Item(i),14))
         {
-            str_workflow_id = gd_task_list->GetCellValue(array_sel_line.Item(i),13);
+            str_workflow_id = gd_task_list->GetCellValue(array_sel_line.Item(i),14);
             if(t_template)
                 delete [] t_template;
             t_template = get_template_action(str_workflow_id);
         }
 
         str_instance = gd_task_list->GetCellValue(array_sel_line.Item(i),1);
-        if(str_action_id != gd_task_list->GetCellValue(array_sel_line.Item(i), 14))
+        if(str_action_id != gd_task_list->GetCellValue(array_sel_line.Item(i), 15))
         {
-            str_action_id = gd_task_list->GetCellValue(array_sel_line.Item(i), 14);
+            str_action_id = gd_task_list->GetCellValue(array_sel_line.Item(i), 15);
             b_sel = false;
         }
 
@@ -221,7 +221,7 @@ void wf_workflow_panel::OnButton1Click(wxCommandEvent& event)
             continue;
         }
 
-        str_flow_ser = gd_task_list->GetCellValue(array_sel_line.Item(i), 19);
+        str_flow_ser = gd_task_list->GetCellValue(array_sel_line.Item(i), 20);
 
         if(!b_sel)
         {
@@ -329,14 +329,14 @@ void wf_workflow_panel::OnButton2Click(wxCommandEvent& event)
     {
         str_instance = gd_task_list->GetCellValue(array_sel_line.Item(i),1);
 
-        str_action_id = gd_task_list->GetCellValue(array_sel_line.Item(i), 14);
-        str_catalog = gd_task_list->GetCellValue(array_sel_line.Item(i), 15);
-        str_flow_mask = gd_task_list->GetCellValue(array_sel_line.Item(i), 16);
+        str_action_id = gd_task_list->GetCellValue(array_sel_line.Item(i), 15);
+        str_catalog = gd_task_list->GetCellValue(array_sel_line.Item(i), 16);
+        str_flow_mask = gd_task_list->GetCellValue(array_sel_line.Item(i), 17);
 
         start_mils = wxGetLocalTimeMillis();
-        if(str_workflow_id != gd_task_list->GetCellValue(array_sel_line.Item(i),13))
+        if(str_workflow_id != gd_task_list->GetCellValue(array_sel_line.Item(i),14))
         {
-            str_workflow_id = gd_task_list->GetCellValue(array_sel_line.Item(i),13);
+            str_workflow_id = gd_task_list->GetCellValue(array_sel_line.Item(i),14);
             if(t_template)
                 delete [] t_template;
             t_template = get_template_action(str_workflow_id);
@@ -681,50 +681,53 @@ void wf_workflow_panel::init_list_header()
         gd_task_list->SetColLabelValue(5, _("是否\n退回"));
         gd_task_list->SetColSize(5,50);
 
-        gd_task_list->SetColLabelValue(6,_("物料需求日"));
-        gd_task_list->SetColSize(6,100);
+        gd_task_list->SetColLabelValue(6, _("任务收到日期"));
+        gd_task_list->SetColSize(6, 80);
 
-        gd_task_list->SetColLabelValue(7,_("图纸需求日"));
+        gd_task_list->SetColLabelValue(7,_("物料需求日"));
         gd_task_list->SetColSize(7,100);
 
+        gd_task_list->SetColLabelValue(8,_("图纸需求日"));
+        gd_task_list->SetColSize(8,100);
 
-        gd_task_list->SetColLabelValue(8,_("非标类别"));
-        gd_task_list->SetColSize(8,80);
 
-        gd_task_list->SetColLabelValue(9,_("非标原因"));
-        gd_task_list->SetColSize(9,100);
+        gd_task_list->SetColLabelValue(9,_("非标类别"));
+        gd_task_list->SetColSize(9,80);
 
-        gd_task_list->SetColLabelValue(10,_("非标负责人ID"));
-        gd_task_list->SetColSize(10,0);
+        gd_task_list->SetColLabelValue(10,_("非标原因"));
+        gd_task_list->SetColSize(10,100);
 
-        gd_task_list->SetColLabelValue(11,_("非标负责人"));
-        gd_task_list->SetColSize(11,80);
+        gd_task_list->SetColLabelValue(11,_("非标负责人ID"));
+        gd_task_list->SetColSize(11,0);
 
-        gd_task_list->SetColLabelValue(12,_("备注"));
-        gd_task_list->SetColSize(12,100);
+        gd_task_list->SetColLabelValue(12,_("非标负责人"));
+        gd_task_list->SetColSize(12,80);
 
-        gd_task_list->SetColLabelValue(13, _("工作流ID"));
-        gd_task_list->SetColSize(13, 0);
+        gd_task_list->SetColLabelValue(13,_("备注"));
+        gd_task_list->SetColSize(13,100);
 
-        gd_task_list->SetColLabelValue(14,_("流程步骤ID"));
-        gd_task_list->SetColSize(14,0);
+        gd_task_list->SetColLabelValue(14, _("工作流ID"));
+        gd_task_list->SetColSize(14, 0);
 
-        gd_task_list->SetColLabelValue(15,_("类别"));
+        gd_task_list->SetColLabelValue(15,_("流程步骤ID"));
         gd_task_list->SetColSize(15,0);
 
-        gd_task_list->SetColLabelValue(16,_("非标掩码"));
+        gd_task_list->SetColLabelValue(16,_("类别"));
         gd_task_list->SetColSize(16,0);
 
-        gd_task_list->SetColLabelValue(17,_("退回次数"));
+        gd_task_list->SetColLabelValue(17,_("非标掩码"));
         gd_task_list->SetColSize(17,0);
 
-        gd_task_list->SetColLabelValue(18,_("流程备注"));
-        gd_task_list->SetColSize(18,100);
+        gd_task_list->SetColLabelValue(18,_("退回次数"));
+        gd_task_list->SetColSize(18,0);
 
-        gd_task_list->SetColLabelValue(19,_("工作步顺序号"));
-        gd_task_list->SetColSize(19,0);
+        gd_task_list->SetColLabelValue(19,_("流程备注"));
+        gd_task_list->SetColSize(19,100);
 
-        for(int i=0; i<20; i++)
+        gd_task_list->SetColLabelValue(20,_("工作步顺序号"));
+        gd_task_list->SetColSize(20,0);
+
+        for(int i=0; i<21; i++)
         {
             str_tasks_header = str_tasks_header + gd_task_list->GetColLabelValue(i)+wxT(";");
         }
@@ -753,32 +756,35 @@ void wf_workflow_panel::init_list_header()
         gd_group_task_list->SetColLabelValue(5,_("状态"));
         gd_group_task_list->SetColSize(5,50);
 
-        gd_group_task_list->SetColLabelValue(6,_("是否\n退回"));
-        gd_group_task_list->SetColSize(6,50);
+        gd_group_task_list->SetColLabelValue(6, _("任务收到日期"));
+        gd_group_task_list->SetColSize(6, 80);
 
-        gd_group_task_list->SetColLabelValue(7,_("物料需求日"));
-        gd_group_task_list->SetColSize(7,100);
+        gd_group_task_list->SetColLabelValue(7,_("是否\n退回"));
+        gd_group_task_list->SetColSize(7,50);
 
-        gd_group_task_list->SetColLabelValue(8,_("图纸需求日"));
+        gd_group_task_list->SetColLabelValue(8,_("物料需求日"));
         gd_group_task_list->SetColSize(8,100);
 
-        gd_group_task_list->SetColLabelValue(9,_("非标类别"));
-        gd_group_task_list->SetColSize(9,80);
+        gd_group_task_list->SetColLabelValue(9,_("图纸需求日"));
+        gd_group_task_list->SetColSize(9,100);
 
-        gd_group_task_list->SetColLabelValue(10,_("非标原因"));
-        gd_group_task_list->SetColSize(10,100);
+        gd_group_task_list->SetColLabelValue(10,_("非标类别"));
+        gd_group_task_list->SetColSize(10,80);
 
-        gd_group_task_list->SetColLabelValue(11,_("非标负责人"));
-        gd_group_task_list->SetColSize(11,80);
+        gd_group_task_list->SetColLabelValue(11,_("非标原因"));
+        gd_group_task_list->SetColSize(11,100);
 
-        gd_group_task_list->SetColLabelValue(12,_("备注"));
-        gd_group_task_list->SetColSize(12,100);
+        gd_group_task_list->SetColLabelValue(12,_("非标负责人"));
+        gd_group_task_list->SetColSize(12,80);
 
-        gd_group_task_list->SetColLabelValue(13,_("流程备注"));
+        gd_group_task_list->SetColLabelValue(13,_("备注"));
         gd_group_task_list->SetColSize(13,100);
 
+        gd_group_task_list->SetColLabelValue(14,_("流程备注"));
+        gd_group_task_list->SetColSize(14,100);
 
-        for(int i=0; i<14; i++)
+
+        for(int i=0; i<15; i++)
         {
             str_group_tasks_header = str_group_tasks_header + gd_group_task_list->GetColLabelValue(i)+wxT(";");
         }
@@ -804,11 +810,11 @@ void wf_workflow_panel::refresh_list()
     wxPostgreSQLresult* _res;
     wxString str_query;
 
-    str_query = wxT("(SELECT action_name, instance_id,(select nstd_mat_app_id from l_nonstd_app_item_instance where index_mat_id = instance_id) as  nstd_mat_app_id, concat(contract_id,' ', project_name,'-',project_id) as task_info, status, is_return, mat_req_date, drawing_req_date, nonstd_catalog,nonstd_desc, \
+    str_query = wxT("(SELECT action_name, instance_id,(select nstd_mat_app_id from l_nonstd_app_item_instance where index_mat_id = instance_id) as  nstd_mat_app_id, concat(contract_id,' ', project_name,'-',project_id) as task_info, status, is_return, start_date,mat_req_date, drawing_req_date, nonstd_catalog,nonstd_desc, \
                      res_person, (select name from s_employee where employee_id = res_person) as res_name, remarks,  workflow_id, action_id ,  item_catalog,  flow_mask, return_time, (select doc_desc from s_doc where doc_id = step_desc_id) as doc_desc, \
                      flow_ser from v_task_list2 WHERE is_active = true AND operator_id = '")+gr_para.login_user+wxT("' ORDER BY  instance_id ASC )");
 
-    str_query = str_query + wxT(" UNION ALL ")+wxT(" (SELECT action_name, instance_id,nstd_mat_app_id,concat(contract_id,' ', project_name,'-',project_id) as task_info, status, is_return, mat_req_date, drawing_req_date, nonstd_catalog,nonstd_desc, \
+    str_query = str_query + wxT(" UNION ALL ")+wxT(" (SELECT action_name, instance_id,nstd_mat_app_id,concat(contract_id,' ', project_name,'-',project_id) as task_info, status, is_return, start_date,mat_req_date, drawing_req_date, nonstd_catalog,nonstd_desc, \
                      res_person, (select name from s_employee where employee_id = res_person) as res_name, remarks,  workflow_id, action_id ,  item_catalog,  flow_mask, return_time, (select doc_desc from s_doc where doc_id = step_desc_id) as doc_desc, \
                      flow_ser from v_task_list3 WHERE is_active = true AND operator_id = '")+gr_para.login_user+wxT("' ORDER BY  instance_id ASC ) ;");
 //    wxLogMessage(str_query);
@@ -833,13 +839,13 @@ void wf_workflow_panel::refresh_list()
     gd_task_list->Fit();
     gd_task_list->ForceRefresh();
  //   gd_task_list->EndBatch();
-    gd_task_list->HideCol(10);
-    gd_task_list->HideCol(13);
+    gd_task_list->HideCol(11);
     gd_task_list->HideCol(14);
     gd_task_list->HideCol(15);
     gd_task_list->HideCol(16);
     gd_task_list->HideCol(17);
-    gd_task_list->HideCol(19);
+    gd_task_list->HideCol(18);
+    gd_task_list->HideCol(20);
 
  //   gd_task_list->AutoSize();
 
@@ -941,7 +947,7 @@ void wf_workflow_panel::OnMenuItem1Selected(wxCommandEvent& event)
     int i_valid=0;
     for(int i=0;i<i_count;i++)
     {
-        if(gd_task_list->GetCellValue(array_sel_line.Item(i),13) == wf_str_nonstd)
+        if(gd_task_list->GetCellValue(array_sel_line.Item(i),14) == wf_str_nonstd)
         {
            str_sql = str_sql + wxT(" index_id = '")+gd_task_list->GetCellValue(array_sel_line.Item(i),1)+wxT("' OR");
            i_valid++;
@@ -998,11 +1004,11 @@ void wf_workflow_panel::OnMenuItem_REMARKSSelected(wxCommandEvent& event)
     for(int i=0;i<i_count;i++)
     {
        s_instance = gd_task_list->GetCellValue(array_sel_line.Item(i),1);
-       s_workflow = gd_task_list->GetCellValue(array_sel_line.Item(i),13);
+       s_workflow = gd_task_list->GetCellValue(array_sel_line.Item(i),14);
        str_sql = wxT("UPDATE l_proc_act SET step_desc_id= '")+str_id+wxT("' WHERE instance_id='")+s_instance+wxT("' AND \
               operator_id = '")+gr_para.login_user+wxT("' AND is_active = true AND workflow_id = '")+s_workflow+wxT("';");
        if(wxGetApp().app_sql_update(str_sql))
-              gd_task_list->SetCellValue(array_sel_line.Item(i),17,str_desc);
+              gd_task_list->SetCellValue(array_sel_line.Item(i),18,str_desc);
 
     }
 
@@ -1038,7 +1044,7 @@ void wf_workflow_panel::OnMenuItem_RETURNSelected(wxCommandEvent& event)
              str = gd_task_list->GetCellValue(array_sel_line.Item(i),1);
              array_return.Add(str);
 
-             str = gd_task_list->GetCellValue(array_sel_line.Item(i),17);
+             str = gd_task_list->GetCellValue(array_sel_line.Item(i),18);
              array_return_time.Add(str);
          }
      }
@@ -1081,7 +1087,7 @@ void wf_workflow_panel::OnMenuItem_WORKFLOWSelected(wxCommandEvent& event)
         str = gd_task_list->GetCellValue(array_sel_line.Item(i), 1);
         array_sel_ins.Add(str);
 
-        str = gd_task_list->GetCellValue(array_sel_line.Item(i),13);
+        str = gd_task_list->GetCellValue(array_sel_line.Item(i),14);
         array_sel_workflow.Add(str);
     }
 
@@ -1236,7 +1242,7 @@ void wf_workflow_panel::OnMenuItem3Selected(wxCommandEvent& event)
     {
         str_instance_id = gd_task_list->GetCellValue(array_sel_line.Item(i), 1);
 
-        str_workflow = gd_task_list->GetCellValue(array_sel_line.Item(i),13);
+        str_workflow = gd_task_list->GetCellValue(array_sel_line.Item(i),14);
 
         array_str = get_unit_list(str_instance_id, str_workflow);
         i_count = array_str.GetCount();
@@ -1273,7 +1279,7 @@ wxArrayString wf_workflow_panel::get_unit_list(wxString str_task_id, wxString st
 
     }
 
-    wxString str_sql = wxT("select link_list from l_nonstd_app_item where index_id = ")+str_task_id+wxT("'; ");
+    wxString str_sql = wxT("select link_list from l_nonstd_app_item where index_id = '")+str_task_id+wxT("'; ");
     wxPostgreSQLresult* _res = wxGetApp().app_sql_select(str_sql);
 
     if(_res->Status()!= PGRES_TUPLES_OK)
@@ -1342,7 +1348,7 @@ void wf_workflow_panel::OnMenuItem4Selected(wxCommandEvent& event)
     wxString s_nonstd_id,s_nonstd_index_id, s_old_date, s_action_id;
     for(int i=0;i<i_count; i++)
     {
-         s_action_id = gd_task_list->GetCellValue(array_sel_line.Item(i),14);
+         s_action_id = gd_task_list->GetCellValue(array_sel_line.Item(i),15);
          s_nonstd_index_id = gd_task_list->GetCellValue(array_sel_line.Item(i),1);
 
          if(s_action_id != wxT("AT00000009"))
@@ -1350,7 +1356,7 @@ void wf_workflow_panel::OnMenuItem4Selected(wxCommandEvent& event)
              wxLogMessage(_("非标申请起始步时，才能更改需求日期, 此任务号无法更改:")+s_nonstd_id);
              continue;
          }
-         s_old_date = gd_task_list->GetCellValue(array_sel_line.Item(i),7);
+         s_old_date = gd_task_list->GetCellValue(array_sel_line.Item(i),8);
 
          s_old_date = s_old_date + wxT(" 23:00:00");
 
@@ -1365,7 +1371,7 @@ void wf_workflow_panel::OnMenuItem4Selected(wxCommandEvent& event)
                 wxGetApp().change_log(wxT("l_nonstd_app_header"),s_nonstd_id, wxT("drawing_req_date"), s_old_date, s_date_ex);
                 wxLogMessage(s_nonstd_index_id+_("非标设计需求日变更成功!"));
 
-                gd_task_list->SetCellValue(array_sel_line.Item(i),7, s_date);
+                gd_task_list->SetCellValue(array_sel_line.Item(i),8, s_date);
          }
     }
 

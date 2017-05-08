@@ -36,6 +36,8 @@ const long instance_unit_info::ID_BUTTON_CANCEL_PROJECT = wxNewId();
 const long instance_unit_info::ID_BUTTON_RESTORE_PROJECT = wxNewId();
 const long instance_unit_info::ID_BUTTON_DEL_PROJECT = wxNewId();
 const long instance_unit_info::ID_BUTTON_IMPORT = wxNewId();
+const long instance_unit_info::ID_BUTTON_PRE_PRODUCTION = wxNewId();
+const long instance_unit_info::ID_BUTTON_CANCEL_PRODUCTION = wxNewId();
 const long instance_unit_info::ID_BUTTON_SAP_BY_WBS = wxNewId();
 const long instance_unit_info::ID_BUTTON_BY_INTERNAL_DATE = wxNewId();
 const long instance_unit_info::ID_BUTTON_NSTD_SAP_UPDATE = wxNewId();
@@ -78,6 +80,7 @@ const long instance_unit_info::idMenu_NSTD_LEVEL = wxNewId();
 const long instance_unit_info::idMenu_UnSt = wxNewId();
 const long instance_unit_info::idMenu_Motion = wxNewId();
 const long instance_unit_info::idMenu_Finish = wxNewId();
+const long instance_unit_info::idMenu_Pre_production = wxNewId();
 const long instance_unit_info::idMenu_Closed = wxNewId();
 const long instance_unit_info::idMenu_InDoc = wxNewId();
 const long instance_unit_info::idMenu_Freeze = wxNewId();
@@ -100,11 +103,11 @@ END_EVENT_TABLE()
 instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size)
 {
     //(*Initialize(instance_unit_info)
-    wxStaticBoxSizer* StaticBoxSizer2;
-    wxBoxSizer* BoxSizer2;
     wxBoxSizer* BoxSizer1;
-    wxStaticBoxSizer* StaticBoxSizer1;
+    wxBoxSizer* BoxSizer2;
     wxBoxSizer* BoxSizer3;
+    wxStaticBoxSizer* StaticBoxSizer1;
+    wxStaticBoxSizer* StaticBoxSizer2;
 
     Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL|wxNO_FULL_REPAINT_ON_RESIZE, _T("wxID_ANY"));
     BoxSizer1 = new wxBoxSizer(wxVERTICAL);
@@ -137,6 +140,10 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     Button1 = new wxButton(this, ID_BUTTON_IMPORT, _("导入项目"), wxDefaultPosition, wxSize(83,23), 0, wxDefaultValidator, _T("ID_BUTTON_IMPORT"));
     Button1->SetToolTip(_("从外部文件或SAP导入项目信息"));
     BoxSizer2->Add(Button1, 1, wxALL|wxEXPAND, 0);
+    Button_Pre_Production = new wxButton(this, ID_BUTTON_PRE_PRODUCTION, _("排产计划"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON_PRE_PRODUCTION"));
+    BoxSizer2->Add(Button_Pre_Production, 1, wxALL|wxEXPAND, 0);
+    Button_cancel_production = new wxButton(this, ID_BUTTON_CANCEL_PRODUCTION, _("取消排产计划"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON_CANCEL_PRODUCTION"));
+    BoxSizer2->Add(Button_cancel_production, 1, wxALL|wxEXPAND, 0);
     button_sap_by_wbs = new wxButton(this, ID_BUTTON_SAP_BY_WBS, _("按WBS NO从SAP导入"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON_SAP_BY_WBS"));
     BoxSizer2->Add(button_sap_by_wbs, 1, wxALL|wxEXPAND, 0);
     button_sap_by_internal = new wxButton(this, ID_BUTTON_BY_INTERNAL_DATE, _("根据启动日期从SAP导入"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON_BY_INTERNAL_DATE"));
@@ -246,6 +253,8 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     menu_project_filter.Append(MenuItem12);
     MenuItem11 = new wxMenuItem((&menu_project_filter), idMenu_Finish, _("评审完成的项目(&R)"), _("已经完成的项目"), wxITEM_NORMAL);
     menu_project_filter.Append(MenuItem11);
+    mi_pre_production = new wxMenuItem((&menu_project_filter), idMenu_Pre_production, _("启动排产项目"), _("启动排产项目"), wxITEM_NORMAL);
+    menu_project_filter.Append(mi_pre_production);
     MenuItem15 = new wxMenuItem((&menu_project_filter), idMenu_Closed, _("配置完成的项目(&C)"), _("配置完成的项目"), wxITEM_NORMAL);
     menu_project_filter.Append(MenuItem15);
     MenuItem16 = new wxMenuItem((&menu_project_filter), idMenu_InDoc, _("Released的项目(&D)"), _("归档的项目"), wxITEM_NORMAL);
@@ -284,6 +293,8 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     Connect(ID_BUTTON_RESTORE_PROJECT,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&instance_unit_info::OnButton_Restore_projectClick);
     Connect(ID_BUTTON_DEL_PROJECT,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&instance_unit_info::OnButton_DEL_projectClick);
     Connect(ID_BUTTON_IMPORT,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&instance_unit_info::OnButton1Click);
+    Connect(ID_BUTTON_PRE_PRODUCTION,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&instance_unit_info::OnButton_Pre_ProductionClick);
+    Connect(ID_BUTTON_CANCEL_PRODUCTION,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&instance_unit_info::OnButton_cancel_productionClick);
     Connect(ID_BUTTON_SAP_BY_WBS,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&instance_unit_info::Onbutton_sap_by_wbsClick);
     Connect(ID_BUTTON_BY_INTERNAL_DATE,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&instance_unit_info::Onbutton_sap_by_internalClick);
     Connect(ID_BUTTON_NSTD_SAP_UPDATE,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&instance_unit_info::OnButton_NSTD_SAP_UPDATEClick);
@@ -327,6 +338,7 @@ instance_unit_info::instance_unit_info(wxWindow* parent, wxWindowID id, const wx
     Connect(idMenu_UnSt,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem10Selected);
     Connect(idMenu_Motion,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem12Selected);
     Connect(idMenu_Finish,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem11Selected);
+    Connect(idMenu_Pre_production,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::Onmi_pre_productionSelected);
     Connect(idMenu_Closed,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem15Selected);
     Connect(idMenu_InDoc,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem16Selected);
     Connect(idMenu_Freeze,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&instance_unit_info::OnMenuItem17Selected);
@@ -1250,6 +1262,12 @@ void instance_unit_info::OnButton3Click(wxCommandEvent& event)
         if(i_status==4)
         {
              wxLogMessage(str_instance + _("-已经冻结，请先解除冻结后再操作!"));
+             continue;
+        }
+
+        if(i_status == 2)
+        {
+            wxLogMessage(str_instance + _("-未启动排产计划，请先启动排产!"));
              continue;
         }
 /*
@@ -2194,7 +2212,8 @@ bool instance_unit_info::update_nonstd_conf_date()
     {
         s_nstd = array_update_conf.Item(i);
         s_list = array_links.Item(i);
-        s_list.RemoveLast();
+        if(s_list.Right(1)==";")
+            s_list.RemoveLast();
         s_list.Replace(";","','");
         str_sql = wxT("select req_configure_finish from s_unit_info where wbs_no in ('")+s_list+wxT("') and status>=0;");
         _res = wxGetApp().app_sql_select(str_sql);
@@ -2530,6 +2549,9 @@ void instance_unit_info::Show_control()
         Button_Cancel_project->Show(false);
         Button_Restore_project->Show(false);
         Button_DEL_project->Show(false);
+        Button_Pre_Production->Show(true);
+        mi_pre_production->Enable(true);
+        Button_cancel_production->Show(true);
 
         MenuItem3->Enable(false);
         MenuItem4->Enable(false);
@@ -2546,7 +2568,7 @@ void instance_unit_info::Show_control()
          mi_add_contract_id->Enable(false);
          mi_special_info->Enable(false);
 
-        button_sap_by_internal->Show(false);
+        button_sap_by_internal->Show(true);
         button_sap_by_wbs->Show(true);
         Button_Cal_Basic_Info->Show(false);
         Button_syc_to_din->Show(false);
@@ -2561,6 +2583,10 @@ void instance_unit_info::Show_control()
         Button4->Show(true);
         Button5->Show(false);
         mi_folder->Enable(true);
+
+        Button_Pre_Production->Show(false);
+        Button_cancel_production->Show(false);
+        mi_pre_production->Enable(true);
 
         button_cancel_restart->Show(true);
         Button_Cancel_project->Show(true);
@@ -2602,11 +2628,14 @@ void instance_unit_info::Show_control()
         Button4->Show(false);
         Button5->Show(true);
         mi_folder->Enable(false);
+        Button_Pre_Production->Show(true);
+        Button_cancel_production->Show(true);
 
         button_cancel_restart->Show(false);
         Button_Cancel_project->Show(false);
         Button_Restore_project->Show(false);
         Button_DEL_project->Show(false);
+        mi_pre_production->Enable(true);
 
         MenuItem3->Enable(false);
         MenuItem4->Enable(false);
@@ -2623,7 +2652,7 @@ void instance_unit_info::Show_control()
         mi_add_contract_id->Enable(true);
         mi_special_info->Enable(true);
 
-        button_sap_by_internal->Show(false);
+        button_sap_by_internal->Show(true);
         button_sap_by_wbs->Show(true);
         Button_Cal_Basic_Info->Show(false);
         Button_syc_to_din->Show(false);
@@ -2641,6 +2670,9 @@ void instance_unit_info::Show_control()
         button_sap_by_internal->Show(true);
         button_sap_by_wbs->Show(false);
         mi_folder->Enable(false);
+        Button_Pre_Production->Show(false);
+        Button_cancel_production->Show(false);
+        mi_pre_production->Enable(false);
 
         button_cancel_restart->Show(false);
         Button_Cancel_project->Show(false);
@@ -2969,7 +3001,7 @@ void instance_unit_info::Onbutton_cancel_restartClick(wxCommandEvent& event)
             wf_configure = new wf_operator(str_instance, wf_str_configure, t_template);
 
             wf_configure->cancel_restart(i_times);
-            wf_configure->update_instance(6);
+            wf_configure->update_cancel_instance();
             delete wf_configure;
             wf_configure = NULL;
         }else
@@ -2979,7 +3011,7 @@ void instance_unit_info::Onbutton_cancel_restartClick(wxCommandEvent& event)
 
                 wf_new_conf = new wf_operator_ex(str_instance, wf_str_new_config, t_new_template, array_flag.Item(k));
                 wf_new_conf->cancel_restart(i_times);
-                wf_new_conf->update_instance(6);
+                wf_new_conf->update_cancel_instance();
                 if (wf_new_conf)
                     delete wf_new_conf;
 
@@ -3232,7 +3264,7 @@ void instance_unit_info::OnButton_Cancel_projectClick(wxCommandEvent& event)
 
             wf_configure->cancel_task(i_times);
 
-            wf_configure->update_instance(2,0);
+            wf_configure->update_cancel_instance();
 
             if(wf_configure)
                delete wf_configure;
@@ -3243,7 +3275,7 @@ void instance_unit_info::OnButton_Cancel_projectClick(wxCommandEvent& event)
             {
                 wf_new_conf = new wf_operator_ex(str_instance, wf_str_new_config, t_new_template, array_flag.Item(k));
                 wf_new_conf->cancel_restart(i_times);
-                wf_new_conf->update_instance(6);
+                wf_new_conf->update_cancel_instance();
                 if (wf_new_conf)
                     delete wf_new_conf;
                 wf_new_conf = NULL;
@@ -4934,4 +4966,114 @@ void instance_unit_info::Onmi_folderSelected(wxCommandEvent& event)
 
     //Create_Folder(array_wbs);
     Create_proj_Folder(array_wbs);
+}
+
+void instance_unit_info::OnButton_Pre_ProductionClick(wxCommandEvent& event)
+{
+    if(!gr_para.login_status)
+        return;
+
+
+    wxArrayInt array_sel_line = gd_unit_info->GetSelectedRows();
+
+    if(array_sel_line.IsEmpty())
+    {
+        wxLogMessage(_("尚未选择项次，无法后续操作!"));
+        return;
+    }
+
+    if(wxMessageBox(_("确认所选项目启动排产？"),_("排产确认："),wxOK|wxCANCEL,this)==wxCANCEL)
+    {
+        return;
+    }
+
+    int i_count = array_sel_line.GetCount();
+
+    wxString str_wbs_no;
+    int i_status,i_can_status;
+    bool b_can_psn;
+
+    for(int i=0;i<i_count;i++)
+    {
+        str_wbs_no = gd_unit_info->GetCellValue(array_sel_line.Item(i),1);
+        i_status = prj_str_to_status(gd_unit_info->GetCellValue(array_sel_line.Item(i),6));
+        b_can_psn = StrToBool(gd_unit_info->GetCellValue(array_sel_line.Item(i), 16));
+
+
+        if (b_can_psn && (i_status==0 || i_status==1))
+           i_can_status=2;
+        else
+           i_can_status = i_status;
+
+
+        if(i_can_status!=2 && i_can_status!=5 && i_can_status !=6)
+            continue;
+
+
+        wxString str_sql = wxT("UPDATE s_unit_info SET old_status = '")+NumToStr(i_status)+wxT("', old_wf_status=wf_status, status ='9', wf_status ='项目启动排产', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' where wbs_no ='")+str_wbs_no+wxT("';");
+        if(wxGetApp().app_sql_update(str_sql))
+        {
+            wxGetApp().change_log(wxT("s_unit_info"),str_wbs_no, wxT("status"), NumToStr(i_status), wxT("9"),wxT("hand") );
+            i_status =9;
+
+            gd_unit_info->SetCellValue(array_sel_line.Item(i),6, prj_status_to_str(i_status));
+            gd_unit_info->SetCellValue(array_sel_line.Item(i),7, wxT("项目启动排产"));
+            wxLogMessage(str_wbs_no+wxT("启动排产成功!"));
+
+        }
+
+    }
+}
+
+void instance_unit_info::Onmi_pre_productionSelected(wxCommandEvent& event)
+{
+    Set_Where_clause(wxT(" WHERE  status='9' "));
+    b_refresh = true;
+    refresh_list();
+    b_refresh = false;
+}
+
+void instance_unit_info::OnButton_cancel_productionClick(wxCommandEvent& event)
+{
+    if(!gr_para.login_status)
+        return;
+
+
+    wxArrayInt array_sel_line = gd_unit_info->GetSelectedRows();
+
+    if(array_sel_line.IsEmpty())
+    {
+        wxLogMessage(_("尚未选择项次，无法后续操作!"));
+        return;
+    }
+
+    if(wxMessageBox(_("确认所选项目取消排产？"),_("取消排产确认："),wxOK|wxCANCEL,this)==wxCANCEL)
+    {
+        return;
+    }
+
+    int i_count = array_sel_line.GetCount();
+
+    wxString str_wbs_no;
+    int i_status;
+
+    for(int i=0;i<i_count;i++)
+    {
+        str_wbs_no = gd_unit_info->GetCellValue(array_sel_line.Item(i),1);
+        i_status = prj_str_to_status(gd_unit_info->GetCellValue(array_sel_line.Item(i),6));
+
+        if(i_status!=9)
+            continue;
+
+        wxString str_sql = wxT("UPDATE s_unit_info SET status=old_status, wf_status=old_wf_status, modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' where wbs_no ='")+str_wbs_no+wxT("';");
+        if(wxGetApp().app_sql_update(str_sql))
+        {
+            wxLogMessage(str_wbs_no+wxT("取消排产成功!"));
+        }
+
+    }
+    b_refresh = true;
+    refresh_list();
+    b_refresh = false;
+
 }

@@ -38,7 +38,9 @@ class instance_unit_info: public wxPanel
 		wxButton* Button_Cancel_project;
 		wxButton* Button_DEL_project;
 		wxButton* Button_NSTD_SAP_UPDATE;
+		wxButton* Button_Pre_Production;
 		wxButton* Button_Restore_project;
+		wxButton* Button_cancel_production;
 		wxButton* Button_syc_to_din;
 		wxButton* button_cancel_restart;
 		wxButton* button_sap_by_internal;
@@ -85,6 +87,7 @@ class instance_unit_info: public wxPanel
 		wxMenuItem* mi_generate_contract;
 		wxMenuItem* mi_hex;
 		wxMenuItem* mi_mc2_h;
+		wxMenuItem* mi_pre_production;
 		wxMenuItem* mi_print_label;
 		wxMenuItem* mi_proj_name;
 		wxMenuItem* mi_search_contract;
@@ -151,6 +154,8 @@ class instance_unit_info: public wxPanel
 		static const long ID_BUTTON_RESTORE_PROJECT;
 		static const long ID_BUTTON_DEL_PROJECT;
 		static const long ID_BUTTON_IMPORT;
+		static const long ID_BUTTON_PRE_PRODUCTION;
+		static const long ID_BUTTON_CANCEL_PRODUCTION;
 		static const long ID_BUTTON_SAP_BY_WBS;
 		static const long ID_BUTTON_BY_INTERNAL_DATE;
 		static const long ID_BUTTON_NSTD_SAP_UPDATE;
@@ -193,6 +198,7 @@ class instance_unit_info: public wxPanel
 		static const long idMenu_UnSt;
 		static const long idMenu_Motion;
 		static const long idMenu_Finish;
+		static const long idMenu_Pre_production;
 		static const long idMenu_Closed;
 		static const long idMenu_InDoc;
 		static const long idMenu_Freeze;
@@ -276,6 +282,9 @@ class instance_unit_info: public wxPanel
 		void Onmi_mc2_hSelected(wxCommandEvent& event);
 		void Onmi_delv_mc2_hSelected(wxCommandEvent& event);
 		void Onmi_folderSelected(wxCommandEvent& event);
+		void OnButton_Pre_ProductionClick(wxCommandEvent& event);
+		void Onmi_pre_productionSelected(wxCommandEvent& event);
+		void OnButton_cancel_productionClick(wxCommandEvent& event);
 		//*)
 
 		int get_same_project_count(wxString s_project, const wxArrayString s_unit_list);

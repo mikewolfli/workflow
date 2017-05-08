@@ -193,6 +193,7 @@ public:
 
     bool update_desc(wxString str_id, wxString str_desc, bool b_update);
     bool update_instance(int i_status, int i_choice = 1 );
+    bool update_cancel_instance(int i_choice=1);
     bool update_instance(int i_status, wxString &s_wf_status, int i_choice = 1);
     bool update_instance_one2several(int i_status, bool only_wf_status=false);
     int  get_instance_status(wxString &s_wf_status);
@@ -250,6 +251,7 @@ public:
     bool update_desc(wxString str_id, wxString str_desc, bool b_update);
 
     bool update_instance(int i_status, int i_choice = 1 );
+    bool update_cancel_instance(int i_choice=1);
     bool update_instance(int i_status, wxString &s_wf_status, int i_choice = 1);
     int  get_instance_status(wxString &s_wf_status);
 

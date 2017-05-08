@@ -103,6 +103,22 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_PRE_PRODUCTION" variable="Button_Pre_Production" member="yes">
+									<label>排产计划</label>
+									<handler function="OnButton_Pre_ProductionClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_BUTTON_CANCEL_PRODUCTION" variable="Button_cancel_production" member="yes">
+									<label>取消排产计划</label>
+									<handler function="OnButton_cancel_productionClick" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
 								<object class="wxButton" name="ID_BUTTON_SAP_BY_WBS" variable="button_sap_by_wbs" member="yes">
 									<label>按WBS NO从SAP导入</label>
 									<handler function="Onbutton_sap_by_wbsClick" entry="EVT_BUTTON" />
@@ -380,6 +396,11 @@
 				<label>评审完成的项目(&amp;R)</label>
 				<help>已经完成的项目</help>
 				<handler function="OnMenuItem11Selected" entry="EVT_MENU" />
+			</object>
+			<object class="wxMenuItem" name="idMenu_Pre_production" variable="mi_pre_production" member="yes">
+				<label>启动排产项目</label>
+				<help>启动排产项目</help>
+				<handler function="Onmi_pre_productionSelected" entry="EVT_MENU" />
 			</object>
 			<object class="wxMenuItem" name="idMenu_Closed" variable="MenuItem15" member="yes">
 				<label>配置完成的项目(&amp;C)</label>

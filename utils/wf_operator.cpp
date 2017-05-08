@@ -1136,11 +1136,25 @@ bool wf_operator::update_instance(int i_status,int i_choice)
     }
 
     if(i_choice == 2)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  wf_status ='")+str_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET old_wf_status=wf_status, wf_status ='")+str_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
     else if(i_choice == 1)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  status = '")+NumToStr(i_status)+wxT("', wf_status ='")+str_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET old_status=status, old_wf_status=wf_status, status = '")+NumToStr(i_status)+wxT("', wf_status ='")+str_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
     else if(i_choice == 0)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  status = '")+NumToStr(i_status)+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET old_status=status, status = '")+NumToStr(i_status)+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+
+    return wxGetApp().app_sql_update(l_query);
+}
+
+bool wf_operator::update_cancel_instance(int i_choice)
+{
+    wxString l_query;
+    if(i_choice == 2)
+        l_query = wxT("UPDATE s_unit_info SET wf_status=old_wf_status, modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE wbs_no= '")+s_instance+wxT("';");
+    else if(i_choice == 1)
+        l_query = wxT("UPDATE s_unit_info SET  wf_status=old_wf_status, status=old_status, modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE wbs_no= '")+s_instance+wxT("';");
+    else if(i_choice == 0)
+        l_query = wxT("UPDATE s_unit_info SET  status=old_status, modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE wbs_no= '")+s_instance+wxT("';");
+
 
     return wxGetApp().app_sql_update(l_query);
 }
@@ -1193,11 +1207,11 @@ bool wf_operator::update_instance(int i_status, wxString &s_wf_status, int i_cho
     }
 
     if(i_choice == 2)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  wf_status ='")+s_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  old_wf_status,wf_status ='")+s_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
     else if(i_choice == 1)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  status = '")+NumToStr(i_status)+wxT("', wf_status ='")+s_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  old_status=status, old_wf_status=wf_status, status = '")+NumToStr(i_status)+wxT("', wf_status ='")+s_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
     else if(i_choice == 0)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  status = '")+NumToStr(i_status)+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  old_status=status, status = '")+NumToStr(i_status)+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
 
 
     return wxGetApp().app_sql_update(l_query);
@@ -1964,6 +1978,19 @@ int  wf_operator_ex::get_instance_status(wxString &s_wf_status)
     return i_status;
 }
 
+bool wf_operator_ex::update_cancel_instance(int i_choice)
+{
+    wxString l_query;
+    if(i_choice == 2)
+        l_query = wxT("UPDATE s_unit_info SET wf_status=old_wf_status, modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE wbs_no= '")+s_instance+wxT("';");
+    else if(i_choice == 1)
+        l_query = wxT("UPDATE s_unit_info SET  wf_status=old_wf_status, status=old_status,modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE wbs_no= '")+s_instance+wxT("';");
+    else if(i_choice == 0)
+        l_query = wxT("UPDATE s_unit_info SET  status=old_status,modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE wbs_no= '")+s_instance+wxT("';");
+
+
+    return wxGetApp().app_sql_update(l_query);
+}
 
 bool wf_operator_ex::update_instance(int i_status,int i_choice)
 {
@@ -2014,11 +2041,11 @@ bool wf_operator_ex::update_instance(int i_status,int i_choice)
     }
 
     if(i_choice == 2)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  wf_status ='")+str_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET old_wf_status=wf_status, wf_status ='")+str_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
     else if(i_choice == 1)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  status = '")+NumToStr(i_status)+wxT("', wf_status ='")+str_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  old_status=status, old_wf_status=wf_status, status = '")+NumToStr(i_status)+wxT("', wf_status ='")+str_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
     else if(i_choice == 0)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  status = '")+NumToStr(i_status)+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  old_status=status, status = '")+NumToStr(i_status)+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
 
 
     return wxGetApp().app_sql_update(l_query);
@@ -2072,11 +2099,11 @@ bool wf_operator_ex::update_instance(int i_status, wxString &s_wf_status, int i_
     }
 
     if(i_choice == 2)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  wf_status ='")+s_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  old_wf_status=wf_status, wf_status ='")+s_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
     else if(i_choice == 1)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  status = '")+NumToStr(i_status)+wxT("', wf_status ='")+s_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET old_status=status, old_wf_status=wf_status, status = '")+NumToStr(i_status)+wxT("', wf_status ='")+s_wf_status+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
     else if(i_choice == 0)
-        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  status = '")+NumToStr(i_status)+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
+        l_query = wxT("UPDATE ")+str_table+ wxT(" SET  old_status=status, status = '")+NumToStr(i_status)+wxT("', modify_date = '")+DateToAnsiStr(wxDateTime::Now())+wxT("', modify_emp_id = '")+gr_para.login_user+wxT("' WHERE ")+str_table_para +wxT("= '")+s_instance+wxT("';");
 
 
     return wxGetApp().app_sql_update(l_query);
